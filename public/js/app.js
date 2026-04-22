@@ -224,35 +224,67 @@ function renderTopicBody(topic) {
     </ul>`;
   }
 
-  // 범용 catch-all: 위에서 처리되지 않은 필드를 자동 렌더링
+  // 범용 catch-all: 지원하지 않는 필드를 재귀적으로 렌더링
   const knownFields = new Set(['mnemonic','steps','layers','algorithms','levels',
     'creational','structural','behavioral','relationships',
     'definition','characteristics','types','acid','schema_3layer']);
   Object.entries(c).forEach(([key, val]) => {
-    if (knownFields.has(key) || !val) return;
-    if (Array.isArray(val) && val.length > 0) {
-      if (typeof val[0] === 'string') {
-        html += `<ul class="key-points" style="margin-top:8px">${val.map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>`;
-      } else if (typeof val[0] === 'object') {
-        const headers = Object.keys(val[0]);
-        html += `<table class="info-table" style="margin-top:10px">
-          <tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>
-          ${val.map(row => `<tr>${headers.map(h => {
-            const v = row[h];
-            return `<td>${Array.isArray(v) ? v.join(', ') : escapeHtml(String(v ?? ''))}</td>`;
-          }).join('')}</tr>`).join('')}
-        </table>`;
-      }
-    } else if (typeof val === 'object' && !Array.isArray(val)) {
-      html += `<ul class="key-points" style="margin-top:8px">
-        ${Object.entries(val).map(([k, v]) => `<li><strong>${escapeHtml(k)}:</strong> ${escapeHtml(typeof v === 'string' ? v : JSON.stringify(v))}</li>`).join('')}
-      </ul>`;
-    } else if (typeof val === 'string') {
-      html += `<p style="margin-top:8px;color:var(--text-primary)">${escapeHtml(val)}</p>`;
-    }
+    if (knownFields.has(key) || val === null || val === undefined) return;
+    html += renderValue(val);
   });
 
   return html || `<p style="color:var(--text-muted);margin-top:10px">내용을 불러오는 중입니다.</p>`;
+}
+
+/* ===== 범용 값 렌더러 (재귀) ===== */
+function renderValue(val) {
+  if (val === null || val === undefined || val === '') return '';
+
+  if (typeof val === 'string') {
+    return `<p style="margin-top:6px;color:var(--text-primary)">${escapeHtml(val)}</p>`;
+  }
+
+  if (Array.isArray(val)) {
+    if (!val.length) return '';
+    if (typeof val[0] === 'string') {
+      return `<ul class="key-points" style="margin-top:8px">${val.map(x => `<li>${escapeHtml(String(x))}</li>`).join('')}</ul>`;
+    }
+    if (typeof val[0] === 'object') {
+      const headers = Object.keys(val[0]);
+      return `<table class="info-table" style="margin-top:10px">
+        <tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>
+        ${val.map(row => `<tr>${headers.map(h => {
+          const v = row[h];
+          if (Array.isArray(v)) return `<td>${v.map(x => escapeHtml(String(x))).join(', ')}</td>`;
+          if (v && typeof v === 'object') return `<td>${Object.entries(v).map(([k2,v2]) => `<strong>${escapeHtml(k2)}:</strong> ${escapeHtml(String(v2))}`).join('<br>')}</td>`;
+          return `<td>${escapeHtml(String(v ?? ''))}</td>`;
+        }).join('')}</tr>`).join('')}
+      </table>`;
+    }
+    return '';
+  }
+
+  if (typeof val === 'object') {
+    const entries = Object.entries(val);
+    const allSimple = entries.every(([, v]) => typeof v === 'string' || typeof v === 'number');
+    if (allSimple) {
+      return `<ul class="key-points" style="margin-top:8px">
+        ${entries.map(([k, v]) => `<li><strong>${escapeHtml(k)}:</strong> ${escapeHtml(String(v))}</li>`).join('')}
+      </ul>`;
+    }
+    let html = '';
+    entries.forEach(([k, v]) => {
+      if (typeof v === 'string' || typeof v === 'number') {
+        html += `<p style="margin-top:6px"><strong style="color:var(--accent)">${escapeHtml(k)}:</strong> ${escapeHtml(String(v))}</p>`;
+      } else {
+        html += `<p style="margin-top:10px;font-weight:700;font-size:12px;color:var(--accent);text-transform:uppercase;letter-spacing:0.05em">${escapeHtml(k)}</p>`;
+        html += renderValue(v);
+      }
+    });
+    return html;
+  }
+
+  return escapeHtml(String(val));
 }
 
 function renderCodingLearn(data) {
