@@ -3,119 +3,386 @@
   "topics": [
     {
       "id": "sd_01",
-      "title": "디자인 패턴 (GoF 23가지)",
+      "title": "UML 다이어그램 종류",
       "content": {
-        "creational": {
-          "description": "생성 패턴 - 객체 생성 방법",
-          "patterns": [
-            { "name": "Singleton", "description": "클래스의 인스턴스를 하나만 생성", "mnemonic": "싱글톤" },
-            { "name": "Factory Method", "description": "객체 생성을 서브클래스에게 위임" },
-            { "name": "Abstract Factory", "description": "관련 객체들의 집합을 생성하는 인터페이스 제공" },
-            { "name": "Builder", "description": "복잡한 객체를 단계적으로 생성" },
-            { "name": "Prototype", "description": "기존 객체를 복제하여 생성" }
-          ]
-        },
-        "structural": {
-          "description": "구조 패턴 - 클래스/객체 조합",
-          "patterns": [
-            { "name": "Adapter", "description": "호환되지 않는 인터페이스를 변환" },
-            { "name": "Bridge", "description": "구현과 추상화를 분리" },
-            { "name": "Composite", "description": "트리 구조로 객체를 구성" },
-            { "name": "Decorator", "description": "객체에 동적으로 기능 추가" },
-            { "name": "Facade", "description": "복잡한 서브시스템에 단순한 인터페이스 제공" },
-            { "name": "Flyweight", "description": "공유를 통해 메모리 사용 최소화" },
-            { "name": "Proxy", "description": "다른 객체에 대한 대리자 역할" }
-          ]
-        },
-        "behavioral": {
-          "description": "행위 패턴 - 객체 간 상호작용",
-          "patterns": [
-            { "name": "Chain of Responsibility", "description": "요청을 처리할 객체를 체인으로 연결" },
-            { "name": "Command", "description": "요청을 객체로 캡슐화" },
-            { "name": "Iterator", "description": "컬렉션 요소를 순차적으로 접근" },
-            { "name": "Mediator", "description": "객체들의 상호작용을 중재자가 담당" },
-            { "name": "Memento", "description": "객체의 이전 상태를 저장하고 복원" },
-            { "name": "Observer", "description": "상태 변화를 다른 객체에 자동 통보" },
-            { "name": "State", "description": "객체의 상태에 따라 행동 변경" },
-            { "name": "Strategy", "description": "알고리즘을 캡슐화하여 교체 가능하게 함" },
-            { "name": "Template Method", "description": "알고리즘의 뼈대를 정의하고 세부 구현을 서브클래스에 위임" },
-            { "name": "Visitor", "description": "객체 구조를 변경하지 않고 새로운 기능 추가" },
-            { "name": "Interpreter", "description": "언어의 문법을 클래스로 표현" }
-          ]
+        "definition": "UML(Unified Modeling Language): 소프트웨어 시스템을 시각화하고 문서화하기 위한 표준 모델링 언어. 구조(정적) 다이어그램과 행위(동적) 다이어그램으로 분류",
+        "mnemonic": "구조: 클객컴배복패 / 행위: 유시커상활타",
+        "characteristics": [
+          "구조(정적) 다이어그램 6종: 클래스·객체·컴포넌트·배포·복합구조·패키지",
+          "행위(동적) 다이어그램 7종: 유스케이스·시퀀스·커뮤니케이션(협업)·상태·활동·타이밍·상호작용",
+          "구조 다이어그램: 시스템의 정적 구조 표현 (클래스, 객체, 컴포넌트, 배포 관계)",
+          "행위 다이어그램: 시스템의 동적 행위 표현 (흐름, 상호작용, 상태 변화)",
+          "암기법(구조): 컴·배·비·치 → 컴포넌트·배포·(복합)비즈·(패키지)치 / 또는 클객컴배복패",
+          "암기법(행위): 시·커·스·톤 → 시퀀스·커뮤니케이션·(상)스테이트·(활)톤 / 또는 유시커상활타"
+        ],
+        "types": {
+          "클래스 다이어그램": "클래스의 속성·메서드와 클래스 간 관계를 표현 (정적 구조)",
+          "객체 다이어그램": "특정 시점의 인스턴스(객체) 상태를 표현",
+          "컴포넌트 다이어그램": "소프트웨어 컴포넌트 구조와 의존 관계를 표현",
+          "배포 다이어그램": "하드웨어 노드에 소프트웨어 컴포넌트가 배포되는 물리적 구조",
+          "패키지 다이어그램": "패키지(모듈) 간 의존 관계를 표현",
+          "유스케이스 다이어그램": "액터(사용자)와 시스템 간 상호작용(기능 요구사항)을 표현",
+          "시퀀스 다이어그램": "시간 순서에 따른 객체 간 메시지 교환을 표현",
+          "커뮤니케이션(협업) 다이어그램": "객체 간 협력 관계와 메시지 흐름을 표현",
+          "상태 다이어그램": "객체의 상태 변화와 전이를 표현",
+          "활동 다이어그램": "작업의 흐름(제어 흐름, 데이터 흐름)을 표현"
         }
       }
     },
     {
       "id": "sd_02",
-      "title": "결합도 (Coupling)",
+      "title": "UML 클래스 다이어그램 6가지 관계",
       "content": {
-        "description": "모듈 간의 의존성 정도. 낮을수록 좋음",
-        "levels": [
-          { "type": "자료 결합도 (Data)", "strength": "가장 약함 (좋음)", "description": "단순 자료만 전달" },
-          { "type": "스탬프 결합도 (Stamp)", "strength": "약함", "description": "자료구조를 전달" },
-          { "type": "제어 결합도 (Control)", "strength": "보통", "description": "제어 신호를 전달" },
-          { "type": "외부 결합도 (External)", "strength": "강함", "description": "외부 형식, 프로토콜 공유" },
-          { "type": "공통 결합도 (Common)", "strength": "더 강함", "description": "전역 변수 공유" },
-          { "type": "내용 결합도 (Content)", "strength": "가장 강함 (나쁨)", "description": "다른 모듈 내부를 직접 참조" }
-        ],
-        "mnemonic": "자스제외공내"
-      }
-    },
-    {
-      "id": "sd_03",
-      "title": "응집도 (Cohesion)",
-      "content": {
-        "description": "모듈 내부 요소들의 관련성 정도. 높을수록 좋음",
-        "levels": [
-          { "type": "기능적 응집도 (Functional)", "strength": "가장 높음 (좋음)", "description": "단일 기능 수행" },
-          { "type": "순차적 응집도 (Sequential)", "strength": "높음", "description": "이전 활동의 출력이 다음 활동의 입력" },
-          { "type": "교환적 응집도 (Communicational)", "strength": "보통 높음", "description": "동일한 데이터를 사용하는 요소들" },
-          { "type": "절차적 응집도 (Procedural)", "strength": "보통", "description": "순서대로 실행되어야 하는 요소들" },
-          { "type": "시간적 응집도 (Temporal)", "strength": "낮음", "description": "같은 시간에 실행되는 요소들" },
-          { "type": "논리적 응집도 (Logical)", "strength": "더 낮음", "description": "유사한 기능의 요소들" },
-          { "type": "우연적 응집도 (Coincidental)", "strength": "가장 낮음 (나쁨)", "description": "관계없는 요소들의 집합" }
-        ],
-        "mnemonic": "기순교절시논우"
-      }
-    },
-    {
-      "id": "sd_04",
-      "title": "UML 다이어그램",
-      "content": {
-        "static_diagrams": [
-          { "name": "클래스 다이어그램", "description": "클래스, 속성, 메서드, 관계 표현" },
-          { "name": "객체 다이어그램", "description": "특정 시점의 객체 인스턴스 표현" },
-          { "name": "컴포넌트 다이어그램", "description": "소프트웨어 컴포넌트 구조 표현" },
-          { "name": "배포 다이어그램", "description": "물리적 배포 구조 표현" },
-          { "name": "패키지 다이어그램", "description": "패키지 간 관계 표현" }
-        ],
-        "dynamic_diagrams": [
-          { "name": "유스케이스 다이어그램", "description": "시스템과 사용자의 상호작용 표현" },
-          { "name": "시퀀스 다이어그램", "description": "시간 흐름에 따른 객체 상호작용" },
-          { "name": "협업 다이어그램", "description": "객체 간 협력 관계 표현" },
-          { "name": "상태 다이어그램", "description": "객체의 상태 변화 표현" },
-          { "name": "활동 다이어그램", "description": "업무 흐름, 작업 순서 표현" }
-        ],
+        "mnemonic": "포집연의일실 (포집연의·일반화·실현화)",
+        "definition": "UML 클래스 다이어그램에서 클래스 간 관계를 표현하는 6가지 표기법. 암기법: 포집연의일실",
         "relationships": [
-          { "type": "연관 (Association)", "notation": "실선 화살표", "description": "클래스 간 연결 관계" },
-          { "type": "집합 (Aggregation)", "notation": "빈 마름모 + 실선", "description": "전체-부분 관계 (독립 존재 가능)" },
-          { "type": "합성 (Composition)", "notation": "채워진 마름모 + 실선", "description": "강한 전체-부분 관계 (부분은 전체에 종속)" },
-          { "type": "의존 (Dependency)", "notation": "점선 화살표", "description": "일시적 사용 관계" },
-          { "type": "실현 (Realization)", "notation": "빈 삼각형 + 점선", "description": "인터페이스 구현" },
-          { "type": "일반화 (Generalization)", "notation": "빈 삼각형 + 실선", "description": "상속 관계 (is-a)" }
+          {
+            "type": "포함(Composition) - 합성",
+            "notation": "채워진 마름모(◆) + 실선",
+            "description": "강한 전체-부분 관계. 부분은 전체 없이 독립 존재 불가. 예) 집 ◆ 방"
+          },
+          {
+            "type": "집합(Aggregation) - 집약",
+            "notation": "빈 마름모(◇) + 실선",
+            "description": "약한 전체-부분 관계. 부분이 전체 없이도 독립 존재 가능. 예) 팀 ◇ 선수"
+          },
+          {
+            "type": "연관(Association)",
+            "notation": "실선 (화살표 있거나 없음)",
+            "description": "클래스 간 지속적인 연결 관계. 예) 학생 ─ 강의"
+          },
+          {
+            "type": "의존(Dependency)",
+            "notation": "점선 화살표 (- - →)",
+            "description": "일시적 사용 관계. 한 클래스가 다른 클래스를 매개변수·리턴값으로 사용"
+          },
+          {
+            "type": "일반화(Generalization) - 상속",
+            "notation": "빈 삼각형(△) + 실선",
+            "description": "상속(is-a) 관계. 자식 클래스가 부모 클래스를 상속. 예) 강아지 ──▷ 동물"
+          },
+          {
+            "type": "실현(Realization) - 구현",
+            "notation": "빈 삼각형(△) + 점선",
+            "description": "인터페이스 구현 관계. 클래스가 인터페이스의 메서드를 구현. 예) Dog - - ▷ Animal(interface)"
+          }
+        ],
+        "characteristics": [
+          "포함(Composition)과 집합(Aggregation)의 차이: 생명 주기 종속 여부",
+          "Composition: 부분이 전체에 종속 (전체 소멸 시 부분도 소멸)",
+          "Aggregation: 부분이 독립적 (전체 소멸해도 부분 존재 가능)",
+          "일반화(상속) vs 실현(구현): 실선이면 상속, 점선이면 인터페이스 구현"
         ]
       }
     },
     {
+      "id": "sd_03",
+      "title": "객체 지향 설계 원칙 - SOLID",
+      "content": {
+        "definition": "객체 지향 설계의 5가지 핵심 원칙. 유지보수성·확장성·재사용성 향상을 위한 원칙",
+        "mnemonic": "SOLID: SRP·OCP·LSP·ISP·DIP",
+        "characteristics": [
+          "SRP (Single Responsibility Principle) 단일 책임 원칙: 클래스는 하나의 책임만 가져야 함. 키워드: 하나의 변경 이유",
+          "OCP (Open-Closed Principle) 개방-폐쇄 원칙: 확장에는 열려(Open) 있고, 수정에는 닫혀(Closed) 있어야 함. 키워드: 확장 Open, 수정 Closed",
+          "LSP (Liskov Substitution Principle) 리스코프 치환 원칙: 자식 클래스는 부모 클래스를 대체할 수 있어야 함. 키워드: 자식이 부모를 대체",
+          "ISP (Interface Segregation Principle) 인터페이스 분리 원칙: 클라이언트가 사용하지 않는 메서드에 의존하지 않도록 인터페이스를 분리. 키워드: 인터페이스 분리",
+          "DIP (Dependency Inversion Principle) 의존 역전 원칙: 고수준 모듈이 저수준 모듈에 의존하지 않고, 둘 다 추상화(인터페이스)에 의존. 키워드: 추상화에 의존"
+        ],
+        "types": {
+          "SRP - 단일 책임": "하나의 클래스는 하나의 책임만 가져야 한다",
+          "OCP - 개방-폐쇄": "확장에는 열려 있고 변경에는 닫혀 있어야 한다",
+          "LSP - 리스코프 치환": "자식 클래스는 언제나 부모 클래스를 대체할 수 있어야 한다",
+          "ISP - 인터페이스 분리": "클라이언트가 사용하지 않는 인터페이스에 의존하지 않아야 한다",
+          "DIP - 의존 역전": "추상화(인터페이스)에 의존하고 구체 클래스에 의존하지 않아야 한다"
+        }
+      }
+    },
+    {
+      "id": "sd_04",
+      "title": "럼바우 객체 모델링 기법",
+      "content": {
+        "definition": "럼바우(Rumbaugh)의 OMT(Object Modeling Technique): 객체 지향 분석 기법. 객체·동적·기능 모델링 3단계로 구성. 암기법: 객(정)동기",
+        "mnemonic": "객(정)동기: 객체(정보)모델링 → 동적모델링 → 기능모델링",
+        "characteristics": [
+          "객체(정보) 모델링: 시스템에서 요구하는 객체와 클래스를 찾고 관계를 정의. 사용 다이어그램: ER 다이어그램(ERD), 클래스 다이어그램",
+          "동적 모델링: 시스템의 제어 흐름과 시간 순서에 따른 상태 변화를 기술. 사용 다이어그램: 상태 다이어그램(State Diagram)",
+          "기능 모델링: 입·출력 데이터 간의 함수적 관계(자료 변환 과정)를 기술. 사용 다이어그램: 자료 흐름도(DFD, Data Flow Diagram)",
+          "순서: 객체 모델링 → 동적 모델링 → 기능 모델링"
+        ],
+        "types": {
+          "객체(정보) 모델링": "클래스·객체·속성·관계 정의. ERD, 클래스 다이어그램 사용",
+          "동적 모델링": "이벤트·상태·전이 표현. 상태 다이어그램(State Diagram) 사용",
+          "기능 모델링": "프로세스·데이터 흐름 표현. 자료 흐름도(DFD) 사용"
+        }
+      }
+    },
+    {
       "id": "sd_05",
+      "title": "소프트웨어 모듈 응집도 (Cohesion)",
+      "content": {
+        "definition": "모듈 내부 구성 요소들이 서로 관련된 정도. 높을수록 좋음 (높은 응집도 = 좋은 모듈)",
+        "mnemonic": "기순통절시논우 (높음 → 낮음) / 두음: 우논시절통순기 (낮음 → 높음으로 외울 때)",
+        "levels": [
+          {
+            "type": "기능적 응집도 (Functional)",
+            "strength": "가장 높음 (최선)",
+            "description": "모듈 내 모든 요소가 단일 기능을 수행. 예) 소수 판별 함수"
+          },
+          {
+            "type": "순차적 응집도 (Sequential)",
+            "strength": "높음",
+            "description": "이전 활동의 출력이 다음 활동의 입력으로 사용. 예) 데이터 읽기 → 처리 → 저장"
+          },
+          {
+            "type": "통신적 응집도 (Communicational)",
+            "strength": "보통 높음",
+            "description": "동일한 입력/출력 데이터를 사용하는 요소들. 예) 같은 DB를 조회·갱신하는 기능들"
+          },
+          {
+            "type": "절차적 응집도 (Procedural)",
+            "strength": "보통",
+            "description": "반드시 순서대로 실행되어야 하는 요소들. 예) 파일 열기 → 읽기 → 닫기"
+          },
+          {
+            "type": "시간적 응집도 (Temporal)",
+            "strength": "낮음",
+            "description": "같은 시간에 실행되는 요소들 (기능적 관련 없음). 예) 초기화 함수에서 여러 변수 초기화"
+          },
+          {
+            "type": "논리적 응집도 (Logical)",
+            "strength": "더 낮음",
+            "description": "유사한 성격의 기능들을 하나의 모듈에 모아놓음. 예) 모든 입력 처리 함수"
+          },
+          {
+            "type": "우연적 응집도 (Coincidental)",
+            "strength": "가장 낮음 (최악)",
+            "description": "모듈 내 요소들이 아무 관련 없이 묶임. 예) 무관한 기능들의 집합"
+          }
+        ],
+        "characteristics": [
+          "응집도가 높을수록 모듈의 독립성이 높고, 재사용성·유지보수성이 향상됨",
+          "기능적 > 순차적 > 통신적 > 절차적 > 시간적 > 논리적 > 우연적",
+          "높은 응집도 + 낮은 결합도 = 좋은 소프트웨어 모듈 설계"
+        ]
+      }
+    },
+    {
+      "id": "sd_06",
+      "title": "소프트웨어 모듈 결합도 (Coupling)",
+      "content": {
+        "definition": "모듈 간 상호 의존하는 정도. 낮을수록 좋음 (낮은 결합도 = 좋은 모듈)",
+        "mnemonic": "내공외제스자 (강함 → 약함) / 좋은 순서: 자스제외공내",
+        "levels": [
+          {
+            "type": "자료 결합도 (Data)",
+            "strength": "가장 약함 (최선)",
+            "description": "모듈 간 단순 자료(매개변수)만 전달. 예) 함수에 값을 인자로 전달"
+          },
+          {
+            "type": "스탬프 결합도 (Stamp)",
+            "strength": "약함",
+            "description": "배열·구조체·레코드 등 자료구조 전체를 전달. 예) 구조체 전달"
+          },
+          {
+            "type": "제어 결합도 (Control)",
+            "strength": "보통",
+            "description": "제어 신호(플래그, 스위치)를 매개변수로 전달. 예) flag 값으로 내부 흐름 제어"
+          },
+          {
+            "type": "외부 결합도 (External)",
+            "strength": "강함",
+            "description": "외부 환경(파일 형식, 프로토콜, 디바이스 인터페이스)에 의존. 예) 공유 파일 포맷"
+          },
+          {
+            "type": "공통 결합도 (Common)",
+            "strength": "더 강함",
+            "description": "전역 변수를 여러 모듈이 공유. 예) global 변수 사용"
+          },
+          {
+            "type": "내용 결합도 (Content)",
+            "strength": "가장 강함 (최악)",
+            "description": "한 모듈이 다른 모듈의 내부 데이터나 코드를 직접 참조·수정. 예) goto로 다른 모듈 진입"
+          }
+        ],
+        "characteristics": [
+          "결합도가 낮을수록 모듈의 독립성이 높고 유지보수·재사용이 용이함",
+          "자료 < 스탬프 < 제어 < 외부 < 공통 < 내용 (나쁨 순서)",
+          "높은 응집도 + 낮은 결합도 = 좋은 소프트웨어 모듈 설계"
+        ]
+      }
+    },
+    {
+      "id": "sd_07",
+      "title": "소프트웨어 아키텍처 4+1 뷰 모델",
+      "content": {
+        "definition": "Philippe Kruchten이 제안한 소프트웨어 아키텍처 기술 모델. 5가지 뷰(4개 + 유스케이스)로 시스템을 다각도에서 기술",
+        "mnemonic": "논리·프로세스·구현·배포 + 유스케이스(중심)",
+        "characteristics": [
+          "유스케이스 뷰 (Use Case View): 시스템의 기능 요구사항·사용자 시나리오 표현. 다른 4가지 뷰의 중심. 이해관계자: 최종 사용자·분석가",
+          "논리 뷰 (Logical View): 기능적 요구사항을 설계 요소로 분해. 클래스·패키지 구조. UML: 클래스·시퀀스·협업 다이어그램. 이해관계자: 설계자",
+          "프로세스 뷰 (Process View): 동시성·분산·성능·가용성 등 비기능 요구사항. UML: 활동 다이어그램. 이해관계자: 통합자",
+          "구현 뷰 (Implementation/Development View): 소스 코드·컴포넌트 구성. UML: 컴포넌트 다이어그램. 이해관계자: 개발자·프로그래머",
+          "배포 뷰 (Deployment/Physical View): 물리적 노드에 소프트웨어 배포. UML: 배포 다이어그램. 이해관계자: 시스템 엔지니어"
+        ],
+        "types": {
+          "유스케이스 뷰": "시스템 기능·사용자 시나리오. 유스케이스 다이어그램",
+          "논리 뷰": "클래스·패키지 설계 구조. 클래스·시퀀스·협업 다이어그램",
+          "프로세스 뷰": "동시성·성능·프로세스 구조. 활동 다이어그램",
+          "구현 뷰": "소스코드·컴포넌트 구성. 컴포넌트 다이어그램",
+          "배포 뷰": "하드웨어 노드 배포 구조. 배포 다이어그램"
+        }
+      }
+    },
+    {
+      "id": "sd_08",
+      "title": "GoF 디자인 패턴 23가지",
+      "content": {
+        "definition": "GoF(Gang of Four)가 정리한 23가지 객체 지향 디자인 패턴. 생성·구조·행위 패턴으로 분류",
+        "mnemonic": "생성: 싱팩빌프앱(5) / 구조: 어데퍼프브플컴(7) / 행위: 전옵중방이상인메커책템(11)",
+        "creational": {
+          "description": "생성(Creational) 패턴 - 객체 생성 방식에 관한 패턴 [암기: 싱팩빌프앱]",
+          "patterns": [
+            {
+              "name": "Singleton (싱글톤)",
+              "description": "클래스의 인스턴스를 단 하나만 생성. 전역 접근점 제공. 키워드: 하나의 인스턴스, private 생성자, static"
+            },
+            {
+              "name": "Factory Method (팩토리 메서드)",
+              "description": "객체 생성을 서브클래스에 위임. 부모 클래스에서 인터페이스 정의, 서브클래스에서 구체 클래스 결정. 키워드: 서브클래스에 위임"
+            },
+            {
+              "name": "Abstract Factory (추상 팩토리)",
+              "description": "관련 객체들의 집합(제품군)을 생성하는 인터페이스 제공. 구체적 클래스를 지정하지 않고 관련 객체 생성. 키워드: 제품군, 관련 객체들"
+            },
+            {
+              "name": "Builder (빌더)",
+              "description": "복잡한 객체의 생성 과정을 단계별로 분리. 동일한 생성 과정으로 다른 표현 결과 생성. 키워드: 단계적 생성, 복잡한 객체"
+            },
+            {
+              "name": "Prototype (프로토타입)",
+              "description": "기존 객체를 복제(clone)하여 새 객체 생성. 객체 생성 비용이 클 때 활용. 키워드: 복제, clone"
+            }
+          ]
+        },
+        "structural": {
+          "description": "구조(Structural) 패턴 - 클래스·객체 조합 구조에 관한 패턴 [암기: 어데퍼프브플컴]",
+          "patterns": [
+            {
+              "name": "Adapter (어댑터)",
+              "description": "호환되지 않는 인터페이스를 변환하여 함께 작동하게 함. 기존 클래스를 수정하지 않고 재사용. 키워드: 인터페이스 변환, 호환성"
+            },
+            {
+              "name": "Decorator (데코레이터)",
+              "description": "객체에 동적으로 새로운 기능을 추가. 상속 없이 기능 확장. 키워드: 동적 기능 추가, 래퍼(Wrapper)"
+            },
+            {
+              "name": "Facade (퍼사드)",
+              "description": "복잡한 서브시스템에 단순화된 인터페이스 제공. 외부에서의 사용을 쉽게 함. 키워드: 단순화된 인터페이스, 복잡성 은닉"
+            },
+            {
+              "name": "Proxy (프록시)",
+              "description": "다른 객체에 대한 대리자(대리인) 역할. 접근 제어·캐싱·지연 초기화에 활용. 키워드: 대리자, 접근 제어"
+            },
+            {
+              "name": "Bridge (브릿지)",
+              "description": "구현과 추상화를 분리하여 독립적으로 변형 가능하게 함. 키워드: 구현과 추상화 분리"
+            },
+            {
+              "name": "Flyweight (플라이웨이트)",
+              "description": "공유를 통해 다수의 유사 객체를 효율적으로 지원. 메모리 사용 최소화. 키워드: 공유, 메모리 절약"
+            },
+            {
+              "name": "Composite (컴포지트)",
+              "description": "트리 구조로 객체를 구성하여 단일 객체와 복합 객체를 동일하게 처리. 키워드: 트리 구조, 부분-전체"
+            }
+          ]
+        },
+        "behavioral": {
+          "description": "행위(Behavioral) 패턴 - 객체 간 상호작용·책임 분배에 관한 패턴 [암기: 전옵중방이상인메커책템]",
+          "patterns": [
+            {
+              "name": "Strategy (전략)",
+              "description": "알고리즘을 캡슐화하여 교체 가능하게 함. 실행 중 알고리즘 변경 가능. 키워드: 알고리즘 교체, 캡슐화"
+            },
+            {
+              "name": "Observer (옵저버)",
+              "description": "객체 상태 변화 시 의존 객체들에 자동 통보. 발행-구독(Pub-Sub) 모델. 키워드: 자동 통보, 상태 변화 감지"
+            },
+            {
+              "name": "Mediator (중재자)",
+              "description": "객체들의 상호작용을 중재자 객체가 담당. 객체 간 직접 통신 제거. 키워드: 중재자, 결합도 감소"
+            },
+            {
+              "name": "Chain of Responsibility (책임 연쇄)",
+              "description": "요청을 처리할 수 있는 객체를 체인으로 연결하여 순차 처리. 키워드: 체인, 요청 전달"
+            },
+            {
+              "name": "Iterator (이터레이터)",
+              "description": "컬렉션 내 요소를 순차적으로 접근하는 방법 제공. 내부 구조 노출 없이 순회. 키워드: 순차 접근, 순회"
+            },
+            {
+              "name": "State (상태)",
+              "description": "객체의 내부 상태에 따라 행동을 변경. 상태를 클래스로 표현. 키워드: 상태에 따른 행동 변경"
+            },
+            {
+              "name": "Interpreter (인터프리터)",
+              "description": "언어의 문법을 클래스로 표현하고 해석기를 구현. 키워드: 문법 표현, 언어 해석"
+            },
+            {
+              "name": "Memento (메멘토)",
+              "description": "객체의 이전 상태를 저장하고 복원(undo 기능). 캡슐화를 유지하며 상태 저장. 키워드: 상태 저장·복원, undo"
+            },
+            {
+              "name": "Command (커맨드)",
+              "description": "요청을 객체로 캡슐화하여 매개변수화. 실행취소·재실행 지원. 키워드: 요청 캡슐화, undo/redo"
+            },
+            {
+              "name": "Template Method (템플릿 메서드)",
+              "description": "알고리즘의 뼈대를 부모 클래스에 정의하고 세부 구현은 자식 클래스에 위임. 키워드: 알고리즘 뼈대, Hook 메서드"
+            },
+            {
+              "name": "Visitor (방문자)",
+              "description": "객체 구조를 변경하지 않고 새로운 기능(연산)을 추가. 더블 디스패치 사용. 키워드: 객체 구조 변경 없이 기능 추가"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "sd_09",
       "title": "요구사항 개발 프로세스",
       "content": {
-        "mnemonic": "도분명확",
+        "definition": "소프트웨어 개발에서 사용자 요구사항을 체계적으로 수집·분석·문서화·검증하는 프로세스",
+        "mnemonic": "도분명확 (도출→분석→명세→확인)",
         "steps": [
-          { "step": "도출 (Elicitation)", "description": "이해관계자로부터 요구사항 수집" },
-          { "step": "분석 (Analysis)", "description": "수집된 요구사항을 분류하고 우선순위 결정" },
-          { "step": "명세 (Specification)", "description": "요구사항을 명확하게 문서화" },
-          { "step": "확인 (Validation)", "description": "요구사항이 올바른지 검증" }
+          {
+            "level": "1단계",
+            "step": "도출 (Elicitation)",
+            "keyword": "도출·수집",
+            "description": "이해관계자로부터 요구사항 수집. 인터뷰·설문·브레인스토밍·프로토타이핑 등 활용",
+            "condition": "이해관계자로부터 요구사항 수집"
+          },
+          {
+            "level": "2단계",
+            "step": "분석 (Analysis)",
+            "keyword": "분류·우선순위",
+            "description": "수집된 요구사항을 분류하고 우선순위 결정. 충돌·중복 제거",
+            "condition": "요구사항 분류 및 우선순위 결정"
+          },
+          {
+            "level": "3단계",
+            "step": "명세 (Specification)",
+            "keyword": "문서화·SRS",
+            "description": "요구사항을 명확하고 정확하게 문서화. 소프트웨어 요구사항 명세서(SRS) 작성",
+            "condition": "요구사항을 명확히 문서화"
+          },
+          {
+            "level": "4단계",
+            "step": "확인 (Validation)",
+            "keyword": "검토·검증",
+            "description": "요구사항이 완전하고 일관성 있는지 검증. 리뷰·워크스루·인스펙션 등 활용",
+            "condition": "요구사항의 완전성·일관성 검증"
+          }
         ]
       }
     }
@@ -123,21 +390,251 @@
   "practice_problems": [
     {
       "id": "sd_q_01",
-      "question": "다음이 설명하는 디자인 패턴의 이름을 쓰시오.\n\n클래스의 인스턴스가 단 하나만 생성되도록 보장하고, 어디서든 그 인스턴스에 접근할 수 있는 전역적인 접근점을 제공하는 패턴",
-      "answer": "싱글톤 패턴 (Singleton Pattern)",
-      "explanation": "생성 패턴 중 하나로, private 생성자와 static 인스턴스 변수를 사용"
+      "question": "다음이 설명하는 UML 다이어그램의 이름을 쓰시오.\n\n시스템에서 제공하는 기능을 사용자(액터)의 관점에서 표현하며, 사용자와 시스템 간의 상호작용을 나타내는 다이어그램",
+      "answer": "유스케이스 다이어그램 (Use Case Diagram)",
+      "explanation": "행위(동적) 다이어그램의 일종. 4+1 뷰 모델에서 유스케이스 뷰에 해당하며 다른 4개 뷰의 중심이 됨",
+      "year": "실기 25년 3회",
+      "difficulty": "중"
     },
     {
       "id": "sd_q_02",
-      "question": "모듈의 독립성을 높이기 위한 결합도와 응집도의 이상적인 방향을 쓰시오.",
-      "answer": "결합도는 낮게(약하게), 응집도는 높게(강하게)",
-      "explanation": "결합도가 낮으면 다른 모듈에 대한 의존성이 낮고, 응집도가 높으면 모듈 내 요소들이 연관성이 높음"
+      "question": "UML 다이어그램을 구조(정적) 다이어그램과 행위(동적) 다이어그램으로 분류할 때, 각각의 종류를 3가지 이상 쓰시오.",
+      "answer": "구조(정적): 클래스, 객체, 컴포넌트, 배포, 패키지 다이어그램\n행위(동적): 유스케이스, 시퀀스, 커뮤니케이션, 상태, 활동 다이어그램",
+      "explanation": "구조 다이어그램 암기법: 클객컴배복패 / 행위 다이어그램 암기법: 유시커상활타",
+      "year": "실기 23년 3회",
+      "difficulty": "중"
     },
     {
       "id": "sd_q_03",
-      "question": "UML 관계 중 인터페이스 구현 관계를 나타내는 관계 유형의 이름을 쓰시오.",
-      "answer": "실현 관계 (Realization)",
-      "explanation": "빈 삼각형 화살표 + 점선으로 표현, 클래스가 인터페이스를 구현하는 관계"
+      "question": "다음이 설명하는 UML 클래스 다이어그램의 관계를 쓰시오.\n\n한 클래스가 다른 클래스를 구성 요소로 포함하며, 포함된 부분(클래스)은 전체(클래스) 없이 독립적으로 존재할 수 없는 강한 전체-부분 관계",
+      "answer": "합성(Composition) 관계 / 포함 관계",
+      "explanation": "채워진 마름모(◆) + 실선으로 표기. Aggregation과의 차이는 생명주기 종속 여부. Composition은 부분이 전체에 종속됨",
+      "year": "실기 24년 3회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_04",
+      "question": "UML 클래스 다이어그램의 관계 중 인터페이스를 구현하는 관계를 나타내는 것의 이름과 표기법을 쓰시오.",
+      "answer": "실현(Realization) 관계. 표기법: 빈 삼각형 화살표 + 점선 (- - ▷)",
+      "explanation": "일반화(상속)와 구분: 일반화는 실선 + 빈 삼각형(──▷), 실현은 점선 + 빈 삼각형(- -▷)",
+      "year": "실기 21년 3회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_05",
+      "question": "객체 지향 설계 원칙 SOLID 중 다음이 설명하는 원칙의 이름(영문 약자 포함)을 쓰시오.\n\n소프트웨어 구성 요소(클래스, 모듈, 함수 등)는 확장에는 열려(Open) 있어야 하고 변경에는 닫혀(Closed) 있어야 한다.",
+      "answer": "OCP (Open-Closed Principle) / 개방-폐쇄 원칙",
+      "explanation": "새로운 기능 추가 시 기존 코드를 수정하지 않고 확장(상속·인터페이스 구현)으로 처리하는 원칙",
+      "year": "실기 22년 2회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_06",
+      "question": "객체 지향 설계 원칙 SOLID의 각 원칙 명칭을 영문 약자와 함께 모두 쓰시오.",
+      "answer": "SRP(단일 책임 원칙), OCP(개방-폐쇄 원칙), LSP(리스코프 치환 원칙), ISP(인터페이스 분리 원칙), DIP(의존 역전 원칙)",
+      "explanation": "SOLID는 유지보수성·확장성·재사용성을 위한 5가지 객체 지향 설계 원칙",
+      "year": "필기 24년 3회",
+      "difficulty": "하"
+    },
+    {
+      "id": "sd_q_07",
+      "question": "다음이 설명하는 SOLID 원칙의 이름을 쓰시오.\n\n클라이언트는 자신이 사용하지 않는 메서드에 의존 관계를 맺으면 안 된다. 하나의 일반적인 인터페이스보다 여러 개의 구체적인 인터페이스가 낫다.",
+      "answer": "ISP (Interface Segregation Principle) / 인터페이스 분리 원칙",
+      "explanation": "큰 인터페이스를 클라이언트에 특화된 작은 인터페이스로 분리하여 불필요한 의존성을 제거",
+      "year": "필기 23년 3회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_08",
+      "question": "럼바우(Rumbaugh)의 객체 지향 분석 기법에서 사용하는 3가지 모델을 순서대로 쓰시오.",
+      "answer": "객체(정보) 모델링 → 동적 모델링 → 기능 모델링",
+      "explanation": "암기법: 객(정)동기. 각각 ER다이어그램/클래스다이어그램, 상태다이어그램, DFD(자료흐름도) 사용",
+      "year": "실기 21년 2회",
+      "difficulty": "하"
+    },
+    {
+      "id": "sd_q_09",
+      "question": "럼바우 객체 모델링 기법에서 각 모델링과 사용하는 다이어그램을 연결하시오.\n① 객체(정보) 모델링  ② 동적 모델링  ③ 기능 모델링",
+      "answer": "① 객체(정보) 모델링 - ER 다이어그램, 클래스 다이어그램\n② 동적 모델링 - 상태 다이어그램(State Diagram)\n③ 기능 모델링 - 자료 흐름도(DFD, Data Flow Diagram)",
+      "explanation": "럼바우 OMT 기법은 객체·동적·기능 3가지 모델로 시스템을 분석",
+      "year": "필기 24년 3회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_10",
+      "question": "소프트웨어 모듈의 응집도를 높은 순서대로 7가지 모두 나열하시오.",
+      "answer": "기능적 > 순차적 > 통신적(교환적) > 절차적 > 시간적 > 논리적 > 우연적",
+      "explanation": "암기법(높음→낮음): 기순통절시논우. 응집도는 높을수록 좋음",
+      "year": "실기 24년 2회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_11",
+      "question": "다음이 설명하는 응집도의 종류를 쓰시오.\n\n모듈 내 구성 요소들이 하나의 기능을 중심으로 모두 긴밀하게 연관되어 있으며, 가장 이상적인 응집도 유형",
+      "answer": "기능적 응집도 (Functional Cohesion)",
+      "explanation": "응집도 중 가장 높은 수준. 단일 기능만을 수행하는 완전히 독립적인 모듈",
+      "year": "실기 21년 3회",
+      "difficulty": "하"
+    },
+    {
+      "id": "sd_q_12",
+      "question": "모듈의 결합도를 낮은(좋은) 순서대로 6가지 모두 나열하시오.",
+      "answer": "자료 결합도 < 스탬프 결합도 < 제어 결합도 < 외부 결합도 < 공통 결합도 < 내용 결합도",
+      "explanation": "암기법(좋음→나쁨): 자스제외공내. 결합도는 낮을수록 좋음",
+      "year": "실기 24년 1회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_13",
+      "question": "다음이 설명하는 결합도의 유형을 쓰시오.\n\n한 모듈이 다른 모듈의 내부 자료를 직접 참조하거나 수정하는 결합도로, 가장 강한 결합도",
+      "answer": "내용 결합도 (Content Coupling)",
+      "explanation": "가장 나쁜 결합도 유형. 다른 모듈의 내부 코드나 데이터를 직접 참조/수정하므로 독립성이 매우 낮음",
+      "year": "실기 25년 1회",
+      "difficulty": "하"
+    },
+    {
+      "id": "sd_q_14",
+      "question": "모듈 간 제어 신호(플래그)를 매개변수로 전달하는 결합도의 종류와 설명을 쓰시오.",
+      "answer": "제어 결합도 (Control Coupling). 한 모듈이 다른 모듈의 내부 논리(흐름)를 제어하기 위해 플래그(Flag)나 스위치 값을 매개변수로 전달하는 결합도",
+      "explanation": "자료 결합도·스탬프 결합도보다 나쁘지만 외부·공통·내용 결합도보다는 좋음",
+      "year": "실기 21년 2회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_15",
+      "question": "소프트웨어 아키텍처 4+1 뷰 모델의 5가지 뷰를 모두 쓰고, 각 뷰에서 사용되는 UML 다이어그램을 한 가지 이상 쓰시오.",
+      "answer": "① 유스케이스 뷰: 유스케이스 다이어그램\n② 논리 뷰: 클래스 다이어그램, 시퀀스 다이어그램\n③ 프로세스 뷰: 활동 다이어그램\n④ 구현 뷰: 컴포넌트 다이어그램\n⑤ 배포 뷰: 배포 다이어그램",
+      "explanation": "Philippe Kruchten이 제안. 유스케이스 뷰가 중심(+1)이고 나머지 4개 뷰를 통합",
+      "year": "필기 24년 2회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_16",
+      "question": "다음이 설명하는 GoF 디자인 패턴의 이름을 쓰시오.\n\n클래스의 인스턴스가 오직 하나임을 보장하며, 이 인스턴스에 대한 전역적인 접근점을 제공하는 패턴",
+      "answer": "싱글톤 패턴 (Singleton Pattern)",
+      "explanation": "생성 패턴 중 하나. private 생성자, static 인스턴스 변수, getInstance() 메서드 사용. 암기: 싱팩빌프앱의 '싱'",
+      "year": "실기 23년 1회",
+      "difficulty": "하"
+    },
+    {
+      "id": "sd_q_17",
+      "question": "다음이 설명하는 GoF 디자인 패턴의 이름을 쓰시오.\n\n객체의 생성과 관련된 패턴으로, 상위 클래스에서 객체를 생성하는 인터페이스를 정의하고, 하위 클래스에서 인스턴스를 생성하는 클래스를 결정하는 패턴",
+      "answer": "팩토리 메서드 패턴 (Factory Method Pattern)",
+      "explanation": "생성 패턴. 어떤 클래스의 인스턴스를 만들지는 서브클래스에서 결정. 암기: 싱팩빌프앱의 '팩'",
+      "year": "실기 22년 3회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_18",
+      "question": "다음이 설명하는 GoF 디자인 패턴의 이름을 쓰시오.\n\n서로 관련 있거나 의존적인 객체들의 집합을 생성하기 위한 인터페이스를 제공하며, 구체적인 클래스를 지정하지 않고도 관련 객체들을 생성할 수 있도록 하는 패턴",
+      "answer": "추상 팩토리 패턴 (Abstract Factory Pattern)",
+      "explanation": "생성 패턴. 팩토리 메서드와 차이: 팩토리 메서드는 단일 객체 생성 위임, 추상 팩토리는 관련 객체군 생성. 암기: '앱'",
+      "year": "실기 21년 1회",
+      "difficulty": "상"
+    },
+    {
+      "id": "sd_q_19",
+      "question": "다음이 설명하는 GoF 디자인 패턴의 이름을 쓰시오.\n\n호환성이 없는 인터페이스 때문에 함께 동작할 수 없는 클래스들이 함께 동작하도록 해주는 패턴. 기존 클래스를 수정하지 않고 특정 인터페이스를 필요로 하는 코드에서 사용할 수 있게 함",
+      "answer": "어댑터 패턴 (Adapter Pattern)",
+      "explanation": "구조 패턴. 마치 전기 어댑터처럼 호환되지 않는 인터페이스 사이를 연결. 암기: 어데퍼프브플컴의 '어'",
+      "year": "실기 24년 2회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_20",
+      "question": "다음이 설명하는 GoF 디자인 패턴의 이름을 쓰시오.\n\n객체에 대한 접근을 제어하거나 추가 기능을 제공하기 위해 대리자(surrogate) 역할을 하는 객체를 제공하는 패턴",
+      "answer": "프록시 패턴 (Proxy Pattern)",
+      "explanation": "구조 패턴. 보안·캐싱·지연 초기화에 활용. 원본 객체와 동일한 인터페이스를 가진 대리 객체 사용. 암기: '프'",
+      "year": "실기 23년 2회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_21",
+      "question": "다음이 설명하는 GoF 디자인 패턴의 이름을 쓰시오.\n\n객체의 상태가 변할 때 그 객체에 의존하는 다른 객체들이 자동으로 통보를 받고 갱신되는 패턴. 발행-구독(Publish-Subscribe) 모델이라고도 함",
+      "answer": "옵저버 패턴 (Observer Pattern)",
+      "explanation": "행위 패턴. Subject(발행자)와 Observer(구독자) 관계. 상태 변화 시 notify() 호출로 모든 Observer에게 통보",
+      "year": "실기 22년 1회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_22",
+      "question": "다음이 설명하는 GoF 디자인 패턴의 이름을 쓰시오.\n\n객체 간의 복잡한 상호작용을 캡슐화하여 중재자 역할을 하는 객체를 제공함으로써, 객체들이 서로 직접 참조하지 않도록 하는 패턴",
+      "answer": "중재자 패턴 (Mediator Pattern)",
+      "explanation": "행위 패턴. M:N 관계를 M:1:N으로 단순화. 채팅방, 항공 관제 시스템 등에 활용",
+      "year": "실기 21년 3회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_23",
+      "question": "다음이 설명하는 GoF 디자인 패턴의 이름을 쓰시오.\n\n객체 구조와 기능을 분리시켜 구조를 변경하지 않고도 새로운 기능을 기존 객체 구조에 추가할 수 있는 패턴",
+      "answer": "방문자 패턴 (Visitor Pattern)",
+      "explanation": "행위 패턴. 기존 클래스 수정 없이 새 기능 추가 가능. accept()와 visit() 메서드 사용. 암기: '방'",
+      "year": "실기 24년 1회",
+      "difficulty": "상"
+    },
+    {
+      "id": "sd_q_24",
+      "question": "GoF 디자인 패턴의 생성 패턴 5가지를 모두 쓰시오.",
+      "answer": "Singleton(싱글톤), Factory Method(팩토리 메서드), Abstract Factory(추상 팩토리), Builder(빌더), Prototype(프로토타입)",
+      "explanation": "암기법: 싱팩빌프앱 (싱글톤-팩토리메서드-빌더-프로토타입-앱스트랙트팩토리)",
+      "year": "필기 23년 1회",
+      "difficulty": "하"
+    },
+    {
+      "id": "sd_q_25",
+      "question": "GoF 디자인 패턴의 구조 패턴 7가지를 모두 쓰시오.",
+      "answer": "Adapter(어댑터), Decorator(데코레이터), Facade(퍼사드), Proxy(프록시), Bridge(브릿지), Flyweight(플라이웨이트), Composite(컴포지트)",
+      "explanation": "암기법: 어데퍼프브플컴 (어댑터-데코레이터-퍼사드-프록시-브릿지-플라이웨이트-컴포지트)",
+      "year": "필기 22년 2회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_26",
+      "question": "GoF 디자인 패턴의 행위 패턴 11가지를 모두 쓰시오.",
+      "answer": "Strategy(전략), Observer(옵저버), Mediator(중재자), Chain of Responsibility(책임연쇄), Iterator(이터레이터), State(상태), Interpreter(인터프리터), Memento(메멘토), Command(커맨드), Template Method(템플릿메서드), Visitor(방문자)",
+      "explanation": "암기법: 전옵중방이상인메커책템 (전략-옵저버-중재자-방문자-이터레이터-상태-인터프리터-메멘토-커맨드-책임연쇄-템플릿메서드)",
+      "year": "필기 22년 3회",
+      "difficulty": "상"
+    },
+    {
+      "id": "sd_q_27",
+      "question": "다음이 설명하는 GoF 디자인 패턴의 이름을 쓰시오.\n\n컬렉션(배열, 리스트 등) 구현 방식을 노출하지 않으면서 집합 객체의 요소들을 순서대로 접근하는 방법을 제공하는 패턴",
+      "answer": "이터레이터 패턴 (Iterator Pattern)",
+      "explanation": "행위 패턴. hasNext()와 next() 메서드를 통해 컬렉션 내부 구조 노출 없이 순차 접근",
+      "year": "실기 22년 2회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_28",
+      "question": "다음이 설명하는 GoF 디자인 패턴의 이름을 쓰시오.\n\n알고리즘 군을 정의하고 각각 캡슐화하여 교환해서 사용할 수 있도록 만들어, 알고리즘을 사용하는 클라이언트와 독립적으로 알고리즘을 다양하게 변경할 수 있는 패턴",
+      "answer": "전략 패턴 (Strategy Pattern)",
+      "explanation": "행위 패턴. 실행 중 알고리즘 교체 가능. Context 객체가 Strategy 인터페이스를 통해 알고리즘 사용",
+      "year": "실기 21년 2회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_29",
+      "question": "다음이 설명하는 GoF 디자인 패턴의 이름을 쓰시오.\n\n기존 객체를 복사하여 새로운 객체를 생성하는 패턴으로, 객체 생성 비용이 클 때 유용하며 clone() 메서드를 사용함",
+      "answer": "프로토타입 패턴 (Prototype Pattern)",
+      "explanation": "생성 패턴. Java의 Cloneable 인터페이스와 clone() 메서드로 구현. 깊은 복사(deep copy) vs 얕은 복사(shallow copy) 주의",
+      "year": "실기 24년 3회",
+      "difficulty": "중"
+    },
+    {
+      "id": "sd_q_30",
+      "question": "다음이 설명하는 GoF 디자인 패턴의 이름을 쓰시오.\n\n브리지 패턴과 유사하지만, 객체의 이전 상태를 캡슐화하여 저장하고 필요 시 이전 상태로 되돌릴 수 있는 패턴 (undo 기능 구현에 사용)",
+      "answer": "메멘토 패턴 (Memento Pattern)",
+      "explanation": "행위 패턴. Originator(원본), Memento(저장된 상태), Caretaker(관리자) 3가지 역할. 외부에서는 내부 상태를 알 수 없도록 캡슐화",
+      "year": "실기 23년 1회",
+      "difficulty": "상"
+    },
+    {
+      "id": "sd_q_31",
+      "question": "응집도와 결합도에 대한 다음 설명에서 ( ) 안에 알맞은 말을 쓰시오.\n\n좋은 모듈화를 위해서는 결합도는 ( ① )수록 좋고, 응집도는 ( ② )수록 좋다.",
+      "answer": "① 낮을(약할) / ② 높을(강할)",
+      "explanation": "결합도(Coupling)는 모듈 간 의존도이므로 낮을수록, 응집도(Cohesion)는 모듈 내 요소들의 연관성이므로 높을수록 좋은 모듈",
+      "year": "필기 24년 1회",
+      "difficulty": "하"
     }
   ]
 }

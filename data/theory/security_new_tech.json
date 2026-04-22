@@ -5,157 +5,497 @@
       "id": "sec_01",
       "title": "암호화 알고리즘",
       "content": {
-        "symmetric_key": {
-          "description": "대칭키 암호화 - 암호화/복호화에 같은 키 사용",
-          "algorithms": [
-            { "name": "DES", "key_length": "56비트", "block_size": "64비트", "description": "현재 안전하지 않음" },
-            { "name": "3DES", "key_length": "168비트", "description": "DES를 3회 반복" },
-            { "name": "AES", "key_length": "128/192/256비트", "block_size": "128비트", "description": "현재 표준 대칭키 알고리즘" },
-            { "name": "ARIA", "key_length": "128/192/256비트", "description": "국내 표준 암호화 알고리즘" },
-            { "name": "SEED", "description": "국내 개발 블록 암호화 알고리즘" }
-          ],
-          "pros": "처리 속도 빠름",
-          "cons": "키 교환의 어려움, 키 관리 복잡"
+        "definition": "데이터를 허가되지 않은 사용자가 읽지 못하도록 변환하는 알고리즘으로, 대칭키, 비대칭키, 해시 방식으로 구분된다.",
+        "types": {
+          "대칭키 - DES": "IBM 개발 / 56bit 키 / 현재 취약하여 사용 지양",
+          "대칭키 - AES": "NIST 표준 / 128·192·256bit 키 / 현재 가장 널리 사용",
+          "대칭키 - SEED": "국산 암호화 / KISA 개발 / 128bit 키",
+          "대칭키 - IDEA": "스위스 개발 / 128bit 키 / 64bit 블록 / 8라운드",
+          "대칭키 - Skipjack": "NSA 개발 / 80bit 키 / 음성 암호화용",
+          "비대칭키 - 디피-헬만": "이산로그 기반 / 최초의 공개키 알고리즘 / 키 교환 전용",
+          "비대칭키 - RSA": "소인수분해 기반 / 전자서명 가능 / 가장 널리 쓰이는 공개키",
+          "비대칭키 - ECC": "타원곡선 기반 / 짧은 키로 높은 보안 / 모바일 환경 적합",
+          "해시 - MD5": "128bit 해시값 / 충돌 취약점 발견 / 사용 지양",
+          "해시 - SHA-1": "160bit 해시값 / 취약점 발견 / 사용 지양",
+          "해시 - SHA-2": "256·384·512bit / 현재 안전한 표준 / SHA-256 널리 사용"
         },
-        "asymmetric_key": {
-          "description": "비대칭키 암호화 - 공개키로 암호화, 개인키로 복호화",
-          "algorithms": [
-            { "name": "RSA", "description": "소인수분해 기반, 가장 널리 사용" },
-            { "name": "ECC", "description": "타원 곡선 기반, 짧은 키로 높은 보안" },
-            { "name": "DSA", "description": "디지털 서명 알고리즘" }
-          ],
-          "pros": "키 교환 문제 해결, 디지털 서명 가능",
-          "cons": "처리 속도 느림"
-        },
-        "hash": {
-          "description": "단방향 암호화 (복호화 불가)",
-          "algorithms": [
-            { "name": "MD5", "output": "128비트", "description": "현재 보안 취약" },
-            { "name": "SHA-1", "output": "160비트", "description": "보안 취약, 사용 자제" },
-            { "name": "SHA-256", "output": "256비트", "description": "현재 표준 해시 알고리즘" }
-          ]
-        }
+        "characteristics": [
+          "대칭키: 암호화·복호화에 같은 키 사용, 속도 빠름, 키 배송 문제 존재",
+          "비대칭키: 공개키로 암호화, 개인키로 복호화, 속도 느림, 키 배송 문제 없음",
+          "해시: 단방향 암호화, 복호화 불가, 무결성 검증에 사용"
+        ]
       }
     },
     {
       "id": "sec_02",
-      "title": "네트워크 공격 유형",
+      "title": "인증 기술 (SSO, Kerberos, OAuth, OTP)",
       "content": {
-        "dos_ddos": {
-          "name": "DoS/DDoS (서비스 거부 공격)",
-          "description": "대량 트래픽으로 서버/네트워크를 마비시키는 공격",
-          "types": [
-            "SYN Flooding: TCP 3-way 핸드셰이크를 악용",
-            "Smurf: IP 브로드캐스트를 이용한 증폭 공격",
-            "Ping of Death: 초대형 ICMP 패킷 전송"
-          ]
+        "definition": "사용자의 신원을 확인하는 기술로, 한 번의 인증으로 여러 서비스를 이용하거나 안전한 자격증명 위임을 제공한다.",
+        "types": {
+          "SSO (Single Sign-On)": "한 번 인증으로 여러 서비스 접근 / SAML·JWT 활용 / 중앙 집중 인증",
+          "Kerberos": "티켓 기반 인증 / KDC(=AS+TGS) 구성 / 대칭키 사용 / TGT 발급",
+          "OAuth": "비밀번호 없이 권한 위임 / 개방형 표준 / SNS 로그인 / 액세스 토큰 사용",
+          "OTP - TOTP": "시간 기반 일회용 비밀번호 / 30초 단위 갱신 / Google Authenticator",
+          "OTP - HOTP": "이벤트 기반 일회용 비밀번호 / 카운터 기반 / 요청 시 마다 새 비밀번호"
         },
-        "malware": [
-          { "name": "바이러스 (Virus)", "description": "다른 파일에 기생하여 복제, 사용자 실행 필요" },
-          { "name": "웜 (Worm)", "description": "스스로 복제하며 네트워크 전파, 독립 실행" },
-          { "name": "트로이목마 (Trojan)", "description": "정상 프로그램으로 위장한 악성 코드" },
-          { "name": "랜섬웨어 (Ransomware)", "description": "파일 암호화 후 복호화 대가로 금전 요구" },
-          { "name": "스파이웨어 (Spyware)", "description": "사용자 정보를 몰래 수집·전송" },
-          { "name": "봇넷 (Botnet)", "description": "감염된 컴퓨터들을 원격 제어하는 네트워크" }
-        ],
-        "web_attacks": [
-          { "name": "SQL 인젝션", "description": "악의적인 SQL 쿼리를 입력하여 DB 조작" },
-          { "name": "XSS (Cross-Site Scripting)", "description": "악성 스크립트를 웹페이지에 삽입" },
-          { "name": "CSRF", "description": "인증된 사용자의 의도하지 않은 요청 실행" }
+        "characteristics": [
+          "Kerberos 구성: KDC(Key Distribution Center) = AS(Authentication Server) + TGS(Ticket Granting Server)",
+          "Kerberos 흐름: 클라이언트→AS(TGT발급)→TGS(서비스티켓발급)→서비스서버",
+          "OAuth 역할: Resource Owner(사용자), Client(앱), Authorization Server, Resource Server",
+          "OTP: 일회용으로 재사용 불가, 피싱 공격에 강함"
         ]
       }
     },
     {
       "id": "sec_03",
-      "title": "접근 제어 모델",
+      "title": "3A (인증, 권한 부여, 계정 관리)",
       "content": {
-        "dac": {
-          "name": "DAC (임의 접근 제어)",
-          "description": "데이터 소유자가 접근 권한 결정",
-          "example": "UNIX 파일 권한"
+        "definition": "네트워크 보안의 핵심 프레임워크로 Authentication(인증), Authorization(권한 부여), Accounting(계정 관리) 세 가지 기능을 의미한다.",
+        "mnemonic": "어쎈 인증! 어떠한 권한 부여? → Authentication, Authorization, Accounting",
+        "types": {
+          "Authentication (인증)": "신원 확인 / 지식·소유·특성·행위·위치 기반 / MFA(다중요소인증)",
+          "Authorization (권한 부여)": "접근 제어 / 인증 후 수행 가능한 행위 결정 / DAC·MAC·RBAC",
+          "Accounting (계정 관리)": "활동 기록 / 책임 추적성 / 로그 파일 / 감사(Audit)"
         },
-        "mac": {
-          "name": "MAC (강제 접근 제어)",
-          "description": "관리자가 보안 등급에 따라 접근 권한 결정",
-          "example": "군사, 정부 기관"
+        "characteristics": [
+          "Authentication 요소: 지식(패스워드), 소유(OTP기기/스마트카드), 특성(지문/홍채), 행위(서명), 위치(GPS)",
+          "MFA(Multi-Factor Authentication): 2가지 이상의 인증 요소 조합",
+          "Accounting: 누가 언제 어떤 리소스를 얼마나 사용했는지 기록"
+        ]
+      }
+    },
+    {
+      "id": "sec_04",
+      "title": "서버 접근 통제 (DAC, MAC, RBAC)",
+      "content": {
+        "definition": "시스템 자원에 대한 접근을 통제하는 방법으로, 권한을 부여하는 주체와 방식에 따라 DAC, MAC, RBAC으로 구분된다.",
+        "levels": [
+          {
+            "type": "DAC (Discretionary Access Control)",
+            "strength": "신분 기반 / 임의적 접근 통제",
+            "description": "자원 소유자가 직접 접근 권한 설정 / 유연하지만 일관성 부족 / chmod, ACL / 개인 PC"
+          },
+          {
+            "type": "MAC (Mandatory Access Control)",
+            "strength": "규칙 기반 / 강제적 접근 통제",
+            "description": "시스템이 강제로 보안 등급 적용 / 엄격하지만 유연성 부족 / 군사 시스템 / SELinux"
+          },
+          {
+            "type": "RBAC (Role-Based Access Control)",
+            "strength": "역할 기반 접근 통제",
+            "description": "사용자→역할→권한 구조 / 기업 환경에 적합 / AWS IAM / 관리 용이"
+          }
+        ],
+        "characteristics": [
+          "DAC: 소유자(Owner)가 권한 결정, 자율적·임의적, 트로이목마 공격에 취약",
+          "MAC: 관리자가 보안 레이블(등급) 설정, 강제 적용, 유연성 낮음",
+          "RBAC: User→Role→Permission 계층 구조, 역할 변경으로 권한 일괄 관리"
+        ]
+      }
+    },
+    {
+      "id": "sec_05",
+      "title": "악성 코드 종류",
+      "content": {
+        "definition": "사용자 동의 없이 시스템에 침입하여 피해를 주는 악의적인 소프트웨어의 총칭으로, 동작 방식에 따라 구분된다.",
+        "types": {
+          "바이러스 (Virus)": "프로그램에 자신을 삽입하여 변형 / 자가복제 가능 / 네트워크 전파 불가 / 실행 필요",
+          "웜 (Worm)": "독립 실행 프로그램 / 네트워크로 자율 전파 / 이메일·공유폴더·P2P 활용 / 숙주 불필요",
+          "트로이목마 (Trojan Horse)": "정상 프로그램으로 위장 / 악성 루틴 포함 / 자가복제 안함 / 백도어 설치",
+          "랜섬웨어 (Ransomware)": "파일 암호화 후 복호화 키로 몸값 요구 / WannaCry 유명 / 비트코인 요구",
+          "스파이웨어 (Spyware)": "사용자 모르게 정보 수집 / 키로거 포함 / 개인정보·금융정보 탈취"
         },
-        "rbac": {
-          "name": "RBAC (역할 기반 접근 제어)",
-          "description": "사용자의 역할(Role)에 따라 접근 권한 부여",
-          "example": "일반 기업, 조직"
+        "characteristics": [
+          "바이러스 vs 웜: 바이러스는 숙주 프로그램 필요, 웜은 독립 실행",
+          "트로이목마: 자가복제 없음, 사용자가 직접 실행하도록 유도",
+          "랜섬웨어 대응: 정기 백업, 보안 패치 적용, 의심 파일 실행 금지"
+        ]
+      }
+    },
+    {
+      "id": "sec_06",
+      "title": "네트워크 공격 종류",
+      "content": {
+        "definition": "네트워크를 통해 시스템이나 사용자의 정보를 탈취하거나 위·변조하는 공격 기법들이다.",
+        "types": {
+          "패스워드 크래킹 - 사전 공격": "미리 만든 단어 사전으로 패스워드 대입",
+          "패스워드 크래킹 - 무차별 대입": "가능한 모든 조합 시도 (Brute Force)",
+          "패스워드 크래킹 - 레인보우 테이블": "해시값 역산 테이블 이용 / Salt로 방어",
+          "IP 스푸핑 (Spoofing)": "출발지 IP 주소를 위조하여 신뢰 관계 악용",
+          "ARP 스푸핑": "MAC 주소 위조 / ARP 캐시 오염 / 중간자 공격(MITM) 가능",
+          "스니핑 (Sniffing)": "네트워크 패킷 엿보기 / 수동적 공격 / 암호화로 방어",
+          "세션 하이재킹": "RST 패킷 전송 후 3-way handshake 완료된 세션 탈취 / TCP 시퀀스 예측"
+        },
+        "characteristics": [
+          "스푸핑(능동적) vs 스니핑(수동적): 스푸핑은 위조·변조, 스니핑은 도청",
+          "ARP 스푸핑 방어: ARP 테이블 정적 설정, ARP 스푸핑 탐지 도구 사용",
+          "세션 하이재킹: TCP 시퀀스 번호 예측으로 공격자가 정상 세션을 탈취"
+        ]
+      }
+    },
+    {
+      "id": "sec_07",
+      "title": "서비스 거부 DoS 공격 종류",
+      "content": {
+        "definition": "시스템이나 네트워크 자원을 고갈시켜 정상적인 서비스를 불가능하게 만드는 공격이다.",
+        "types": {
+          "랜드 어택 (Land Attack)": "출발지 IP = 목적지 IP / 무한 루프 유발 / 자기 자신에게 응답 반복",
+          "스머프 (Smurf)": "ICMP 브로드캐스트 / 출발지 IP를 피해자로 위조 / DRDoS의 일종",
+          "티어드롭 (Teardrop)": "IP Fragment 조립 오류 유발 / 오프셋 값 조작 / 시스템 충돌",
+          "죽음의 핑 (Ping of Death)": "65535 바이트 초과 ICMP 패킷 전송 / 버퍼 오버플로우 유발",
+          "SYN 플러딩 (SYN Flooding)": "ACK 미전송으로 연결 테이블 고갈 / half-open 연결 남용",
+          "UDP 플러딩 (UDP Flooding)": "UDP 패킷 대량 전송 / 대역폭 고갈"
+        },
+        "characteristics": [
+          "SYN 플러딩 방어: SYN Cookie 사용, 연결 타임아웃 단축, 방화벽 필터링",
+          "스머프: 브로드캐스트 네트워크를 반사체로 활용하여 피해 증폭",
+          "티어드롭: 패킷 재조합 시 오프셋 겹침/틈 발생으로 시스템 오류 유발"
+        ]
+      }
+    },
+    {
+      "id": "sec_08",
+      "title": "DoS vs DDoS vs DRDoS",
+      "content": {
+        "definition": "서비스 거부 공격의 세 가지 유형으로, 공격 주체의 수와 공격 방식의 차이로 구분된다.",
+        "levels": [
+          {
+            "type": "DoS (Denial of Service)",
+            "strength": "단일 공격자",
+            "description": "단일 공격자가 단일 대상 공격 / 리소스 고갈 / 출처 파악 용이 / 방어 비교적 쉬움"
+          },
+          {
+            "type": "DDoS (Distributed DoS)",
+            "strength": "분산 공격 / 다수 좀비 PC",
+            "description": "다수의 좀비 PC(봇넷)로 분산 공격 / 출처 파악 어려움 / 방어 어려움 / C&C 서버 통제"
+          },
+          {
+            "type": "DRDoS (Distributed Reflection DoS)",
+            "strength": "IP 스푸핑 + 반사 증폭",
+            "description": "IP 스푸핑 + 정상 서버(반사체) 활용 / DNS·NTP 서버 이용 / 증폭 공격 / 추적 극히 어려움"
+          }
+        ],
+        "characteristics": [
+          "DDoS 구성: 공격자→C&C 서버→마스터→에이전트(좀비PC)→피해자",
+          "DRDoS 반사체: DNS(53), NTP(123), SSDP, Memcached 서버 활용",
+          "DRDoS 특징: 공격자가 직접 패킷 전송 안 함, 정상 서버가 의도치 않게 공격에 가담"
+        ]
+      }
+    },
+    {
+      "id": "sec_09",
+      "title": "네트워크 신기술",
+      "content": {
+        "definition": "최신 네트워크 환경에서 활용되는 다양한 기술들로, IoT, SDN, NFV, 엣지 컴퓨팅 등을 포함한다.",
+        "types": {
+          "MQTT": "발행/구독 프로토콜 / IBM 개발 / 브로커 중계 / IoT 경량 메시지 / TCP 기반",
+          "SDN (Software Defined Networking)": "제어부와 데이터부 분리 / OpenFlow 프로토콜 / 소프트웨어로 네트워크 제어 / 프로그래머블 네트워크",
+          "NFV (Network Function Virtualization)": "네트워크 기능 가상화 / 범용 하드웨어에서 구현 / 비용 절감 / 방화벽·로드밸런서 소프트웨어화",
+          "애드혹 네트워크 (Ad-hoc)": "인프라 없는 단말간 통신 / 자율 구성 / 긴급 구조·군사 분야 활용",
+          "MEC (Mobile Edge Computing)": "모바일 엣지 컴퓨팅 / 기지국 근처 처리 / 5G 핵심 / 초저지연",
+          "IoT (Internet of Things)": "사물인터넷 / 센서 탑재 기기의 인터넷 연결 / 스마트홈·웨어러블",
+          "NFC (Near Field Communication)": "13.56MHz / 10cm 이내 근거리 통신 / 교통카드·모바일 결제",
+          "비컨 (Beacon)": "BLE(Bluetooth Low Energy) 기반 / 최대 70m / 실내 위치 추적 / 모바일 결제",
+          "Zing": "NFC 기반 / 기가급 속도 / 10cm 이내 초고속 근거리 통신",
+          "Wi-SUN": "스마트 그리드용 / IEEE 802.15.4g / 900MHz / 저전력 광역",
+          "스마트 그리드 (Smart Grid)": "지능형 전력망 / 양방향 전력·정보 흐름 / IoT 활용",
+          "AllJoyn": "퀄컴 개발 / 오픈소스 / IoT 기기 간 상호작용 프레임워크"
         }
       }
     },
     {
-      "id": "tech_01",
-      "title": "신기술 트렌드",
+      "id": "sec_10",
+      "title": "소프트웨어 신기술 (SOA, CPS, MSA, 메타버스)",
       "content": {
-        "technologies": [
-          {
-            "name": "블록체인 (Blockchain)",
-            "description": "분산 원장 기술, 투명성과 불변성, 스마트 계약",
-            "keywords": ["분산 원장", "해시 체인", "합의 알고리즘", "스마트 컨트랙트"]
-          },
-          {
-            "name": "인공지능 (AI) / 머신러닝",
-            "description": "딥러닝, 자연어처리(NLP), 컴퓨터 비전",
-            "keywords": ["딥러닝", "지도학습", "비지도학습", "강화학습"]
-          },
-          {
-            "name": "클라우드 컴퓨팅",
-            "description": "인터넷을 통한 컴퓨팅 자원 제공",
-            "types": ["IaaS (인프라)", "PaaS (플랫폼)", "SaaS (소프트웨어)"]
-          },
-          {
-            "name": "IoT (사물인터넷)",
-            "description": "인터넷에 연결된 사물들의 데이터 수집·교환"
-          },
-          {
-            "name": "양자 컴퓨팅 / 양자암호",
-            "description": "양자역학 원리를 이용한 컴퓨팅과 암호화"
-          },
-          {
-            "name": "제로 트러스트 (Zero Trust)",
-            "description": "신뢰하지 않고 항상 검증하는 보안 모델"
-          },
-          {
-            "name": "DevSecOps",
-            "description": "개발(Dev) + 보안(Sec) + 운영(Ops) 통합"
-          },
-          {
-            "name": "마이크로서비스 아키텍처 (MSA)",
-            "description": "서비스를 소규모 독립 서비스로 분리"
-          },
-          {
-            "name": "컨테이너 (Docker/Kubernetes)",
-            "description": "애플리케이션을 컨테이너로 패키징하여 배포"
-          },
-          {
-            "name": "엣지 컴퓨팅",
-            "description": "데이터 처리를 엣지(단말)에서 수행"
-          }
+        "definition": "소프트웨어 개발 및 서비스 제공 방식의 최신 트렌드로, 마이크로서비스, 서비스 지향, 사이버-물리 통합, 가상 현실 등을 포함한다.",
+        "types": {
+          "MSA (Microservice Architecture)": "독립적 소규모 서비스 구성 / API 통신 / 장애 격리 / DevOps·클라우드 네이티브 / 서비스별 독립 배포",
+          "SOA (Service Oriented Architecture)": "서비스 재사용 중심 / WSDL·SOAP·ESB 활용 / 느슨한 결합 / MSA의 전신",
+          "CPS (Cyber-Physical Systems)": "사이버-물리 시스템 / 현실과 가상 상호작용 / 피드백 루프 / 스마트팩토리·자율주행",
+          "디지털 트윈 (Digital Twin)": "현실 객체의 가상 모델 / 실시간 동기화 / 시뮬레이션·예측 분석 / 제조·건설 분야",
+          "메타버스 (Metaverse)": "3차원 가상 세계 / 아바타로 활동 / 현실과 통합 / 사회·경제 활동 가능",
+          "VR (Virtual Reality)": "완전한 가상 환경 / HMD 착용 / 현실 차단 / 게임·훈련",
+          "AR (Augmented Reality)": "현실에 가상 정보 overlay / 스마트폰·스마트글래스 / 포켓몬GO",
+          "MR (Mixed Reality)": "현실+가상 융합·상호작용 / AR보다 높은 몰입 / HoloLens",
+          "매시업 (Mashup)": "여러 웹 서비스·API 조합 / 새로운 서비스 생성 / 구글맵+부동산 정보"
+        }
+      }
+    },
+    {
+      "id": "sec_11",
+      "title": "데이터베이스 & 빅데이터 신기술",
+      "content": {
+        "definition": "대용량 데이터의 저장, 처리, 분석을 위한 기술들로, Hadoop 에코시스템과 데이터 분석 방법론을 포함한다.",
+        "types": {
+          "Hadoop": "분산 처리 프레임워크 / HDFS + MapReduce / 오픈소스 / Apache / 대용량 비정형 데이터",
+          "HDFS (Hadoop Distributed File System)": "분산 파일 시스템 / 내고장성(Fault Tolerance) / Write-Once-Read-Many / 블록 단위 저장",
+          "Chukwa": "로그 수집 시스템 / 에이전트-컬렉터 구조 / Hadoop 기반 / 대규모 로그 모니터링",
+          "Sqoop": "RDBMS ↔ Hadoop 데이터 전송 도구 / 관계형 DB와 HDFS 연동",
+          "Scrapy": "Python 웹 크롤링 프레임워크 / 대규모 웹 스크래핑 / 비동기 처리",
+          "데이터 마이닝 (Data Mining)": "데이터에서 패턴·규칙 발견 / 분류·군집·연관 분석 / 예측 모델",
+          "데이터 웨어하우스 (Data Warehouse)": "의사결정 지원 / 주제 중심·통합·시계열·비휘발성 / OLAP / 대용량 저장",
+          "데이터 마트 (Data Mart)": "데이터 웨어하우스의 축소판 / 부서별 특화 / 빠른 분석",
+          "메타데이터 (Metadata)": "데이터에 대한 데이터 / 데이터 구조·속성·출처 기술",
+          "디지털 아카이빙": "디지털 자료 장기 보존 / 포맷 변환·마이그레이션",
+          "마이데이터 (MyData)": "정보 주권 / 데이터 이동권 / 개인이 자신의 데이터 직접 관리·활용"
+        },
+        "characteristics": [
+          "빅데이터 3V: Volume(규모), Velocity(속도), Variety(다양성) / 5V: +Veracity(정확성), Value(가치)",
+          "MapReduce: Map(분산처리)→Shuffle→Reduce(집계) 단계",
+          "HDFS 특징: 마스터(NameNode)-슬레이브(DataNode) 구조, 블록 복제로 내고장성 확보"
+        ]
+      }
+    },
+    {
+      "id": "sec_12",
+      "title": "클라우드 & 가상화 신기술 (도커, 쿠버네티스, 서버리스)",
+      "content": {
+        "definition": "IT 자원을 가상화하여 인터넷으로 제공하는 클라우드 서비스와 컨테이너 기반 가상화 기술들이다.",
+        "types": {
+          "IaaS (Infrastructure as a Service)": "인프라 서비스 / 서버·스토리지·네트워크 제공 / AWS EC2, GCP / 가장 낮은 추상화",
+          "PaaS (Platform as a Service)": "플랫폼 서비스 / 개발 환경 제공 / AWS Elastic Beanstalk, Heroku / 코드만 작성",
+          "SaaS (Software as a Service)": "소프트웨어 서비스 / 완성된 앱 제공 / Gmail, Salesforce / 가장 높은 추상화",
+          "BaaS (Blockchain as a Service)": "블록체인 서비스 / AWS Managed Blockchain / 블록체인 인프라 관리 위임",
+          "멀티클라우드 (Multi-cloud)": "2개 이상 클라우드 사용 / Vendor Lock-in 방지 / 가용성 향상",
+          "인터클라우드 (Inter-cloud)": "다른 클라우드 간 상호운용성 / 자원 공유·연동",
+          "메타클라우드 (Meta-cloud)": "여러 클라우드 통합 관리 포털",
+          "하이퍼바이저 (Hypervisor)": "VM 생성·관리 / VMM / Type1(베어메탈, VMware ESXi) / Type2(호스트형, VirtualBox)",
+          "도커 (Docker)": "컨테이너 기반 가상화 / OS 수준 가상화 / 이미지로 배포 / 빠른 구동 / 경량화",
+          "쿠버네티스 (Kubernetes)": "컨테이너 오케스트레이션 / 자동 배포·확장·복구 / 구글 개발 / 오픈소스",
+          "서버리스 (Serverless)": "FaaS(Function as a Service) / 이벤트 기반 / 코드만 작성 / AWS Lambda / 사용량 과금",
+          "N-Screen": "하나의 콘텐츠를 여러 기기(TV·PC·모바일)에서 이어보기 / N-스크린"
+        },
+        "characteristics": [
+          "VM vs 컨테이너: VM은 OS 전체 가상화(무거움), 컨테이너는 OS 커널 공유(가벼움·빠름)",
+          "하이퍼바이저 Type1: 하드웨어 직접 제어, 성능 우수 / Type2: 호스트OS 위에서 실행, 설치 편리",
+          "도커 구성: Dockerfile→Image→Container / Docker Hub로 이미지 공유",
+          "쿠버네티스 구성: Pod(최소 단위)→ReplicaSet→Deployment / 마스터-워커 노드 구조"
         ]
       }
     }
   ],
   "practice_problems": [
     {
-      "id": "sec_q_01",
-      "question": "다음이 설명하는 보안 공격의 이름을 쓰시오.\n\n공격자가 웹 게시판의 댓글에 악성 스크립트 코드를 삽입하고, 사용자가 해당 게시글을 열람할 때 스크립트가 실행되어 사용자의 쿠키나 세션 정보를 탈취하는 공격",
-      "answer": "XSS (Cross-Site Scripting, 크로스 사이트 스크립팅)",
-      "explanation": "입력값 검증과 출력값 인코딩으로 방어 가능"
+      "year": "실기 21년1회",
+      "topic": "sec_04",
+      "question": "다음은 접근 통제에 관한 내용이다. 괄호 안에 알맞은 용어를 쓰시오. 주체가 속해있는 그룹의 신원에 근거하여 객체에 대한 접근을 제한하는 방법으로 어떤 주체나 그 주체가 속한 그룹의 신원에 기초하여 객체에 대한 접근을 제한하는 정책이다. 이것을 ( )라 한다.",
+      "answer": "DAC (Discretionary Access Control, 임의적 접근 통제)"
     },
     {
-      "id": "sec_q_02",
-      "question": "대칭키 암호화 알고리즘과 비대칭키 암호화 알고리즘의 차이를 쓰시오.",
-      "answer": "대칭키: 암호화와 복호화에 같은 키 사용, 속도 빠름. 비대칭키: 공개키로 암호화하고 개인키로 복호화, 키 교환 문제 해결하지만 속도 느림",
-      "explanation": "AES(대칭키), RSA(비대칭키)가 대표적"
+      "year": "실기 21년1회",
+      "topic": "sec_06",
+      "question": "다음이 설명하는 네트워크 공격 기법을 쓰시오. 네트워크 상에서 자신의 MAC 주소를 다른 컴퓨터의 MAC 주소인 것처럼 속여 해당 컴퓨터인 것처럼 동작하게 하는 해킹 기법이다.",
+      "answer": "ARP 스푸핑 (ARP Spoofing)"
     },
     {
-      "id": "sec_q_03",
-      "question": "다음이 설명하는 신기술의 이름을 쓰시오.\n\n데이터를 중앙 서버가 아닌 네트워크 참여자들이 공동으로 기록·관리하는 분산 원장 기술로, 데이터 위변조가 어렵고 투명성이 높다.",
-      "answer": "블록체인 (Blockchain)",
-      "explanation": "각 블록은 이전 블록의 해시값을 포함하므로 변경 탐지 가능"
+      "year": "실기 21년2회",
+      "topic": "sec_01",
+      "question": "다음 중 공개키 암호화 기법의 하나로 이산대수의 계산이 어렵다는 것에 기반하여 최초로 제안된 공개키 알고리즘은?",
+      "answer": "디피-헬만 (Diffie-Hellman)"
+    },
+    {
+      "year": "실기 21년2회",
+      "topic": "sec_09",
+      "question": "사물 인터넷(IoT) 환경에서 사용되는 경량 메시지 프로토콜로, 발행-구독 모델을 기반으로 하며 브로커를 통해 메시지를 전달하는 프로토콜을 쓰시오.",
+      "answer": "MQTT (Message Queuing Telemetry Transport)"
+    },
+    {
+      "year": "실기 21년3회",
+      "topic": "sec_03",
+      "question": "다음은 AAA에 관한 설명이다. 각 설명에 해당하는 용어를 쓰시오. (1) 망, 시스템 접근을 허용하기 전에 사용자의 신원을 검증하는 것 (2) 검증된 사용자에게 어떤 수준의 권한과 서비스를 허용하는 것 (3) 사용자의 자원에 대한 사용 정보를 수집하는 것",
+      "answer": "(1) Authentication(인증) (2) Authorization(권한부여) (3) Accounting(계정관리)"
+    },
+    {
+      "year": "실기 21년3회",
+      "topic": "sec_06",
+      "question": "다음이 설명하는 공격 기법의 명칭을 쓰시오. 공격자가 TCP 세션을 가로채기 위해 시퀀스 번호를 예측하고 RST 패킷을 전송하여 정상적인 통신을 방해하는 공격이다.",
+      "answer": "세션 하이재킹 (Session Hijacking)"
+    },
+    {
+      "year": "실기 21년3회",
+      "topic": "sec_09",
+      "question": "다음 설명에 해당하는 네트워크 기술을 쓰시오. 고정된 인프라 없이 단말 장치들이 자율적으로 네트워크를 구성하여 통신하는 방식으로, 긴급구조나 군사 분야에 활용된다.",
+      "answer": "애드혹 네트워크 (Ad-hoc Network)"
+    },
+    {
+      "year": "실기 22년2회",
+      "topic": "sec_01",
+      "question": "다음 설명에 해당하는 암호화 알고리즘을 쓰시오. 국내 표준 대칭키 암호화 알고리즘으로 한국인터넷진흥원(KISA)에서 개발하였으며, 128비트 키를 사용한다.",
+      "answer": "SEED"
+    },
+    {
+      "year": "실기 22년3회",
+      "topic": "sec_02",
+      "question": "다음 설명에 해당하는 기술의 명칭을 쓰시오. 인터넷 사용자가 다른 웹사이트에 대한 자신의 정보에 웹사이트나 응용프로그램의 접근 권한을 부여하는 개방형 표준으로, 제3자 응용프로그램이 해당 서비스의 사용자 계정에 대한 제한된 접근을 허용한다.",
+      "answer": "OAuth"
+    },
+    {
+      "year": "실기 23년1회",
+      "topic": "sec_05",
+      "question": "다음이 설명하는 악성코드의 종류를 쓰시오. 네트워크를 통해 스스로를 복제하여 전파할 수 있는 독립적인 프로그램으로, 다른 프로그램에 기생하지 않고 자체적으로 실행된다.",
+      "answer": "웜 (Worm)"
+    },
+    {
+      "year": "실기 23년1회",
+      "topic": "sec_06",
+      "question": "다음이 설명하는 네트워크 공격 기법을 쓰시오. 네트워크에서 전송되는 패킷을 몰래 캡처하여 내용을 엿보는 수동적 공격 방식이다.",
+      "answer": "스니핑 (Sniffing)"
+    },
+    {
+      "year": "실기 23년2회",
+      "topic": "sec_01",
+      "question": "다음 설명의 괄호 안에 들어갈 암호화 알고리즘을 쓰시오. ( )은/는 미국 표준 기술연구소(NIST)에서 표준으로 채택한 대칭키 암호화 알고리즘으로, DES의 취약점을 보완하기 위해 개발되었으며 128, 192, 256비트의 키 길이를 지원한다.",
+      "answer": "AES (Advanced Encryption Standard)"
+    },
+    {
+      "year": "실기 23년3회",
+      "topic": "sec_02",
+      "question": "다음이 설명하는 인증 기술을 쓰시오. 네트워크 인증 프로토콜로, 티켓을 사용하여 신원을 증명하며 KDC(Key Distribution Center)를 통해 인증한다. 대칭키 암호화를 사용하며 AS와 TGS로 구성된다.",
+      "answer": "Kerberos (커베로스)"
+    },
+    {
+      "year": "실기 23년3회",
+      "topic": "sec_04",
+      "question": "다음 설명에 해당하는 접근 통제 모델을 쓰시오. 사용자의 역할에 기반하여 접근 권한을 부여하는 모델로, 사용자-역할-권한의 계층 구조를 가지며 기업 환경에서 널리 사용된다.",
+      "answer": "RBAC (Role-Based Access Control, 역할 기반 접근 통제)"
+    },
+    {
+      "year": "실기 23년3회",
+      "topic": "sec_12",
+      "question": "다음 설명에 해당하는 기술을 쓰시오. 컨테이너화된 애플리케이션을 자동으로 배포, 확장, 관리해주는 오픈소스 컨테이너 오케스트레이션 시스템이다.",
+      "answer": "쿠버네티스 (Kubernetes)"
+    },
+    {
+      "year": "실기 24년2회",
+      "topic": "sec_01",
+      "question": "다음 설명에 해당하는 암호화 알고리즘을 쓰시오. 타원 곡선 암호화를 기반으로 한 공개키 암호화 알고리즘으로, 짧은 키 길이로도 높은 보안 강도를 제공하여 모바일 환경에 적합하다.",
+      "answer": "ECC (Elliptic Curve Cryptography)"
+    },
+    {
+      "year": "실기 24년3회",
+      "topic": "sec_07",
+      "question": "다음이 설명하는 DoS 공격의 종류를 쓰시오. TCP 연결 시 SYN 패킷만 대량으로 전송하고 ACK를 보내지 않아 서버의 연결 대기 큐를 가득 채워 정상적인 서비스를 방해하는 공격이다.",
+      "answer": "SYN 플러딩 (SYN Flooding)"
+    },
+    {
+      "year": "실기 24년3회",
+      "topic": "sec_09",
+      "question": "다음 설명에 해당하는 기술을 쓰시오. 네트워크의 제어부(Control Plane)와 데이터부(Data Plane)를 분리하여 소프트웨어로 네트워크를 제어하고 관리하는 기술이다.",
+      "answer": "SDN (Software Defined Networking)"
+    },
+    {
+      "year": "실기 25년1회",
+      "topic": "sec_06",
+      "question": "다음 설명에 해당하는 공격 기법을 쓰시오. IP 패킷의 출발지 주소를 위조하여 다른 시스템인 척 통신하는 네트워크 공격 기법이다.",
+      "answer": "IP 스푸핑 (IP Spoofing)"
+    },
+    {
+      "year": "실기 25년2회",
+      "topic": "sec_07",
+      "question": "다음이 설명하는 DoS 공격의 종류를 쓰시오. IP 패킷의 출발지와 목적지 주소를 동일하게 설정하여 대상 시스템이 자기 자신에게 계속 응답하도록 만드는 공격이다.",
+      "answer": "랜드 어택 (Land Attack)"
+    },
+    {
+      "year": "실기 25년3회",
+      "topic": "sec_02",
+      "question": "다음 설명에 해당하는 인증 기술을 쓰시오. 시간을 기반으로 생성되는 일회용 패스워드로, 일반적으로 30초마다 새로운 값을 생성하며 스마트폰 인증 앱에서 많이 활용된다.",
+      "answer": "TOTP (Time-based One-Time Password)"
+    },
+    {
+      "year": "실기 25년3회",
+      "topic": "sec_04",
+      "question": "다음 설명에 해당하는 접근 통제 모델을 쓰시오. 시스템 관리자가 설정한 보안 정책에 따라 강제적으로 접근을 통제하는 방식으로, 사용자의 보안 등급과 객체의 보안 레이블을 비교하여 접근을 결정한다. 주로 군사 시스템에서 사용된다.",
+      "answer": "MAC (Mandatory Access Control, 강제적 접근 통제)"
+    },
+    {
+      "year": "필기 21년1회",
+      "topic": "sec_12",
+      "question": "다음 중 하이퍼바이저(Hypervisor)에 대한 설명으로 옳지 않은 것은?",
+      "answer": "하이퍼바이저: VM 생성·관리 소프트웨어(VMM). Type1은 하드웨어에 직접 설치(베어메탈), Type2는 호스트 OS 위에 설치"
+    },
+    {
+      "year": "필기 21년2회",
+      "topic": "sec_01",
+      "question": "다음 중 대칭키 암호화 알고리즘이 아닌 것은? ① DES ② AES ③ RSA ④ SEED",
+      "answer": "③ RSA (RSA는 비대칭키 암호화 알고리즘)"
+    },
+    {
+      "year": "필기 21년2회",
+      "topic": "sec_09",
+      "question": "다음 중 애드혹(Ad-hoc) 네트워크에 대한 설명으로 옳은 것은?",
+      "answer": "애드혹 네트워크: 고정된 인프라 없이 단말 간 자율적으로 구성되는 네트워크, 긴급구조·군사 분야 활용"
+    },
+    {
+      "year": "필기 22년1회",
+      "topic": "sec_11",
+      "question": "다음 설명에 해당하는 기술을 고르시오. 분산 컴퓨팅 플랫폼으로 대용량 데이터를 분산 처리하며 HDFS와 MapReduce로 구성된 오픈소스 프레임워크이다.",
+      "answer": "Hadoop"
+    },
+    {
+      "year": "필기 22년2회",
+      "topic": "sec_01",
+      "question": "다음 중 해시 암호화 알고리즘으로 옳은 것을 모두 고르시오.",
+      "answer": "MD5, SHA-1, SHA-2 (SHA-256, SHA-512 포함)"
+    },
+    {
+      "year": "필기 22년2회",
+      "topic": "sec_09",
+      "question": "다음 설명에 해당하는 기술을 쓰시오. NFC를 기반으로 하며 10cm 이내의 거리에서 기가급 속도로 데이터를 전송하는 근거리 무선 통신 기술이다.",
+      "answer": "Zing"
+    },
+    {
+      "year": "필기 23년2회",
+      "topic": "sec_01",
+      "question": "다음 설명에 해당하는 암호화 알고리즘을 고르시오. 소인수분해의 어려움을 기반으로 한 공개키 암호화 알고리즘으로 전자서명에 활용된다.",
+      "answer": "RSA"
+    },
+    {
+      "year": "필기 23년2회",
+      "topic": "sec_10",
+      "question": "다음 설명에 해당하는 기술을 쓰시오. 현실 세계의 물리적 시스템을 사이버 공간에 동일하게 구현하고 실시간으로 연동하는 기술로, 스마트팩토리와 자율주행에 활용된다.",
+      "answer": "CPS (Cyber-Physical Systems)"
+    },
+    {
+      "year": "필기 23년2회",
+      "topic": "sec_11",
+      "question": "다음 설명에 해당하는 것을 쓰시오. 개인이 자신의 정보를 직접 관리하고 원하는 곳에 제공할 수 있는 권리로, 정보 주권과 데이터 이동권을 핵심으로 한다.",
+      "answer": "마이데이터 (MyData)"
+    },
+    {
+      "year": "필기 23년3회",
+      "topic": "sec_09",
+      "question": "다음 설명에 해당하는 기술을 쓰시오. 네트워크 기능을 소프트웨어로 구현하여 범용 하드웨어에서 실행할 수 있게 하는 기술로, 방화벽·로드밸런서 등을 가상화한다.",
+      "answer": "NFV (Network Function Virtualization)"
+    },
+    {
+      "year": "필기 24년1회",
+      "topic": "sec_11",
+      "question": "다음 설명에 해당하는 것을 쓰시오. 관계형 데이터베이스와 Hadoop 간에 데이터를 효율적으로 전송하는 도구이다.",
+      "answer": "Sqoop"
+    },
+    {
+      "year": "필기 24년2회",
+      "topic": "sec_09",
+      "question": "다음 설명에 해당하는 기술을 쓰시오. 스마트 그리드를 위한 무선 통신 표준으로 IEEE 802.15.4g 기반이며 900MHz 대역을 사용하는 저전력 광역 통신 기술이다.",
+      "answer": "Wi-SUN"
+    },
+    {
+      "year": "필기 24년2회",
+      "topic": "sec_10",
+      "question": "다음 설명에 해당하는 아키텍처를 쓰시오. 하나의 애플리케이션을 독립적으로 배포 가능한 작은 서비스들로 분리하여 구성하는 아키텍처 방식으로, 각 서비스는 API로 통신한다.",
+      "answer": "MSA (Microservice Architecture)"
+    },
+    {
+      "year": "필기 24년3회",
+      "topic": "sec_10",
+      "question": "다음 설명에 해당하는 개념을 쓰시오. 현실 세계의 물리적 객체나 시스템을 가상 공간에 동일하게 표현하고 실시간으로 동기화하여 시뮬레이션과 분석에 활용하는 기술이다.",
+      "answer": "디지털 트윈 (Digital Twin)"
+    },
+    {
+      "year": "필기 20년3회",
+      "topic": "sec_10",
+      "question": "다음 설명에 해당하는 아키텍처를 쓰시오. 기업의 비즈니스 절차에 따른 소프트웨어 기능을 서비스로 판단하고, 그 서비스를 네트워크상에 연동하여 시스템 전체를 구축하는 방법으로 WSDL, SOAP, ESB를 활용한다.",
+      "answer": "SOA (Service Oriented Architecture)"
     }
   ]
 }

@@ -1,162 +1,1411 @@
 {
-  "subject": "데이터베이스 (DB)",
+  "subject": "데이터베이스",
   "topics": [
     {
       "id": "db_01",
-      "title": "데이터베이스 개요",
+      "title": "데이터베이스 개념과 스키마",
       "content": {
-        "definition": "통합·저장·운영·공유 데이터의 집합",
+        "definition": "데이터베이스(DB)란 여러 사람이 공유하고 사용할 목적으로 통합 관리되는 데이터의 집합",
         "characteristics": [
-          "통합 데이터 (Integrated Data): 중복 최소화",
-          "저장 데이터 (Stored Data): 컴퓨터 저장매체에 저장",
-          "운영 데이터 (Operational Data): 조직의 업무에 필요한 데이터",
-          "공유 데이터 (Shared Data): 여러 사용자가 공동 사용"
+          "실시간 접근성(Real-time Accessibility): 수시적이고 비정형적인 질의에 대해 실시간 처리 응답",
+          "계속적인 변화(Continuous Evolution): 삽입·삭제·갱신을 통해 현재의 정확한 데이터를 유지",
+          "동시 공유(Concurrent Sharing): 서로 다른 목적을 가진 여러 사용자가 동시에 이용",
+          "내용에 의한 참조(Content Reference): 저장 위치가 아닌 데이터의 내용(값)으로 참조"
         ],
-        "schema_3layer": {
-          "external": "외부 스키마 - 사용자 관점의 논리적 구조",
-          "conceptual": "개념 스키마 - 전체 데이터의 논리적 구조",
-          "internal": "내부 스키마 - 물리적 저장 구조"
-        },
-        "design_steps": [
-          "요구조건 분석",
-          "개념적 설계 (ER 다이어그램)",
-          "논리적 설계 (관계형 모델)",
-          "물리적 설계 (저장 구조)",
-          "구현"
+        "schema_levels": [
+          {
+            "level": "외부 스키마(External Schema)",
+            "alias": "서브 스키마(Sub Schema)",
+            "description": "각 사용자 관점에서 정의한 스키마. 개인 또는 응용 프로그램이 보는 DB의 논리적 구조",
+            "count": "여러 개 존재 가능"
+          },
+          {
+            "level": "개념 스키마(Conceptual Schema)",
+            "alias": "전체적인 논리적 구조",
+            "description": "DB 전체의 논리적 구조. 모든 응용 프로그램이나 사용자들이 필요로 하는 데이터를 종합한 조직 전체의 DB",
+            "count": "1개만 존재"
+          },
+          {
+            "level": "내부 스키마(Internal Schema)",
+            "alias": "물리적 저장 구조",
+            "description": "DB의 물리적 저장 구조 정의. 실제 저장 방법·구조를 기술",
+            "count": "1개만 존재"
+          }
+        ],
+        "independence": [
+          {
+            "type": "논리적 독립성",
+            "description": "개념 스키마가 변경되어도 외부 스키마에 영향을 주지 않는 성질"
+          },
+          {
+            "type": "물리적 독립성",
+            "description": "내부 스키마가 변경되어도 개념 스키마에 영향을 주지 않는 성질"
+          }
+        ],
+        "dbms_features": [
+          "데이터 중복 최소화",
+          "데이터 공유",
+          "일관성 유지",
+          "무결성 유지",
+          "보안 보장",
+          "표준화 가능",
+          "데이터 독립성 유지"
         ]
       }
     },
     {
       "id": "db_02",
-      "title": "키(Key)의 종류",
+      "title": "데이터 모델과 관계 데이터 모델",
       "content": {
-        "types": {
-          "super_key": "유일성을 만족하는 속성 집합",
-          "candidate_key": "유일성 + 최소성을 만족하는 속성 집합",
-          "primary_key": "후보키 중 선택된 대표 키, NULL 불가",
-          "alternate_key": "후보키 중 기본키를 제외한 나머지",
-          "foreign_key": "다른 릴레이션의 기본키를 참조하는 속성"
-        }
+        "data_model_elements": [
+          {
+            "element": "구조(Structure)",
+            "description": "데이터베이스에 논리적으로 표현될 수 있는 개체 타입들 간의 관계"
+          },
+          {
+            "element": "연산(Operation)",
+            "description": "실제 데이터를 처리하는 작업에 대한 명세(검색, 삽입, 삭제, 갱신)"
+          },
+          {
+            "element": "제약조건(Constraint)",
+            "description": "데이터베이스에 저장될 수 있는 실제 데이터의 논리적 제약 조건"
+          }
+        ],
+        "relational_model_terms": [
+          {
+            "term": "릴레이션(Relation)",
+            "description": "2차원 테이블 형태로 표현된 데이터 집합"
+          },
+          {
+            "term": "튜플(Tuple)",
+            "description": "릴레이션의 행(Row), 레코드에 해당"
+          },
+          {
+            "term": "속성(Attribute)",
+            "description": "릴레이션의 열(Column), 필드에 해당"
+          },
+          {
+            "term": "도메인(Domain)",
+            "description": "하나의 속성이 가질 수 있는 값의 범위(집합)"
+          },
+          {
+            "term": "카디널리티(Cardinality)",
+            "description": "릴레이션의 튜플 수 (행의 개수)"
+          },
+          {
+            "term": "차수/디그리(Degree)",
+            "description": "릴레이션의 속성 수 (열의 개수)"
+          }
+        ],
+        "relational_characteristics": [
+          "튜플의 유일성: 모든 튜플은 서로 다른 값을 가짐",
+          "튜플의 무순서성: 튜플 사이에는 순서가 없음",
+          "속성의 원자성: 속성값은 원자값(더 이상 분해되지 않는 값)이어야 함",
+          "속성의 무순서성: 속성 사이에는 순서가 없음"
+        ]
       }
     },
     {
       "id": "db_03",
-      "title": "정규화 (Normalization)",
+      "title": "키(Key)의 종류와 특성",
       "content": {
-        "purpose": "데이터 중복 최소화, 이상 현상 제거",
-        "mnemonic": "도부이결다조",
-        "steps": [
-          { "level": "1NF", "keyword": "도메인 분해", "condition": "모든 속성이 원자값을 가짐" },
-          { "level": "2NF", "keyword": "부분 종속 제거", "condition": "완전 함수 종속 (기본키에 완전 종속)" },
-          { "level": "3NF", "keyword": "이행 종속 제거", "condition": "이행적 함수 종속 제거" },
-          { "level": "BCNF", "keyword": "결정자 함수 종속 제거", "condition": "모든 결정자가 후보키" },
-          { "level": "4NF", "keyword": "다치 종속 제거", "condition": "다치 종속 제거" },
-          { "level": "5NF", "keyword": "조인 종속 제거", "condition": "조인 종속성 제거" }
+        "key_types": [
+          {
+            "type": "슈퍼키(Super Key)",
+            "properties": ["유일성"],
+            "description": "한 릴레이션 내에서 튜플을 유일하게 식별할 수 있는 속성 또는 속성들의 집합 (최소성 불필요)"
+          },
+          {
+            "type": "후보키(Candidate Key)",
+            "properties": ["유일성", "최소성"],
+            "description": "튜플을 유일하게 식별하기 위해 꼭 필요한 최소한의 속성들의 집합. 기본키가 될 수 있는 키"
+          },
+          {
+            "type": "기본키(Primary Key)",
+            "properties": ["유일성", "최소성", "NOT NULL", "중복불가"],
+            "description": "후보키 중에서 선택된 메인 키. NULL 값 불가, 중복값 불가"
+          },
+          {
+            "type": "대체키(Alternate Key)",
+            "properties": ["유일성", "최소성"],
+            "description": "후보키 중 기본키를 제외한 나머지 후보키"
+          },
+          {
+            "type": "외래키(Foreign Key)",
+            "properties": ["참조 무결성"],
+            "description": "다른 릴레이션의 기본키를 참조하는 속성 또는 속성들의 집합. NULL 허용"
+          }
         ],
-        "anomalies": {
-          "insertion": "삽입 이상 - 불필요한 데이터를 함께 삽입해야 하는 문제",
-          "deletion": "삭제 이상 - 유용한 데이터가 함께 삭제되는 문제",
-          "update": "갱신 이상 - 일부만 갱신되어 불일치가 발생하는 문제"
+        "key_hierarchy": "슈퍼키 ⊃ 후보키 ⊃ {기본키, 대체키}",
+        "properties": {
+          "유일성": "릴레이션에서 해당 키로 하나의 튜플만 유일하게 식별 가능",
+          "최소성": "꼭 필요한 최소한의 속성으로만 구성"
         }
       }
     },
     {
       "id": "db_04",
-      "title": "트랜잭션 (Transaction)",
+      "title": "관계 대수와 관계 해석",
       "content": {
-        "definition": "데이터베이스의 상태를 변환시키는 논리적 작업 단위",
-        "acid": {
-          "atomicity": "원자성 - 전부 실행되거나 전혀 실행되지 않음",
-          "consistency": "일관성 - 트랜잭션 전후 데이터베이스 일관성 유지",
-          "isolation": "격리성 - 동시 실행 트랜잭션은 서로 영향을 주지 않음",
-          "durability": "영속성 - 완료된 트랜잭션 결과는 영구적으로 반영"
+        "relational_algebra": {
+          "definition": "릴레이션을 처리하기 위한 연산의 집합. 절차적 언어(Procedural Language)",
+          "operators": [
+            {
+              "symbol": "σ (시그마)",
+              "name": "셀렉션(Selection)",
+              "description": "조건을 만족하는 튜플만 선택 (행 선택)",
+              "example": "σ 조건(릴레이션)"
+            },
+            {
+              "symbol": "π (파이)",
+              "name": "프로젝션(Projection)",
+              "description": "원하는 속성만 선택 (열 선택)",
+              "example": "π 속성목록(릴레이션)"
+            },
+            {
+              "symbol": "⋈",
+              "name": "조인(Join)",
+              "description": "두 릴레이션의 공통 속성을 기준으로 결합",
+              "example": "R ⋈ S"
+            },
+            {
+              "symbol": "÷",
+              "name": "디비전(Division)",
+              "description": "S의 모든 튜플과 관련된 R의 튜플 선택",
+              "example": "R ÷ S"
+            },
+            {
+              "symbol": "∪",
+              "name": "합집합(Union)",
+              "description": "두 릴레이션의 합집합"
+            },
+            {
+              "symbol": "∩",
+              "name": "교집합(Intersection)",
+              "description": "두 릴레이션의 교집합"
+            },
+            {
+              "symbol": "-",
+              "name": "차집합(Difference)",
+              "description": "두 릴레이션의 차집합"
+            },
+            {
+              "symbol": "×",
+              "name": "카티션 프로덕트(Cartesian Product)",
+              "description": "두 릴레이션의 모든 튜플 조합"
+            }
+          ]
         },
-        "commands": {
-          "commit": "트랜잭션 결과를 영구 저장",
-          "rollback": "트랜잭션 이전 상태로 복구"
+        "relational_calculus": {
+          "definition": "원하는 정보와 그 정보를 어떻게 유도하는가를 정의하는 비절차적 언어(Non-procedural Language)",
+          "types": [
+            "튜플 관계 해석(Tuple Relational Calculus)",
+            "도메인 관계 해석(Domain Relational Calculus)"
+          ]
         }
       }
     },
     {
       "id": "db_05",
-      "title": "SQL 핵심 문법",
+      "title": "데이터베이스 설계 단계",
       "content": {
-        "ddl": {
-          "description": "데이터 정의어 (Data Definition Language)",
-          "commands": ["CREATE", "ALTER", "DROP", "TRUNCATE"],
-          "example": "CREATE TABLE 학생 (학번 VARCHAR(10) PRIMARY KEY, 이름 VARCHAR(20) NOT NULL);"
-        },
-        "dml": {
-          "description": "데이터 조작어 (Data Manipulation Language)",
-          "commands": ["SELECT", "INSERT", "UPDATE", "DELETE"],
-          "select_syntax": "SELECT [DISTINCT] 속성명 FROM 테이블명 [WHERE 조건] [GROUP BY 속성] [HAVING 조건] [ORDER BY 속성 ASC|DESC];"
-        },
-        "dcl": {
-          "description": "데이터 제어어 (Data Control Language)",
-          "commands": ["GRANT", "REVOKE"],
-          "example": "GRANT SELECT ON 학생 TO 사용자1;"
-        },
-        "join_types": [
-          { "type": "INNER JOIN", "description": "두 테이블의 교집합" },
-          { "type": "LEFT JOIN", "description": "왼쪽 테이블 전체 + 오른쪽 일치 데이터" },
-          { "type": "RIGHT JOIN", "description": "오른쪽 테이블 전체 + 왼쪽 일치 데이터" },
-          { "type": "FULL OUTER JOIN", "description": "두 테이블의 합집합" },
-          { "type": "CROSS JOIN", "description": "카티션 곱 (모든 조합)" },
-          { "type": "NATURAL JOIN", "description": "같은 이름의 속성으로 자동 조인" }
+        "acronym": "요개논물",
+        "stages": [
+          {
+            "order": 1,
+            "name": "요구사항 분석",
+            "description": "사용자의 요구사항을 파악하고 분석하여 DB 구축 목적을 명확히 하는 단계",
+            "output": "요구사항 명세서"
+          },
+          {
+            "order": 2,
+            "name": "개념적 설계",
+            "description": "현실 세계를 개념적 데이터 모델(ER 다이어그램)로 표현하는 단계. DBMS에 독립적",
+            "output": "E-R 다이어그램, 개념 스키마"
+          },
+          {
+            "order": 3,
+            "name": "논리적 설계",
+            "description": "개념적 스키마를 특정 DBMS가 지원하는 논리적 데이터 구조(관계형 모델 등)로 변환",
+            "output": "논리 스키마(테이블 구조)"
+          },
+          {
+            "order": 4,
+            "name": "물리적 설계",
+            "description": "논리적 스키마를 물리적 저장 구조(파일 구조, 인덱스 등)로 변환",
+            "output": "물리 스키마(저장 구조)"
+          }
         ],
-        "subquery": "SELECT 이름 FROM 학생 WHERE 학번 IN (SELECT 학번 FROM 수강 WHERE 과목='DB');"
+        "er_model": {
+          "components": [
+            {
+              "component": "개체(Entity)",
+              "symbol": "직사각형",
+              "description": "현실 세계에서 독립적으로 존재하는 사물이나 개념"
+            },
+            {
+              "component": "속성(Attribute)",
+              "symbol": "타원",
+              "description": "개체가 가지는 특성이나 성질"
+            },
+            {
+              "component": "관계(Relationship)",
+              "symbol": "마름모",
+              "description": "개체 사이의 연관성"
+            }
+          ],
+          "cardinality": ["1:1", "1:N", "M:N"]
+        }
       }
     },
     {
       "id": "db_06",
-      "title": "무결성 제약 조건",
+      "title": "무결성(Integrity)",
       "content": {
-        "entity_integrity": "기본키는 NULL이 될 수 없고 중복될 수 없음",
-        "referential_integrity": "외래키는 참조하는 릴레이션의 기본키 값이거나 NULL",
-        "domain_integrity": "속성값은 정의된 도메인 범위 내에 있어야 함",
-        "null_integrity": "특정 속성에 NULL을 허용하지 않음"
+        "definition": "데이터베이스에 저장된 데이터 값과 그것이 표현하는 현실 세계의 실제 값이 일치하는 정확성을 의미",
+        "integrity_types": [
+          {
+            "type": "개체 무결성(Entity Integrity)",
+            "description": "기본키(PK)를 구성하는 속성은 NULL 값이나 중복 값을 가질 수 없음"
+          },
+          {
+            "type": "참조 무결성(Referential Integrity)",
+            "description": "외래키(FK) 값은 참조하는 테이블의 기본키 값이거나 NULL이어야 함. 존재하지 않는 값 참조 불가"
+          },
+          {
+            "type": "도메인 무결성(Domain Integrity)",
+            "alias": "속성 무결성",
+            "description": "속성값은 해당 속성의 도메인에 속하는 값이어야 함 (자료형, 범위 준수)"
+          },
+          {
+            "type": "사용자 정의 무결성(User-defined Integrity)",
+            "description": "특정 응용 분야에서 사용자가 정의한 규칙을 준수해야 함"
+          },
+          {
+            "type": "키 무결성(Key Integrity)",
+            "description": "릴레이션에는 적어도 하나의 키가 존재해야 함"
+          }
+        ]
       }
     },
     {
       "id": "db_07",
-      "title": "병행 제어 & 회복",
+      "title": "이상 현상(Anomaly)과 정규화",
       "content": {
-        "concurrency_problems": [
-          "갱신 분실 (Lost Update): 동시 갱신 시 일부 결과 손실",
-          "현황 파악 오류 (Dirty Read): 미완료 트랜잭션 결과 참조",
-          "모순성 (Inconsistency): 여러 데이터 조회 시 일관성 위배",
-          "연쇄 복귀 (Cascading Rollback): 한 트랜잭션 실패 시 연쇄 롤백"
+        "anomalies": {
+          "definition": "정규화를 거치지 않은 릴레이션에서 데이터 중복으로 인해 발생하는 문제점",
+          "types": [
+            {
+              "type": "삽입 이상(Insertion Anomaly)",
+              "description": "데이터 삽입 시 의도하지 않은 값들도 함께 삽입되거나, 원하는 값만 삽입이 불가한 경우"
+            },
+            {
+              "type": "삭제 이상(Deletion Anomaly)",
+              "description": "데이터 삭제 시 의도하지 않은 다른 데이터까지 함께 삭제되는 경우"
+            },
+            {
+              "type": "갱신 이상(Update Anomaly)",
+              "description": "중복된 데이터 중 일부만 갱신되어 데이터 불일치가 발생하는 경우"
+            }
+          ]
+        },
+        "normalization": {
+          "definition": "이상 현상의 원인인 함수적 종속성을 분석하여 하나의 릴레이션을 여러 릴레이션으로 분해하는 과정",
+          "normal_forms": [
+            {
+              "nf": "1NF (제1정규형)",
+              "condition": "모든 속성의 도메인이 원자값(Atomic Value)으로만 구성",
+              "remove": "반복 그룹(다중값 속성) 제거"
+            },
+            {
+              "nf": "2NF (제2정규형)",
+              "condition": "1NF를 만족하고, 기본키가 아닌 모든 속성이 기본키에 완전 함수 종속",
+              "remove": "부분 함수 종속 제거"
+            },
+            {
+              "nf": "3NF (제3정규형)",
+              "condition": "2NF를 만족하고, 기본키가 아닌 모든 속성이 기본키에 이행적 함수 종속이 아님",
+              "remove": "이행 함수 종속 제거"
+            },
+            {
+              "nf": "BCNF (Boyce-Codd Normal Form)",
+              "condition": "3NF를 만족하고, 모든 결정자가 후보키",
+              "remove": "후보키가 아닌 결정자 제거"
+            },
+            {
+              "nf": "4NF (제4정규형)",
+              "condition": "BCNF를 만족하고, 다치 종속(Multi-valued Dependency)이 없음",
+              "remove": "다치 종속 제거"
+            },
+            {
+              "nf": "5NF (제5정규형)",
+              "condition": "4NF를 만족하고, 조인 종속(Join Dependency)이 없음",
+              "remove": "조인 종속 제거"
+            }
+          ]
+        },
+        "functional_dependency": {
+          "complete": "완전 함수 종속: 기본키 전체에 종속",
+          "partial": "부분 함수 종속: 기본키의 일부에 종속 (복합키에서 발생)",
+          "transitive": "이행 함수 종속: A→B, B→C이면 A→C (간접 종속)"
+        },
+        "denormalization": {
+          "definition": "정규화로 분해된 테이블들을 성능 향상을 위해 의도적으로 중복을 허용하고 통합하는 과정",
+          "purpose": "조회 성능 향상 (JOIN 감소)",
+          "trade_off": "데이터 중복 증가, 갱신 비용 증가"
+        }
+      }
+    },
+    {
+      "id": "db_08",
+      "title": "파일 구조와 인덱스",
+      "content": {
+        "file_structures": [
+          {
+            "type": "순차 파일(Sequential File)",
+            "description": "데이터를 키 순서대로 연속적으로 저장",
+            "pros": "순차 처리 빠름, 저장 공간 효율적",
+            "cons": "삽입·삭제 비효율, 특정 레코드 검색 느림"
+          },
+          {
+            "type": "인덱스 파일(Indexed File)",
+            "description": "인덱스를 이용하여 데이터에 빠르게 접근하는 방식",
+            "types": [
+              "ISAM(Indexed Sequential Access Method): 정적 인덱스, 오버플로우 영역 사용",
+              "B-Tree 인덱스: 동적 인덱스, 균형 트리 구조로 삽입·삭제 시 자동 재구성"
+            ]
+          },
+          {
+            "type": "해싱 파일(Hashing File)",
+            "description": "해시 함수를 이용하여 데이터의 저장 위치를 계산",
+            "collision_resolution": [
+              "체이닝(Chaining): 충돌된 데이터를 연결 리스트로 연결",
+              "개방 주소법(Open Addressing): 충돌 시 다른 빈 버킷에 저장"
+            ]
+          }
         ],
-        "locking": "로킹 프로토콜 - 트랜잭션이 데이터에 잠금 설정",
-        "two_phase_locking": "2단계 로킹: 성장 단계(잠금 획득)와 축소 단계(잠금 해제)",
-        "recovery_methods": [
-          "지연 갱신 (Deferred Update): 트랜잭션 완료 후 DB에 반영",
-          "즉시 갱신 (Immediate Update): 갱신 즉시 DB에 반영",
-          "검사점 (Checkpoint): 주기적으로 검사점 저장",
-          "Redo: 완료된 트랜잭션 재실행",
-          "Undo: 미완료 트랜잭션 취소"
+        "index_types": [
+          {
+            "type": "클러스터 인덱스(Clustered Index)",
+            "description": "인덱스 순서와 데이터 저장 순서가 동일. 테이블당 1개만 가능"
+          },
+          {
+            "type": "비클러스터 인덱스(Non-Clustered Index)",
+            "description": "인덱스 순서와 데이터 저장 순서가 다름. 여러 개 가능"
+          },
+          {
+            "type": "밀집 인덱스(Dense Index)",
+            "description": "데이터 레코드 하나당 인덱스 항목 하나"
+          },
+          {
+            "type": "희소 인덱스(Sparse Index)",
+            "description": "일부 레코드에 대해서만 인덱스 항목 존재"
+          }
+        ]
+      }
+    },
+    {
+      "id": "db_09",
+      "title": "트랜잭션(Transaction)",
+      "content": {
+        "definition": "데이터베이스에서 하나의 논리적 기능을 수행하기 위한 일련의 연산들의 집합. 작업의 완전성을 보장",
+        "acid_properties": [
+          {
+            "property": "원자성(Atomicity)",
+            "description": "트랜잭션의 연산은 모두 수행되거나 모두 수행되지 않아야 함 (All or Nothing)"
+          },
+          {
+            "property": "일관성(Consistency)",
+            "description": "트랜잭션 실행 전후 데이터베이스가 일관된 상태를 유지해야 함"
+          },
+          {
+            "property": "고립성(Isolation)",
+            "alias": "격리성",
+            "description": "하나의 트랜잭션이 실행 중에는 다른 트랜잭션의 연산이 끼어들 수 없음"
+          },
+          {
+            "property": "지속성(Durability)",
+            "alias": "영속성",
+            "description": "성공적으로 완료된 트랜잭션의 결과는 영구적으로 반영되어야 함"
+          }
+        ],
+        "states": [
+          "활동(Active): 트랜잭션이 실행 중인 상태",
+          "부분 완료(Partially Committed): 마지막 연산까지 실행 후 COMMIT 대기 상태",
+          "완료(Committed): COMMIT 연산이 실행된 상태",
+          "실패(Failed): 트랜잭션 실행에 오류가 발생한 상태",
+          "철회(Aborted): ROLLBACK 연산이 실행된 상태"
+        ],
+        "operations": {
+          "COMMIT": "트랜잭션이 성공적으로 완료되었음을 알리는 연산. DB에 영구 반영",
+          "ROLLBACK": "트랜잭션이 비정상 종료되어 이전 상태로 되돌리는 연산"
+        }
+      }
+    },
+    {
+      "id": "db_10",
+      "title": "회복(Recovery)과 병행 제어",
+      "content": {
+        "recovery": {
+          "definition": "트랜잭션 실행 중 오류 발생 시 데이터베이스를 오류 발생 이전의 일관된 상태로 복원하는 기법",
+          "techniques": [
+            {
+              "technique": "REDO",
+              "description": "장애 발생 전 COMMIT된 트랜잭션을 재실행하여 DB 갱신. 회복 후 재실행"
+            },
+            {
+              "technique": "UNDO",
+              "description": "장애 발생 전 COMMIT되지 않은 트랜잭션을 취소하여 원상복구"
+            },
+            {
+              "technique": "검사점(Checkpoint)",
+              "description": "주기적으로 검사점을 설정하여 장애 발생 시 검사점부터 회복 작업 수행. 전체 로그 탐색 불필요"
+            },
+            {
+              "technique": "그림자 페이징(Shadow Paging)",
+              "description": "트랜잭션 실행 전 페이지 테이블 복사본(그림자 페이지)을 저장. 로그 불필요"
+            }
+          ]
+        },
+        "concurrency_control": {
+          "definition": "다수의 사용자가 동시에 데이터베이스에 접근할 때 데이터의 일관성을 유지하기 위한 제어",
+          "problems": [
+            {
+              "problem": "갱신 분실(Lost Update)",
+              "description": "두 트랜잭션이 같은 데이터를 갱신할 때 먼저 수행된 트랜잭션의 결과가 사라짐"
+            },
+            {
+              "problem": "오손 읽기(Dirty Read)",
+              "description": "COMMIT되지 않은 데이터를 다른 트랜잭션이 읽음"
+            },
+            {
+              "problem": "반복 불가능 읽기(Non-repeatable Read)",
+              "description": "같은 쿼리를 두 번 실행했을 때 다른 결과가 나옴"
+            }
+          ],
+          "locking": {
+            "definition": "트랜잭션이 DB 자원 접근 시 잠금(Lock)을 설정하여 다른 트랜잭션의 접근을 제한",
+            "types": [
+              {
+                "type": "공유 락(Shared Lock, S-Lock)",
+                "description": "읽기 연산에 사용. 여러 트랜잭션이 동시에 공유 락 설정 가능"
+              },
+              {
+                "type": "배타 락(Exclusive Lock, X-Lock)",
+                "description": "쓰기 연산에 사용. 다른 트랜잭션의 락 설정 불가"
+              }
+            ],
+            "deadlock": "교착 상태(Deadlock): 두 트랜잭션이 서로 상대방의 락 해제를 기다리는 상태"
+          }
+        }
+      }
+    },
+    {
+      "id": "db_11",
+      "title": "SQL DDL - 데이터 정의어",
+      "content": {
+        "definition": "데이터베이스의 구조(테이블, 인덱스, 뷰 등)를 정의, 수정, 삭제하는 SQL 명령어",
+        "commands": [
+          {
+            "command": "CREATE",
+            "description": "테이블, 뷰, 인덱스 등 DB 객체 생성",
+            "syntax": {
+              "table": "CREATE TABLE 테이블명 (속성명 데이터타입 [제약조건], ...);",
+              "view": "CREATE VIEW 뷰명 AS SELECT 문;",
+              "index": "CREATE [UNIQUE] INDEX 인덱스명 ON 테이블명(속성명 [ASC|DESC]);"
+            }
+          },
+          {
+            "command": "ALTER",
+            "description": "테이블 구조 변경 (속성 추가·수정·삭제)",
+            "syntax": {
+              "add_column": "ALTER TABLE 테이블명 ADD 속성명 데이터타입;",
+              "modify_column": "ALTER TABLE 테이블명 MODIFY 속성명 데이터타입;",
+              "drop_column": "ALTER TABLE 테이블명 DROP COLUMN 속성명;"
+            }
+          },
+          {
+            "command": "DROP",
+            "description": "테이블, 뷰, 인덱스 등 DB 객체 삭제",
+            "syntax": "DROP TABLE 테이블명 [CASCADE | RESTRICT];",
+            "options": {
+              "CASCADE": "해당 객체를 참조하는 모든 객체 함께 삭제",
+              "RESTRICT": "참조하는 객체가 있으면 삭제 거부"
+            }
+          },
+          {
+            "command": "TRUNCATE",
+            "description": "테이블의 모든 데이터를 삭제하지만 테이블 구조는 유지 (롤백 불가)"
+          }
+        ],
+        "constraints": [
+          {
+            "constraint": "PRIMARY KEY",
+            "description": "기본키 지정. NULL 불가, 중복 불가",
+            "example": "PRIMARY KEY(속성명)"
+          },
+          {
+            "constraint": "FOREIGN KEY",
+            "description": "외래키 지정. 다른 테이블의 기본키 참조",
+            "example": "FOREIGN KEY(속성명) REFERENCES 참조테이블(기본키)"
+          },
+          {
+            "constraint": "NOT NULL",
+            "description": "NULL 값을 허용하지 않음"
+          },
+          {
+            "constraint": "UNIQUE",
+            "description": "중복값을 허용하지 않음 (NULL은 허용)"
+          },
+          {
+            "constraint": "CHECK",
+            "description": "속성값의 범위나 조건 지정",
+            "example": "CHECK(나이 >= 0 AND 나이 <= 150)"
+          },
+          {
+            "constraint": "DEFAULT",
+            "description": "속성의 기본값 지정",
+            "example": "DEFAULT '기본값'"
+          }
+        ],
+        "on_delete_options": [
+          "ON DELETE CASCADE: 참조된 기본키 삭제 시 외래키를 가진 행도 자동 삭제",
+          "ON DELETE SET NULL: 참조된 기본키 삭제 시 외래키를 NULL로 설정",
+          "ON DELETE SET DEFAULT: 참조된 기본키 삭제 시 외래키를 기본값으로 설정",
+          "ON DELETE RESTRICT: 참조된 기본키를 가진 행이 있으면 삭제 거부"
+        ]
+      }
+    },
+    {
+      "id": "db_12",
+      "title": "SQL DCL - 데이터 제어어",
+      "content": {
+        "definition": "데이터베이스에 대한 접근 권한을 부여하거나 취소하는 SQL 명령어",
+        "commands": [
+          {
+            "command": "GRANT",
+            "description": "사용자에게 권한 부여",
+            "syntax": "GRANT 권한 ON 객체 TO 사용자 [WITH GRANT OPTION];",
+            "example": "GRANT SELECT, INSERT ON 학생 TO 홍길동;",
+            "with_grant_option": "WITH GRANT OPTION: 권한을 받은 사용자가 다른 사용자에게 같은 권한을 부여할 수 있음"
+          },
+          {
+            "command": "REVOKE",
+            "description": "사용자로부터 권한 취소",
+            "syntax": "REVOKE [GRANT OPTION FOR] 권한 ON 객체 FROM 사용자 [CASCADE];",
+            "example": "REVOKE SELECT ON 학생 FROM 홍길동;",
+            "cascade": "CASCADE: 권한을 부여받은 사용자가 다른 사용자에게 부여한 권한도 함께 취소"
+          }
+        ],
+        "privilege_types": [
+          "SELECT: 조회 권한",
+          "INSERT: 삽입 권한",
+          "UPDATE: 수정 권한",
+          "DELETE: 삭제 권한",
+          "ALL: 모든 권한"
+        ]
+      }
+    },
+    {
+      "id": "db_13",
+      "title": "SQL DML - 데이터 조작어 (INSERT, UPDATE, DELETE)",
+      "content": {
+        "definition": "데이터베이스의 데이터를 삽입, 수정, 삭제하는 SQL 명령어",
+        "insert": {
+          "syntax_values": "INSERT INTO 테이블명[(속성명1, 속성명2, ...)] VALUES (값1, 값2, ...);",
+          "syntax_select": "INSERT INTO 테이블명[(속성명1, 속성명2, ...)] SELECT 속성명1, 속성명2, ... FROM 다른테이블 [WHERE 조건];",
+          "notes": [
+            "속성명 생략 시 모든 속성에 값을 순서대로 입력해야 함",
+            "속성명을 명시하면 명시된 속성에만 값 입력 (나머지는 NULL 또는 DEFAULT)",
+            "문자열은 작은따옴표('') 사용"
+          ]
+        },
+        "update": {
+          "syntax": "UPDATE 테이블명 SET 속성명1=값1[, 속성명2=값2, ...] [WHERE 조건];",
+          "notes": [
+            "WHERE 절 생략 시 모든 튜플이 수정됨",
+            "여러 속성을 동시에 수정 가능 (콤마로 구분)"
+          ]
+        },
+        "delete": {
+          "syntax": "DELETE FROM 테이블명 [WHERE 조건];",
+          "notes": [
+            "WHERE 절 생략 시 모든 튜플 삭제 (테이블 구조는 유지)",
+            "ON DELETE CASCADE 설정 시 참조하는 튜플도 자동 삭제"
+          ]
+        },
+        "case_sensitivity": "SQL 명령어(SELECT, FROM, WHERE 등)는 대소문자 구분 없음. 데이터 값은 대소문자 구분"
+      }
+    },
+    {
+      "id": "db_14",
+      "title": "SQL JOIN과 서브쿼리",
+      "content": {
+        "joins": {
+          "types": [
+            {
+              "type": "INNER JOIN",
+              "alias": "내부 조인",
+              "description": "양쪽 테이블에 모두 존재하는 데이터만 반환 (교집합)",
+              "syntax": "SELECT * FROM A INNER JOIN B ON A.키 = B.키;"
+            },
+            {
+              "type": "CROSS JOIN",
+              "alias": "카티션 프로덕트",
+              "description": "두 테이블의 모든 행을 조합. 결과 행 수 = A행수 × B행수",
+              "syntax": "SELECT * FROM A CROSS JOIN B;"
+            },
+            {
+              "type": "LEFT OUTER JOIN",
+              "description": "왼쪽 테이블의 모든 행과 오른쪽에서 매칭되는 행 반환. 매칭 없으면 NULL",
+              "syntax": "SELECT * FROM A LEFT OUTER JOIN B ON A.키 = B.키;"
+            },
+            {
+              "type": "RIGHT OUTER JOIN",
+              "description": "오른쪽 테이블의 모든 행과 왼쪽에서 매칭되는 행 반환. 매칭 없으면 NULL",
+              "syntax": "SELECT * FROM A RIGHT OUTER JOIN B ON A.키 = B.키;"
+            },
+            {
+              "type": "FULL OUTER JOIN",
+              "description": "양쪽 테이블의 모든 행 반환. 매칭 없으면 NULL",
+              "syntax": "SELECT * FROM A FULL OUTER JOIN B ON A.키 = B.키;"
+            },
+            {
+              "type": "NATURAL JOIN",
+              "description": "두 테이블에서 같은 이름을 가진 속성을 자동으로 조인 조건으로 사용"
+            }
+          ],
+          "academic_classification": [
+            "세타 조인(θ-Join): 비교 연산자(=, <, >, ≤, ≥, ≠)를 사용하는 조인의 총칭",
+            "동등 조인(Equi-Join): 세타 조인 중 = 연산자를 사용하는 조인",
+            "자연 조인(Natural Join): 동등 조인에서 중복 속성을 제거한 조인",
+            "계층: 세타 조인 > 동등 조인 > 자연 조인"
+          ]
+        },
+        "subquery": {
+          "definition": "쿼리 안에 중첩된 또 다른 쿼리 (내부 쿼리 먼저 실행)",
+          "operators": [
+            {
+              "operator": "IN",
+              "description": "서브쿼리 결과 중 하나라도 일치하면 참",
+              "example": "WHERE 학과 IN (SELECT 학과 FROM 교수 WHERE 이름='홍길동')"
+            },
+            {
+              "operator": "ALL",
+              "description": "서브쿼리의 모든 결과와 비교하여 모두 만족하면 참",
+              "example": "WHERE 점수 > ALL (SELECT 점수 FROM B반)"
+            },
+            {
+              "operator": "ANY / SOME",
+              "description": "서브쿼리 결과 중 하나라도 만족하면 참",
+              "example": "WHERE 점수 > ANY (SELECT 점수 FROM B반)"
+            },
+            {
+              "operator": "EXISTS",
+              "description": "서브쿼리 결과가 존재하면 참"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "db_15",
+      "title": "SQL SELECT - 조회 완전 정복",
+      "content": {
+        "execution_order": ["FROM", "WHERE", "GROUP BY", "HAVING", "SELECT", "ORDER BY"],
+        "clauses": {
+          "select": {
+            "syntax": "SELECT [DISTINCT] 속성명 FROM 테이블명;",
+            "distinct": "중복 행 제거"
+          },
+          "where": {
+            "operators": [
+              "=, <>, >, <, >=, <=",
+              "AND, OR, NOT",
+              "BETWEEN A AND B: A 이상 B 이하",
+              "IN (값 목록): 목록 중 하나와 일치",
+              "LIKE '패턴': % (0개 이상 문자), _ (정확히 1개 문자)",
+              "IS NULL / IS NOT NULL"
+            ],
+            "and_or_priority": "AND가 OR보다 우선순위 높음"
+          },
+          "order_by": {
+            "syntax": "ORDER BY 속성명 [ASC | DESC];",
+            "default": "기본값은 ASC (오름차순)"
+          },
+          "aggregate_functions": [
+            "COUNT(*): NULL 포함 전체 행 수",
+            "COUNT(속성명): NULL 제외한 해당 속성의 행 수",
+            "COUNT(DISTINCT 속성명): 중복 제거 후 NULL 제외 행 수",
+            "SUM(속성명): 합계",
+            "AVG(속성명): 평균",
+            "MAX(속성명): 최댓값",
+            "MIN(속성명): 최솟값"
+          ],
+          "group_by": {
+            "syntax": "GROUP BY 속성명 HAVING 조건;",
+            "note": "HAVING: GROUP BY 결과에 대한 조건 (WHERE는 그룹화 전, HAVING은 그룹화 후)"
+          },
+          "alias": {
+            "syntax": "속성명 AS 별칭",
+            "note": "별칭은 SELECT 절에서 정의하고 ORDER BY에서 사용 가능. GROUP BY에서는 사용 불가 (DB마다 다름)"
+          }
+        },
+        "set_operations": [
+          {
+            "operator": "UNION",
+            "description": "합집합, 중복 제거",
+            "syntax": "SELECT ... UNION SELECT ...;"
+          },
+          {
+            "operator": "UNION ALL",
+            "description": "합집합, 중복 포함",
+            "syntax": "SELECT ... UNION ALL SELECT ...;"
+          },
+          {
+            "operator": "INTERSECT",
+            "description": "교집합",
+            "syntax": "SELECT ... INTERSECT SELECT ...;"
+          },
+          {
+            "operator": "EXCEPT / MINUS",
+            "description": "차집합 (EXCEPT: 표준, MINUS: Oracle)",
+            "syntax": "SELECT ... EXCEPT SELECT ...;"
+          }
+        ],
+        "union_order_by": "UNION 쿼리에서 ORDER BY는 마지막 SELECT 뒤에 한 번만 작성"
+      }
+    },
+    {
+      "id": "db_16",
+      "title": "RAID - 저장 장치 성능과 안정성",
+      "content": {
+        "definition": "RAID(Redundant Array of Independent Disks): 여러 개의 물리적 디스크를 하나의 논리적 디스크로 구성하여 성능과 신뢰성을 향상시키는 기술",
+        "concepts": [
+          {
+            "concept": "스트라이핑(Striping)",
+            "description": "데이터를 여러 디스크에 분산 저장하여 병렬 처리로 성능 향상. 장애 허용 기능 없음"
+          },
+          {
+            "concept": "미러링(Mirroring)",
+            "description": "동일한 데이터를 두 개 이상의 디스크에 중복 저장하여 신뢰성 향상"
+          },
+          {
+            "concept": "패리티(Parity)",
+            "description": "오류 검출 및 복구를 위한 정보. 디스크 장애 발생 시 데이터 복구에 사용"
+          }
+        ],
+        "levels": [
+          {
+            "level": "RAID 0",
+            "technique": "스트라이핑",
+            "parity": "없음",
+            "min_disks": 2,
+            "fault_tolerance": "없음 (1개 장애 시 모든 데이터 손실)",
+            "storage_efficiency": "100%",
+            "characteristics": "성능 최고, 신뢰성 최저"
+          },
+          {
+            "level": "RAID 1",
+            "technique": "미러링",
+            "parity": "없음",
+            "min_disks": 2,
+            "fault_tolerance": "1개 디스크 장애 허용",
+            "storage_efficiency": "50%",
+            "characteristics": "신뢰성 높음, 저장 효율 낮음"
+          },
+          {
+            "level": "RAID 5",
+            "technique": "스트라이핑 + 분산 패리티",
+            "parity": "분산 패리티",
+            "min_disks": 3,
+            "fault_tolerance": "1개 디스크 장애 허용",
+            "storage_efficiency": "(n-1)/n × 100%",
+            "characteristics": "성능과 신뢰성의 균형. 가장 많이 사용"
+          },
+          {
+            "level": "RAID 6",
+            "technique": "스트라이핑 + 이중 분산 패리티",
+            "parity": "이중 분산 패리티",
+            "min_disks": 4,
+            "fault_tolerance": "2개 디스크 장애 허용",
+            "storage_efficiency": "(n-2)/n × 100%",
+            "characteristics": "높은 신뢰성, RAID 5보다 쓰기 성능 낮음"
+          },
+          {
+            "level": "RAID 10",
+            "alias": "RAID 1+0",
+            "technique": "미러링 + 스트라이핑",
+            "parity": "없음",
+            "min_disks": 4,
+            "fault_tolerance": "각 미러 그룹에서 1개씩 장애 허용",
+            "storage_efficiency": "50%",
+            "characteristics": "성능과 신뢰성 모두 높음, 비용 높음"
+          }
         ]
       }
     }
   ],
   "practice_problems": [
     {
-      "id": "db_q_01",
-      "question": "다음 SQL 실행 결과를 쓰시오.\nSELECT COUNT(*) FROM 학생 WHERE 학년 >= 3 AND 학과 = '컴퓨터';\n\n[학생 테이블]\n학번 | 이름  | 학년 | 학과\n001  | 홍길동 | 3   | 컴퓨터\n002  | 이영희 | 2   | 컴퓨터\n003  | 김철수 | 4   | 전기\n004  | 박민준 | 3   | 컴퓨터",
-      "answer": "2",
-      "explanation": "학년이 3 이상이고 학과가 '컴퓨터'인 레코드: 001(홍길동), 004(박민준) → 2개"
+      "id": "db_p_001",
+      "year": "23년1회",
+      "topic": "스키마",
+      "question": "데이터베이스의 3단계 스키마 중 각 사용자 관점에서 정의한 스키마로, 개인 또는 응용 프로그램이 보는 데이터베이스의 논리적 구조를 정의하는 스키마는?",
+      "answer": "외부 스키마 (서브 스키마)"
     },
     {
-      "id": "db_q_02",
-      "question": "릴레이션의 이상 현상 3가지를 쓰시오.",
-      "answer": "삽입 이상, 삭제 이상, 갱신 이상",
-      "explanation": "정규화가 되지 않은 릴레이션에서 발생하는 문제들"
+      "id": "db_p_002",
+      "year": "기출변형",
+      "topic": "스키마 독립성",
+      "question": "내부 스키마가 변경되어도 개념 스키마에 영향을 주지 않는 성질을 무엇이라 하는가?",
+      "answer": "물리적 독립성"
     },
     {
-      "id": "db_q_03",
-      "question": "트랜잭션의 ACID 특성 중 '격리성'의 정의를 쓰시오.",
-      "answer": "동시에 실행되는 트랜잭션들이 서로 영향을 주지 않고 독립적으로 실행되어야 한다.",
-      "explanation": "Isolation - 트랜잭션 실행 중 다른 트랜잭션의 연산이 끼어들지 못함"
+      "id": "db_p_003",
+      "year": "기출변형",
+      "topic": "관계 데이터 모델",
+      "question": "릴레이션의 튜플 수를 나타내는 용어는?",
+      "answer": "카디널리티(Cardinality)"
+    },
+    {
+      "id": "db_p_004",
+      "year": "기출변형",
+      "topic": "키",
+      "question": "다음 중 유일성과 최소성을 모두 만족하는 키들의 집합은?",
+      "answer": "후보키(Candidate Key)"
+    },
+    {
+      "id": "db_p_005",
+      "year": "기출변형",
+      "topic": "정규화",
+      "question": "함수 종속성 A→B, B→C가 존재할 때, A→C가 성립하는 종속성을 제거하는 정규형은?",
+      "answer": "제3정규형(3NF) - 이행 함수 종속 제거"
+    },
+    {
+      "id": "db_p_006",
+      "year": "기출변형",
+      "topic": "트랜잭션 ACID",
+      "question": "트랜잭션의 연산이 모두 성공하거나 모두 실패해야 하는 성질은?",
+      "answer": "원자성(Atomicity)"
+    },
+    {
+      "id": "db_p_007",
+      "year": "21년2회",
+      "topic": "트랜잭션 원자성",
+      "question": "다음 트랜잭션의 특성 중 하나의 트랜잭션이 DB 갱신 도중 문제가 발생하면 갱신 작업이 처음부터 다시 시작되거나 취소되어야 하는 특성은?",
+      "answer": "원자성(Atomicity)"
+    },
+    {
+      "id": "db_p_008",
+      "year": "22년1회",
+      "topic": "REDO/UNDO",
+      "question": "DB 회복 기법에서 장애 발생 전 COMMIT된 트랜잭션의 내용을 다시 실행하는 것은 ( )이고, COMMIT되지 않은 트랜잭션을 취소하는 것은 ( )이다.",
+      "answer": "REDO, UNDO"
+    },
+    {
+      "id": "db_p_009",
+      "year": "기초",
+      "topic": "REDO",
+      "question": "데이터베이스 회복 기법에서 COMMIT이 완료된 데이터를 다시 반영하는 회복 기법은?",
+      "answer": "REDO"
+    },
+    {
+      "id": "db_p_010",
+      "year": "21년2회",
+      "topic": "Locking",
+      "question": "병행 제어 기법 중 하나로, 트랜잭션이 사용하는 자원에 대하여 상호 배제 기능을 제공하는 기법은?",
+      "answer": "로킹(Locking)"
+    },
+    {
+      "id": "db_p_011",
+      "year": "20년3회",
+      "topic": "DDL ALTER TABLE ADD",
+      "question": "다음 SQL에서 빈칸을 채우시오. 학생 테이블에 '학점' 속성(FLOAT 타입)을 추가하라.\nALTER TABLE 학생 ( ) 학점 FLOAT;",
+      "answer": "ADD"
+    },
+    {
+      "id": "db_p_012",
+      "year": "기출변형",
+      "topic": "DDL ALTER TABLE ADD",
+      "question": "테이블에 새로운 컬럼을 추가하는 DDL 명령의 형식을 쓰시오.",
+      "answer": "ALTER TABLE 테이블명 ADD 속성명 데이터타입;"
+    },
+    {
+      "id": "db_p_013",
+      "year": "기초",
+      "topic": "DDL CREATE VIEW",
+      "question": "성적이 90점 이상인 학생의 학번과 이름을 조회하는 뷰 '우수학생'을 생성하는 SQL을 작성하시오.",
+      "answer": "CREATE VIEW 우수학생 AS SELECT 학번, 이름 FROM 학생 WHERE 성적 >= 90;"
+    },
+    {
+      "id": "db_p_014",
+      "year": "23년2회",
+      "topic": "DDL DROP VIEW CASCADE",
+      "question": "뷰 '우수학생'을 삭제하되, 이 뷰를 참조하는 모든 객체도 함께 삭제하는 SQL을 작성하시오.",
+      "answer": "DROP VIEW 우수학생 CASCADE;"
+    },
+    {
+      "id": "db_p_015",
+      "year": "기출변형",
+      "topic": "DDL CASCADE vs RESTRICT",
+      "question": "DROP TABLE 명령에서 CASCADE와 RESTRICT의 차이를 설명하시오.",
+      "answer": "CASCADE: 해당 테이블을 참조하는 모든 객체도 함께 삭제. RESTRICT: 참조하는 객체가 있으면 삭제 거부"
+    },
+    {
+      "id": "db_p_016",
+      "year": "23년2회",
+      "topic": "DDL DROP TABLE CASCADE",
+      "question": "테이블 '학생'을 삭제하되, 참조하는 모든 객체도 함께 삭제하는 SQL을 작성하시오.",
+      "answer": "DROP TABLE 학생 CASCADE;"
+    },
+    {
+      "id": "db_p_017",
+      "year": "기출변형",
+      "topic": "DDL DROP TABLE RESTRICT",
+      "question": "테이블 '수강'을 삭제하되, 참조하는 객체가 있으면 삭제를 거부하는 SQL을 작성하시오.",
+      "answer": "DROP TABLE 수강 RESTRICT;"
+    },
+    {
+      "id": "db_p_018",
+      "year": "20년2회",
+      "topic": "DDL CREATE INDEX",
+      "question": "학생 테이블의 '이름' 속성에 'NAME_IDX'라는 인덱스를 생성하는 SQL을 작성하시오.",
+      "answer": "CREATE INDEX NAME_IDX ON 학생(이름);"
+    },
+    {
+      "id": "db_p_019",
+      "year": "기출변형",
+      "topic": "DDL CREATE INDEX",
+      "question": "학생 테이블의 '학번' 속성에 유일한 인덱스를 생성하는 SQL을 작성하시오.",
+      "answer": "CREATE UNIQUE INDEX 학번_IDX ON 학생(학번);"
+    },
+    {
+      "id": "db_p_020",
+      "year": "23년1회",
+      "topic": "DCL GRANT",
+      "question": "사용자 '홍길동'에게 학생 테이블에 대한 SELECT와 INSERT 권한을 부여하는 SQL을 작성하시오.",
+      "answer": "GRANT SELECT, INSERT ON 학생 TO 홍길동;"
+    },
+    {
+      "id": "db_p_021",
+      "year": "기출변형",
+      "topic": "DCL REVOKE",
+      "question": "사용자 '홍길동'에게 부여된 학생 테이블의 SELECT 권한을 취소하는 SQL을 작성하시오.",
+      "answer": "REVOKE SELECT ON 학생 FROM 홍길동;"
+    },
+    {
+      "id": "db_p_022",
+      "year": "24년2회",
+      "topic": "DML INSERT VALUES",
+      "question": "학생(학번, 이름, 학과) 테이블에 ('2024001', '김철수', '컴퓨터공학')을 삽입하는 SQL을 작성하시오.",
+      "answer": "INSERT INTO 학생(학번, 이름, 학과) VALUES ('2024001', '김철수', '컴퓨터공학');"
+    },
+    {
+      "id": "db_p_023",
+      "year": "23년2회",
+      "topic": "DML INSERT INTO",
+      "question": "다음 SQL에서 빈칸을 채우시오.\n( ) INTO 학생(학번, 이름) VALUES ('001', '홍길동');",
+      "answer": "INSERT"
+    },
+    {
+      "id": "db_p_024",
+      "year": "24년2회",
+      "topic": "DML INSERT SELECT",
+      "question": "학생 테이블에서 학과가 '컴퓨터공학'인 학생들을 전체 선택하여 졸업생 테이블에 삽입하는 SQL을 작성하시오.",
+      "answer": "INSERT INTO 졸업생 SELECT * FROM 학생 WHERE 학과 = '컴퓨터공학';"
+    },
+    {
+      "id": "db_p_025",
+      "year": "24년2회",
+      "topic": "DML UPDATE SET",
+      "question": "학생 테이블에서 학번이 '2024001'인 학생의 학과를 '전자공학'으로 수정하는 SQL을 작성하시오.",
+      "answer": "UPDATE 학생 SET 학과 = '전자공학' WHERE 학번 = '2024001';"
+    },
+    {
+      "id": "db_p_026",
+      "year": "24년2회",
+      "topic": "DML DELETE FROM",
+      "question": "학생 테이블에서 학과가 '수학과'인 학생을 모두 삭제하는 SQL을 작성하시오.",
+      "answer": "DELETE FROM 학생 WHERE 학과 = '수학과';"
+    },
+    {
+      "id": "db_p_027",
+      "year": "23년1회",
+      "topic": "DML DELETE WHERE",
+      "question": "수강 테이블에서 점수가 60 미만인 모든 레코드를 삭제하는 SQL을 작성하시오.",
+      "answer": "DELETE FROM 수강 WHERE 점수 < 60;"
+    },
+    {
+      "id": "db_p_028",
+      "year": "20년3회",
+      "topic": "DML DELETE",
+      "question": "학생 테이블에서 이름이 '홍길동'인 레코드를 삭제하는 SQL의 빈칸을 채우시오.\n( ) FROM 학생 WHERE 이름 = '홍길동';",
+      "answer": "DELETE"
+    },
+    {
+      "id": "db_p_029",
+      "year": "22년3회",
+      "topic": "ON DELETE CASCADE",
+      "question": "부모 테이블의 데이터 삭제 시 자식 테이블의 관련 데이터도 자동으로 삭제되도록 하는 외래키 옵션은?",
+      "answer": "ON DELETE CASCADE"
+    },
+    {
+      "id": "db_p_030",
+      "year": "25년3회",
+      "topic": "SELECT CROSS JOIN COUNT",
+      "question": "테이블 A에 3개의 행, 테이블 B에 4개의 행이 있을 때, 두 테이블을 CROSS JOIN한 결과의 행 수는?",
+      "answer": "12 (3 × 4 = 12)"
+    },
+    {
+      "id": "db_p_031",
+      "year": "21년3회",
+      "topic": "CROSS JOIN COUNT",
+      "question": "GAMJA 테이블에 5개의 레코드, POTATO 테이블에 3개의 레코드가 있을 때, 두 테이블의 CROSS JOIN 결과 레코드 수는?",
+      "answer": "15 (5 × 3 = 15)"
+    },
+    {
+      "id": "db_p_032",
+      "year": "25년1회",
+      "topic": "INNER JOIN",
+      "question": "학생 테이블과 수강 테이블을 학번으로 INNER JOIN하여 이름과 과목명을 조회하는 SQL을 작성하시오.",
+      "answer": "SELECT 학생.이름, 수강.과목명 FROM 학생 INNER JOIN 수강 ON 학생.학번 = 수강.학번;"
+    },
+    {
+      "id": "db_p_033",
+      "year": "21년2회",
+      "topic": "JOIN ON 빈칸",
+      "question": "두 테이블을 조인할 때 빈칸을 채우시오.\nSELECT * FROM A INNER JOIN B ( ) A.id = B.id;",
+      "answer": "ON"
+    },
+    {
+      "id": "db_p_034",
+      "year": "24년3회",
+      "topic": "중첩 서브쿼리",
+      "question": "학생 테이블에서 학과별 평균 점수보다 높은 점수를 가진 학생을 조회하는 서브쿼리 방식을 설명하시오.",
+      "answer": "SELECT * FROM 학생 A WHERE 점수 > (SELECT AVG(점수) FROM 학생 B WHERE A.학과 = B.학과);"
+    },
+    {
+      "id": "db_p_035",
+      "year": "24년1회",
+      "topic": "IN 서브쿼리",
+      "question": "학생 테이블에서 수강 테이블에 등록된 학생들의 이름을 조회하는 SQL을 IN 연산자를 사용하여 작성하시오.",
+      "answer": "SELECT 이름 FROM 학생 WHERE 학번 IN (SELECT 학번 FROM 수강);"
+    },
+    {
+      "id": "db_p_036",
+      "year": "22년2회",
+      "topic": "ALL 연산자",
+      "question": "학생 테이블에서 모든 3학년 학생의 점수보다 높은 점수를 가진 학생을 조회하는 SQL을 작성하시오.",
+      "answer": "SELECT * FROM 학생 WHERE 점수 > ALL (SELECT 점수 FROM 학생 WHERE 학년 = 3);"
+    },
+    {
+      "id": "db_p_037",
+      "year": "20년2회",
+      "topic": "IN 연산자",
+      "question": "학생 테이블에서 학과가 '컴퓨터공학' 또는 '전자공학'인 학생을 조회하는 SQL을 IN 연산자로 작성하시오.",
+      "answer": "SELECT * FROM 학생 WHERE 학과 IN ('컴퓨터공학', '전자공학');"
+    },
+    {
+      "id": "db_p_038",
+      "year": "24년1회",
+      "topic": "조인 분류",
+      "question": "조인의 학술적 분류에서 등호(=) 연산자를 사용하는 조인은 ( )이고, 그 중 중복 속성을 제거한 조인은 ( )이다.",
+      "answer": "동등 조인(Equi-Join), 자연 조인(Natural Join)"
+    },
+    {
+      "id": "db_p_039",
+      "year": "21년2회",
+      "topic": "LIKE ORDER BY",
+      "question": "학생 테이블에서 이름이 '김'으로 시작하는 학생을 학번 오름차순으로 조회하는 SQL을 작성하시오.",
+      "answer": "SELECT * FROM 학생 WHERE 이름 LIKE '김%' ORDER BY 학번 ASC;"
+    },
+    {
+      "id": "db_p_040",
+      "year": "21년2회",
+      "topic": "LIKE ORDER BY 빈칸",
+      "question": "다음 SQL의 빈칸을 채우시오.\nSELECT * FROM 학생 WHERE 이름 ( ) '이%' ORDER BY 성적 DESC;",
+      "answer": "LIKE"
+    },
+    {
+      "id": "db_p_041",
+      "year": "기출변형",
+      "topic": "LIKE _",
+      "question": "학생 테이블에서 이름이 정확히 2글자인 학생을 조회하는 SQL을 작성하시오.",
+      "answer": "SELECT * FROM 학생 WHERE 이름 LIKE '__';"
+    },
+    {
+      "id": "db_p_042",
+      "year": "기초",
+      "topic": "BETWEEN",
+      "question": "학생 테이블에서 점수가 70 이상 90 이하인 학생을 조회하는 SQL을 작성하시오.",
+      "answer": "SELECT * FROM 학생 WHERE 점수 BETWEEN 70 AND 90;"
+    },
+    {
+      "id": "db_p_043",
+      "year": "기초",
+      "topic": "IS NULL",
+      "question": "학생 테이블에서 이메일 속성이 NULL인 학생을 조회하는 SQL을 작성하시오.",
+      "answer": "SELECT * FROM 학생 WHERE 이메일 IS NULL;"
+    },
+    {
+      "id": "db_p_044",
+      "year": "24년1회",
+      "topic": "AND OR COUNT",
+      "question": "학생 테이블에서 학과가 '컴퓨터공학'이고 점수가 80 이상이거나, 학과가 '전자공학'인 학생 수를 구하는 SQL을 작성하시오. (AND가 OR보다 우선순위가 높음에 주의)",
+      "answer": "SELECT COUNT(*) FROM 학생 WHERE 학과 = '컴퓨터공학' AND 점수 >= 80 OR 학과 = '전자공학';"
+    },
+    {
+      "id": "db_p_045",
+      "year": "21년1회",
+      "topic": "AND OR COUNT",
+      "question": "학생 테이블에서 학년이 2이거나, 학과가 '수학과'이고 점수가 90 이상인 학생 수는? (AND/OR 우선순위 고려)",
+      "answer": "SELECT COUNT(*) FROM 학생 WHERE 학년 = 2 OR 학과 = '수학과' AND 점수 >= 90;\n※ AND가 OR보다 우선순위 높으므로 (학과='수학과' AND 점수>=90) 조건이 먼저 묶임"
+    },
+    {
+      "id": "db_p_046",
+      "year": "22년2회",
+      "topic": "COUNT IN OR",
+      "question": "학생 테이블에서 학과가 '컴퓨터공학' 또는 '전자공학'인 학생 수를 구하는 SQL을 IN 연산자를 사용하여 작성하시오.",
+      "answer": "SELECT COUNT(*) FROM 학생 WHERE 학과 IN ('컴퓨터공학', '전자공학');"
+    },
+    {
+      "id": "db_p_047",
+      "year": "25년3회",
+      "topic": "COUNT IN OR",
+      "question": "성적 테이블에서 과목이 'C1' 또는 'C2'인 레코드의 수를 구하는 SQL을 작성하시오.",
+      "answer": "SELECT COUNT(*) FROM 성적 WHERE 과목 IN ('C1', 'C2');"
+    },
+    {
+      "id": "db_p_048",
+      "year": "22년3회",
+      "topic": "DISTINCT COUNT",
+      "question": "수강 테이블에서 중복을 제거한 학과의 수를 구하는 SQL을 작성하시오.",
+      "answer": "SELECT COUNT(DISTINCT 학과) FROM 수강;"
+    },
+    {
+      "id": "db_p_049",
+      "year": "20년1회",
+      "topic": "DISTINCT COUNT",
+      "question": "학생 테이블에서 중복되지 않는 학과의 개수를 구하는 SQL을 작성하시오.",
+      "answer": "SELECT COUNT(DISTINCT 학과) FROM 학생;"
+    },
+    {
+      "id": "db_p_050",
+      "year": "22년1회",
+      "topic": "ORDER BY",
+      "question": "학생 테이블에서 모든 학생을 성적 오름차순으로 정렬하여 조회하는 SQL을 작성하시오.",
+      "answer": "SELECT * FROM 학생 ORDER BY 성적 ASC;"
+    },
+    {
+      "id": "db_p_051",
+      "year": "22년1회",
+      "topic": "ORDER BY DESC",
+      "question": "학생 테이블에서 모든 학생을 성적 내림차순으로 조회하는 SQL을 작성하시오.",
+      "answer": "SELECT * FROM 학생 ORDER BY 성적 DESC;"
+    },
+    {
+      "id": "db_p_052",
+      "year": "23년3회",
+      "topic": "UNION ORDER BY",
+      "question": "학생A 테이블과 학생B 테이블의 이름을 합집합으로 구하되, 중복을 제거하고 이름 오름차순으로 정렬하는 SQL을 작성하시오.",
+      "answer": "SELECT 이름 FROM 학생A UNION SELECT 이름 FROM 학생B ORDER BY 이름 ASC;"
+    },
+    {
+      "id": "db_p_053",
+      "year": "23년1회",
+      "topic": "GROUP BY HAVING SQL 작성",
+      "question": "학생 테이블에서 학과별 학생 수를 구하되, 학생 수가 3명 이상인 학과만 조회하는 SQL을 작성하시오.",
+      "answer": "SELECT 학과, COUNT(*) AS 학생수 FROM 학생 GROUP BY 학과 HAVING COUNT(*) >= 3;"
+    },
+    {
+      "id": "db_p_054",
+      "year": "23년1회",
+      "topic": "SELECT 절 별칭 GROUP BY HAVING",
+      "question": "수강 테이블에서 과목별 평균 점수를 '평균점수'라는 별칭으로 조회하되, 평균 점수가 70 이상인 과목만 표시하는 SQL을 작성하시오.",
+      "answer": "SELECT 과목, AVG(점수) AS 평균점수 FROM 수강 GROUP BY 과목 HAVING AVG(점수) >= 70;"
+    },
+    {
+      "id": "db_p_055",
+      "year": "20년4회",
+      "topic": "GROUP BY AS COUNT",
+      "question": "학생 테이블에서 학과별 학생 수를 '인원'이라는 별칭으로 조회하는 SQL을 작성하시오.",
+      "answer": "SELECT 학과, COUNT(*) AS 인원 FROM 학생 GROUP BY 학과;"
+    },
+    {
+      "id": "db_p_056",
+      "year": "20년3회",
+      "topic": "GROUP BY HAVING MAX MIN",
+      "question": "수강 테이블에서 학과별 최고 점수와 최저 점수를 구하되, 최고 점수가 90 이상인 학과만 조회하는 SQL을 작성하시오.",
+      "answer": "SELECT 학과, MAX(점수), MIN(점수) FROM 수강 GROUP BY 학과 HAVING MAX(점수) >= 90;"
+    },
+    {
+      "id": "db_p_057",
+      "year": "기출변형",
+      "topic": "IN WHERE",
+      "question": "교수 테이블에서 학과가 '컴퓨터공학'이거나 '전자공학'인 교수의 이름을 조회하는 SQL을 IN을 사용하여 작성하시오.",
+      "answer": "SELECT 이름 FROM 교수 WHERE 학과 IN ('컴퓨터공학', '전자공학');"
+    },
+    {
+      "id": "db_p_058",
+      "year": "22년1회",
+      "topic": "RAID 0",
+      "question": "RAID 레벨 중 스트라이핑 기법만 사용하여 데이터를 분산 저장하며, 패리티 정보가 없어 하나의 디스크 장애 시 모든 데이터가 손실되는 레벨은?",
+      "answer": "RAID 0"
+    },
+    {
+      "id": "db_p_059",
+      "year": "기출변형",
+      "topic": "RAID 5",
+      "question": "RAID 레벨 중 스트라이핑과 분산 패리티를 사용하여 1개 디스크 장애를 허용하며, 최소 3개의 디스크가 필요한 레벨은?",
+      "answer": "RAID 5"
+    },
+    {
+      "id": "db_p_060",
+      "year": "기출변형",
+      "topic": "RAID 비교",
+      "question": "RAID 1과 RAID 0의 차이점을 설명하시오.",
+      "answer": "RAID 0: 스트라이핑만 사용, 장애 허용 없음, 저장 효율 100%, 성능 우수\nRAID 1: 미러링 사용, 1개 장애 허용, 저장 효율 50%, 신뢰성 우수"
+    },
+    {
+      "id": "db_p_061",
+      "year": "기출변형",
+      "topic": "정규화 단계",
+      "question": "정규화 순서대로 나열하시오: BCNF, 1NF, 3NF, 2NF",
+      "answer": "1NF → 2NF → 3NF → BCNF"
+    },
+    {
+      "id": "db_p_062",
+      "year": "기출변형",
+      "topic": "이상 현상",
+      "question": "정규화되지 않은 테이블에서 발생하는 세 가지 이상 현상을 쓰시오.",
+      "answer": "삽입 이상(Insertion Anomaly), 삭제 이상(Deletion Anomaly), 갱신 이상(Update Anomaly)"
+    },
+    {
+      "id": "db_p_063",
+      "year": "기출변형",
+      "topic": "무결성",
+      "question": "외래키 값은 참조하는 테이블의 기본키 값이거나 NULL이어야 한다는 무결성 규칙은?",
+      "answer": "참조 무결성(Referential Integrity)"
+    },
+    {
+      "id": "db_p_064",
+      "year": "기출변형",
+      "topic": "관계 대수 연산자",
+      "question": "관계 대수에서 조건을 만족하는 튜플을 선택하는 연산자 기호와 명칭을 쓰시오.",
+      "answer": "σ (시그마) - 셀렉션(Selection)"
+    },
+    {
+      "id": "db_p_065",
+      "year": "기출변형",
+      "topic": "B-Tree 인덱스",
+      "question": "동적 인덱스 구조로, 삽입·삭제 시 자동으로 재구성되는 인덱스 구조는?",
+      "answer": "B-Tree 인덱스"
+    },
+    {
+      "id": "db_p_066",
+      "year": "기출변형",
+      "topic": "해싱 충돌 해결",
+      "question": "해싱 파일에서 충돌 발생 시 해결 방법 두 가지를 쓰시오.",
+      "answer": "체이닝(Chaining): 연결 리스트로 연결\n개방 주소법(Open Addressing): 다른 빈 버킷에 저장"
+    },
+    {
+      "id": "db_p_067",
+      "year": "기출변형",
+      "topic": "트랜잭션 상태",
+      "question": "트랜잭션이 COMMIT 연산을 통해 성공적으로 종료된 상태를 무엇이라 하는가?",
+      "answer": "완료(Committed) 상태"
+    },
+    {
+      "id": "db_p_068",
+      "year": "기출변형",
+      "topic": "DB 설계 단계",
+      "question": "데이터베이스 설계 4단계를 순서대로 쓰시오.",
+      "answer": "요구사항 분석 → 개념적 설계 → 논리적 설계 → 물리적 설계 (요개논물)"
+    },
+    {
+      "id": "db_p_069",
+      "year": "기출변형",
+      "topic": "ER 다이어그램",
+      "question": "ER 다이어그램에서 개체(Entity)는 ( )으로, 속성(Attribute)은 ( )으로, 관계(Relationship)는 ( )으로 표시한다.",
+      "answer": "직사각형, 타원, 마름모"
+    },
+    {
+      "id": "db_p_070",
+      "year": "기출변형",
+      "topic": "외부 스키마",
+      "question": "데이터베이스 3단계 스키마 중 사용자나 응용 프로그램의 관점에서 정의되는 스키마를 무엇이라 하는가?",
+      "answer": "외부 스키마(External Schema) 또는 서브 스키마(Sub Schema)"
+    },
+    {
+      "id": "db_p_071",
+      "year": "기출변형",
+      "topic": "기본키 특성",
+      "question": "기본키(Primary Key)의 특성 3가지를 쓰시오.",
+      "answer": "유일성(중복 값 불가), NULL 값 불가, 최소성(최소한의 속성으로 구성)"
+    },
+    {
+      "id": "db_p_072",
+      "year": "기출변형",
+      "topic": "BCNF",
+      "question": "3NF를 만족하지만 BCNF를 만족하지 않는 경우의 조건은?",
+      "answer": "결정자이지만 후보키가 아닌 속성이 존재하는 경우. BCNF는 모든 결정자가 후보키여야 함"
+    },
+    {
+      "id": "db_p_073",
+      "year": "기출변형",
+      "topic": "반정규화",
+      "question": "정규화된 테이블을 성능 향상을 위해 의도적으로 중복을 허용하고 통합하는 작업은?",
+      "answer": "반정규화(Denormalization)"
+    },
+    {
+      "id": "db_p_074",
+      "year": "기출변형",
+      "topic": "공유락 배타락",
+      "question": "로킹 기법에서 읽기 연산에 사용하는 락과 쓰기 연산에 사용하는 락을 각각 무엇이라 하는가?",
+      "answer": "공유 락(Shared Lock, S-Lock): 읽기 연산\n배타 락(Exclusive Lock, X-Lock): 쓰기 연산"
+    },
+    {
+      "id": "db_p_075",
+      "year": "기출변형",
+      "topic": "교착 상태",
+      "question": "두 트랜잭션이 서로 상대방의 락 해제를 기다리며 무한히 대기하는 상태를 무엇이라 하는가?",
+      "answer": "교착 상태(Deadlock)"
+    },
+    {
+      "id": "db_p_076",
+      "year": "기출변형",
+      "topic": "그림자 페이징",
+      "question": "트랜잭션 실행 전 페이지 테이블의 복사본을 저장하여 장애 시 원상복구하는 회복 기법은?",
+      "answer": "그림자 페이징(Shadow Paging)"
+    },
+    {
+      "id": "db_p_077",
+      "year": "기출변형",
+      "topic": "검사점",
+      "question": "장애 회복 시 전체 로그를 탐색하지 않고 특정 시점부터 회복 작업을 수행할 수 있도록 하는 회복 기법은?",
+      "answer": "검사점(Checkpoint) 기법"
+    },
+    {
+      "id": "db_p_078",
+      "year": "기출변형",
+      "topic": "SQL 집합 연산",
+      "question": "두 SELECT 쿼리의 결과를 합치되 중복을 허용하는 집합 연산자는?",
+      "answer": "UNION ALL"
+    },
+    {
+      "id": "db_p_079",
+      "year": "기출변형",
+      "topic": "SQL INTERSECT",
+      "question": "두 SELECT 쿼리의 결과 중 공통된 행만 반환하는 집합 연산자는?",
+      "answer": "INTERSECT"
+    },
+    {
+      "id": "db_p_080",
+      "year": "기출변형",
+      "topic": "SQL EXCEPT",
+      "question": "첫 번째 SELECT 쿼리 결과에서 두 번째 SELECT 쿼리 결과를 제외한 행을 반환하는 집합 연산자는?",
+      "answer": "EXCEPT (Oracle에서는 MINUS)"
     }
   ]
 }

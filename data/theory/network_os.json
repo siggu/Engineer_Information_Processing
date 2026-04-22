@@ -1,199 +1,641 @@
 {
-  "subject": "네트워크 / 운영체제 (NW/OS)",
+  "subject": "네트워크/OS",
   "topics": [
     {
-      "id": "nw_01",
-      "title": "OSI 7계층",
+      "id": "net_01",
+      "title": "네트워크 계층 프로토콜",
       "content": {
-        "mnemonic": "응표세전네데물 (응용-표현-세션-전송-네트워크-데이터링크-물리)",
+        "definition": "네트워크 계층에서 동작하는 프로토콜로, IP 주소 기반의 논리적 통신을 담당하며 라우팅, 주소 변환, 오류 보고 등의 기능을 수행한다.",
         "layers": [
           {
-            "number": 7,
-            "name": "응용 계층 (Application)",
-            "protocols": ["HTTP", "FTP", "SMTP", "DNS", "TELNET"],
-            "description": "사용자와 직접 상호작용하는 계층"
+            "name": "IP (Internet Protocol)",
+            "description": "비연결성, 비신뢰성의 최선형(Best Effort) 서비스를 제공하는 핵심 프로토콜. 패킷 분할/재조합 수행."
           },
           {
-            "number": 6,
-            "name": "표현 계층 (Presentation)",
-            "protocols": ["JPEG", "MPEG", "ASCII"],
-            "description": "데이터 압축, 암호화, 형식 변환"
+            "name": "ARP (Address Resolution Protocol)",
+            "description": "IP 주소 → MAC 주소 변환. 브로드캐스트로 요청하고 유니캐스트로 응답."
           },
           {
-            "number": 5,
-            "name": "세션 계층 (Session)",
-            "protocols": ["NetBIOS", "SSH"],
-            "description": "통신 세션 설정, 유지, 종료"
+            "name": "RARP (Reverse ARP)",
+            "description": "MAC 주소 → IP 주소 변환. 자신의 IP를 모르는 단말이 MAC으로 IP를 요청."
           },
           {
-            "number": 4,
-            "name": "전송 계층 (Transport)",
-            "protocols": ["TCP", "UDP"],
-            "description": "종단 간 신뢰성 있는 데이터 전송, 흐름 제어",
-            "pdu": "세그먼트"
+            "name": "ICMP (Internet Control Message Protocol)",
+            "description": "오류 보고 및 진단 프로토콜. ping(Echo Request/Reply), traceroute에 사용. 오류는 보고만 하고 수정 불가."
           },
           {
-            "number": 3,
-            "name": "네트워크 계층 (Network)",
-            "protocols": ["IP", "ICMP", "ARP", "OSPF", "BGP"],
-            "description": "논리적 주소(IP) 지정, 라우팅",
-            "device": "라우터",
-            "pdu": "패킷"
+            "name": "IGMP (Internet Group Management Protocol)",
+            "description": "멀티캐스트 그룹 관리 프로토콜. 호스트가 라우터에게 멀티캐스트 그룹 가입/탈퇴를 알림."
           },
           {
-            "number": 2,
-            "name": "데이터링크 계층 (Data Link)",
-            "protocols": ["Ethernet", "PPP", "HDLC"],
-            "description": "물리적 주소(MAC) 지정, 오류 검출",
-            "device": "스위치, 브리지",
-            "pdu": "프레임"
-          },
-          {
-            "number": 1,
-            "name": "물리 계층 (Physical)",
-            "protocols": ["RS-232", "USB"],
-            "description": "비트 단위 전송, 전기/광 신호",
-            "device": "허브, 리피터",
-            "pdu": "비트"
+            "name": "NAT (Network Address Translation)",
+            "description": "사설 IP ↔ 공인 IP 변환. IPv4 주소 부족 문제 해결, 보안성 향상. 공유기에서 사용."
           }
-        ]
+        ],
+        "mnemonic": "IP는 비연결·비신뢰, ARP는 IP→MAC, RARP는 MAC→IP, ICMP는 오류보고(ping), IGMP는 멀티캐스트, NAT는 사설→공인"
       }
     },
     {
-      "id": "nw_02",
+      "id": "net_02",
+      "title": "데이터 링크 프로토콜과 오류 제어",
+      "content": {
+        "definition": "데이터 링크 계층의 프레임 구조와 오류 검출·정정 방법. HDLC는 비트 지향 프로토콜이며, FEC와 BEC로 오류를 처리한다.",
+        "types": [
+          {
+            "name": "HDLC 프레임 유형",
+            "description": "I-프레임(정보 프레임): 첫 비트 0, 데이터 전송용 / S-프레임(감독 프레임): 첫 비트 10, 흐름/오류 제어용 / U-프레임(비번호 프레임): 첫 비트 11, 링크 관리용"
+          },
+          {
+            "name": "HDLC 전송 모드",
+            "description": "NRM(정규응답모드): 점-대-점/멀티포인트, 종국은 주국 허가 시에만 전송 / ARM(비동기응답모드): 허가 없이 전송 가능 / ABM(비동기균형모드): 혼합국끼리 대등한 전송, 전이중"
+          },
+          {
+            "name": "ATM (Asynchronous Transfer Mode)",
+            "description": "고속 셀 교환 방식. 셀 크기: 53바이트(헤더 5 + 데이터 48). 고정 크기로 지연 예측 가능."
+          }
+        ],
+        "characteristics": [
+          "HDLC 비트 스터핑: 플래그(01111110) 내 연속 1이 5개면 0 삽입하여 구분",
+          "FEC(전진 오류 수정): 수신 측에서 오류 검출·정정. 해밍 코드 사용. 역채널 불필요",
+          "BEC(후진 오류 수정): 오류 검출 후 재전송 요청(ARQ). CRC로 검출",
+          "ARQ 방식: Stop-and-Wait(하나씩), Go-Back-N(오류 프레임부터 재전송), Selective Repeat(오류 프레임만 재전송)",
+          "해밍 코드: 2^p >= d+p+1 조건으로 패리티 비트 수(p) 결정"
+        ],
+        "mnemonic": "I프레임=0(정보), S프레임=10(감독), U프레임=11(관리) / FEC=해밍(정정), BEC=ARQ(재전송) / ATM=53바이트"
+      }
+    },
+    {
+      "id": "net_03",
+      "title": "응용 계층 프로토콜과 포트번호",
+      "content": {
+        "definition": "응용 계층에서 사용하는 주요 프로토콜과 Well-known 포트번호. 암호화 여부와 프로토콜 특성을 구분하는 것이 중요하다.",
+        "types": [
+          {
+            "name": "원격 접속",
+            "description": "SSH: 22번 포트, 암호화된 안전한 원격 접속 / Telnet: 23번 포트, 암호화 없는 원격 접속 (보안 취약)"
+          },
+          {
+            "name": "파일 전송",
+            "description": "FTP: 21번 포트(제어), 20번(데이터), 파일 전송 프로토콜 / TFTP: 69번 포트, UDP 기반 간단한 파일 전송"
+          },
+          {
+            "name": "웹",
+            "description": "HTTP: 80번 포트, 평문 웹 통신 / HTTPS: 443번 포트, SSL/TLS로 암호화된 웹 통신"
+          },
+          {
+            "name": "이메일",
+            "description": "SMTP: 25번 포트, 메일 발송 / POP3: 110번 포트, 메일 수신(서버에서 삭제) / IMAP: 143번 포트, 메일 수신(서버 유지)"
+          },
+          {
+            "name": "네트워크 서비스",
+            "description": "DNS: 53번 포트, 도메인 → IP 변환 / SNMP: 161번 포트, 네트워크 장비 관리 / DHCP: 67/68번 포트, IP 자동 할당"
+          }
+        ],
+        "mnemonic": "SSH=22, Telnet=23, FTP=21, HTTP=80, HTTPS=443, SMTP=25, POP3=110, IMAP=143, DNS=53"
+      }
+    },
+    {
+      "id": "net_04",
       "title": "라우팅 프로토콜",
       "content": {
-        "rip": {
-          "name": "RIP (Routing Information Protocol)",
-          "type": "Distance Vector",
-          "metric": "홉 수 (최대 15)",
-          "update_interval": "30초",
-          "description": "소규모 네트워크에 적합"
-        },
-        "ospf": {
-          "name": "OSPF (Open Shortest Path First)",
-          "type": "Link State",
-          "metric": "Cost (대역폭 기반)",
-          "description": "대규모 네트워크에 적합, 링크 상태 정보 교환"
-        },
-        "bgp": {
-          "name": "BGP (Border Gateway Protocol)",
-          "type": "Path Vector",
-          "description": "ISP 간 인터넷 라우팅 (외부 게이트웨이 프로토콜)"
-        }
-      }
-    },
-    {
-      "id": "nw_03",
-      "title": "IP 주소 및 서브넷팅",
-      "content": {
-        "ipv4": "32비트 주소체계, 약 43억 개",
-        "ipv6": "128비트 주소체계, 거의 무한대",
-        "classes": [
-          { "class": "A", "range": "1.0.0.0 ~ 126.255.255.255", "default_mask": "255.0.0.0 (/8)" },
-          { "class": "B", "range": "128.0.0.0 ~ 191.255.255.255", "default_mask": "255.255.0.0 (/16)" },
-          { "class": "C", "range": "192.0.0.0 ~ 223.255.255.255", "default_mask": "255.255.255.0 (/24)" }
+        "definition": "라우터 간 경로 정보를 교환하여 최적 경로를 결정하는 프로토콜. 정적 라우팅과 동적 라우팅으로 구분되며, 동적은 IGP와 EGP로 분류된다.",
+        "types": [
+          {
+            "name": "정적 라우팅",
+            "description": "관리자가 수동으로 경로 설정. 소규모 네트워크에 적합. 변경 시 수동 업데이트 필요."
+          },
+          {
+            "name": "RIP (Routing Information Protocol)",
+            "description": "IGP, 거리 벡터 알고리즘(벨만-포드), 최대 홉 수 15. 소규모 네트워크용. 30초마다 전체 라우팅 테이블 교환."
+          },
+          {
+            "name": "OSPF (Open Shortest Path First)",
+            "description": "IGP, 링크 상태 알고리즘(다익스트라). 대규모 네트워크용. 변경 사항만 플러딩. 홉 수 제한 없음. 계층적 구조(Area)."
+          },
+          {
+            "name": "BGP (Border Gateway Protocol)",
+            "description": "EGP, 경로 벡터 알고리즘. AS(자율 시스템) 간 라우팅. 인터넷 백본 라우팅에 사용."
+          }
         ],
-        "cidr_example": "192.168.1.0/26 → 서브넷 마스크 255.255.255.192, 호스트 62개"
+        "characteristics": [
+          "IGP(Interior Gateway Protocol): 동일 AS 내부 라우팅 - RIP, OSPF",
+          "EGP(Exterior Gateway Protocol): AS 간 라우팅 - BGP",
+          "벨만-포드 알고리즘: 거리 벡터 기반, 음수 가중치 처리 가능, RIP 사용",
+          "다익스트라 알고리즘: 링크 상태 기반, 음수 가중치 불가, OSPF 사용",
+          "RIP 최단경로: 홉 수가 가장 적은 경로 선택"
+        ],
+        "mnemonic": "RIP=거리벡터=벨만포드=15홉 / OSPF=링크상태=다익스트라=제한없음 / BGP=경로벡터=AS간"
       }
     },
     {
-      "id": "os_01",
+      "id": "net_05",
+      "title": "네트워크 전송 방식",
+      "content": {
+        "definition": "데이터를 목적지까지 전달하는 방식. 크게 서킷 교환과 패킷 교환으로 구분되며, 패킷 교환은 데이터그램 방식과 가상회선 방식으로 나뉜다.",
+        "types": [
+          {
+            "name": "서킷 교환 (Circuit Switching)",
+            "description": "통신 전 전용 회선을 설정하고 통신 종료 후 해제. 안정적이지만 회선 독점으로 비효율적. 음성 전화에 사용."
+          },
+          {
+            "name": "패킷 교환 - 데이터그램 방식",
+            "description": "비연결형. 패킷마다 독립적으로 최적 경로 선택. 순서 보장 없음. 경로 설정 불필요. 오버헤드 증가 가능."
+          },
+          {
+            "name": "패킷 교환 - 가상회선 방식",
+            "description": "연결 지향형. 통신 전 가상 경로 설정 후 모든 패킷이 같은 경로로 전송. 순서 보장. 연결 설정/해제 단계 필요."
+          }
+        ],
+        "characteristics": [
+          "데이터그램: 비연결형, 패킷별 독립 경로, 순서 무보장, 유연한 라우팅",
+          "가상회선: 연결 지향형, 동일 경로, 순서 보장, 연결 설정/전송/해제 3단계",
+          "패킷 교환의 장점: 회선 공유로 효율적, 오류 제어 및 흐름 제어 가능",
+          "서킷 교환의 장점: 일정한 전송 품질, 실시간 통신에 적합"
+        ],
+        "mnemonic": "데이터그램=비연결형=순서무보장 / 가상회선=연결지향=순서보장"
+      }
+    },
+    {
+      "id": "net_06",
+      "title": "IP 주소 체계",
+      "content": {
+        "definition": "인터넷에서 각 호스트를 식별하는 논리적 주소. IPv4는 32비트, IPv6는 128비트이며 주소 고갈 문제 해결을 위해 IPv6로 전환 중이다.",
+        "types": [
+          {
+            "name": "IPv4",
+            "description": "32비트, 8비트씩 4옥텟 점(.)으로 구분, 10진수 표기, 약 43억(2^32)개 주소"
+          },
+          {
+            "name": "IPv6",
+            "description": "128비트, 16비트씩 8그룹 콜론(:)으로 구분, 16진수 표기, 약 340간(2^128)개 주소"
+          },
+          {
+            "name": "유니캐스트",
+            "description": "1:1 통신, 단일 목적지 주소"
+          },
+          {
+            "name": "멀티캐스트",
+            "description": "1:다(그룹) 통신, 특정 그룹에게만 전송"
+          },
+          {
+            "name": "브로드캐스트",
+            "description": "1:전체 통신, 네트워크 내 모든 호스트에게 전송 (IPv4만 해당, IPv6는 없음)"
+          },
+          {
+            "name": "애니캐스트",
+            "description": "가장 가까운 단일 호스트에게 전송 (IPv6 도입)"
+          }
+        ],
+        "characteristics": [
+          "IPv4 주소 고갈 해결책: IPv6 전환, NAT, DHCP, 사설 IP",
+          "네트워크 주소: 호스트 부분이 모두 0인 주소 (대표 주소)",
+          "브로드캐스트 주소: 호스트 부분이 모두 1인 주소",
+          "루프백 주소: 127.0.0.1 (자기 자신을 가리킴)",
+          "사설 IP: 10.x.x.x / 172.16-31.x.x / 192.168.x.x"
+        ],
+        "mnemonic": "IPv4=32비트=10진수=43억 / IPv6=128비트=16진수=340간"
+      }
+    },
+    {
+      "id": "net_07",
+      "title": "서브넷 마스크",
+      "content": {
+        "definition": "IP 주소에서 네트워크 부분과 호스트 부분을 구분하는 32비트 값. AND 연산으로 네트워크 주소를 구하고, NOT+OR 연산으로 브로드캐스트 주소를 구한다.",
+        "characteristics": [
+          "서브넷 마스크: 연속된 1 다음 연속된 0으로 구성 (예: 255.255.255.0 = 11111111.11111111.11111111.00000000)",
+          "네트워크 주소 = IP 주소 AND 서브넷 마스크",
+          "브로드캐스트 주소 = IP 주소 OR (NOT 서브넷 마스크)",
+          "0의 개수 = 호스트 비트 수 → 호스트 범위 결정",
+          "사용 가능 호스트 수 = 2^(호스트 비트 수) - 2 (네트워크 주소와 브로드캐스트 주소 제외)",
+          "255.255.255.192 → 하위 6비트가 호스트 → 64개 주소(62개 호스트)",
+          "255.255.255.128 → 하위 7비트가 호스트 → 128개 주소(126개 호스트)",
+          "255.255.255.0 → 하위 8비트가 호스트 → 256개 주소(254개 호스트)"
+        ],
+        "mnemonic": "네트워크주소=IP AND 마스크 / 브로드캐스트=IP OR (NOT 마스크) / 사용가능호스트=2^n-2"
+      }
+    },
+    {
+      "id": "net_08",
+      "title": "서브넷팅 (FLSM, CIDR)",
+      "content": {
+        "definition": "하나의 네트워크를 여러 개의 서브넷으로 분할하는 기술. FLSM은 동일 크기, VLSM은 가변 크기 서브넷. CIDR는 슬래시 표기법으로 네트워크 비트 수를 표현한다.",
+        "types": [
+          {
+            "name": "CIDR (Classless Inter-Domain Routing)",
+            "description": "/n 표기법: n은 네트워크 비트 수. /24 = 255.255.255.0 (1이 24개). /25 = 255.255.255.128 (1이 25개). /26 = 255.255.255.192 (1이 26개)"
+          },
+          {
+            "name": "FLSM (Fixed Length Subnet Masking)",
+            "description": "고정 길이 서브넷 마스크. 필요한 서브넷 수 i에 대해 2^n >= i 조건으로 n 결정. n비트를 네트워크 비트로 추가."
+          },
+          {
+            "name": "서브넷팅 계산 예시",
+            "description": "192.168.1.0/24를 4개 서브넷으로 분할: 2^n >= 4 → n=2비트. /26로 변환. 각 서브넷 64개 주소(62개 호스트)"
+          }
+        ],
+        "steps": [
+          "필요한 서브넷 수 확인",
+          "2^n >= 서브넷 수를 만족하는 최솟값 n 결정",
+          "기존 서브넷 마스크에 n비트 추가 (/24 + 2비트 = /26)",
+          "각 서브넷의 크기 계산: 2^(32-새마스크비트수)",
+          "각 서브넷의 네트워크 주소, 사용 가능 호스트 범위, 브로드캐스트 주소 계산"
+        ],
+        "mnemonic": "CIDR /n = 1이 n개 / FLSM: 2^n >= 서브넷 수 최소 n / 서브넷 크기 = 2^(호스트비트수)"
+      }
+    },
+    {
+      "id": "net_09",
+      "title": "OSI 7계층",
+      "content": {
+        "definition": "국제 표준 네트워크 통신 모델. 7개 계층으로 구성되며 각 계층이 독립적인 기능을 수행한다.",
+        "layers": [
+          {
+            "name": "1계층 - 물리 계층 (Physical)",
+            "description": "비트 전송, 전기·광 신호 변환. 케이블, 허브, 리피터. PDU: 비트(Bit)"
+          },
+          {
+            "name": "2계층 - 데이터 링크 계층 (Data Link)",
+            "description": "프레임 전송, MAC 주소, 오류 검출/수정, 흐름 제어. 스위치, 브리지. PDU: 프레임(Frame)"
+          },
+          {
+            "name": "3계층 - 네트워크 계층 (Network)",
+            "description": "IP 주소 기반 라우팅, 논리적 주소 지정, 패킷 분할/재조합. 라우터. PDU: 패킷(Packet)"
+          },
+          {
+            "name": "4계층 - 전송 계층 (Transport)",
+            "description": "종단 간 신뢰성 전송, 포트 번호, TCP(연결형)/UDP(비연결형). PDU: 세그먼트(Segment)"
+          },
+          {
+            "name": "5계층 - 세션 계층 (Session)",
+            "description": "세션 설정·유지·종료, 동기화, 체크포인트. PDU: 데이터(Data)"
+          },
+          {
+            "name": "6계층 - 표현 계층 (Presentation)",
+            "description": "데이터 형식 변환, 암호화/복호화, 압축/압축 해제. PDU: 데이터(Data)"
+          },
+          {
+            "name": "7계층 - 응용 계층 (Application)",
+            "description": "사용자 인터페이스, HTTP/FTP/SMTP/DNS 등 응용 프로토콜. PDU: 데이터(Data)"
+          }
+        ],
+        "mnemonic": "물(Physical)·데(DataLink)·네(Network)·전(Transport)·세(Session)·표(Presentation)·응(Application)"
+      }
+    },
+    {
+      "id": "net_10",
       "title": "프로세스 스케줄링",
       "content": {
+        "definition": "CPU를 여러 프로세스에 효율적으로 할당하기 위한 알고리즘. 비선점(Non-preemptive)과 선점(Preemptive) 방식으로 구분된다.",
         "algorithms": [
           {
-            "name": "FCFS (First Come First Served)",
+            "name": "FIFO / FCFS (First Come First Served)",
             "type": "비선점",
-            "description": "도착 순서대로 처리, 단순하지만 긴 대기시간 발생 가능"
+            "description": "도착 순서대로 처리. 구현 단순. 긴 작업이 앞에 오면 뒤 작업들이 오래 기다리는 Convoy Effect 발생."
           },
           {
             "name": "SJF (Shortest Job First)",
             "type": "비선점",
-            "description": "실행 시간이 짧은 것부터 처리, 기아 현상 발생 가능"
+            "description": "실행 시간이 짧은 프로세스 먼저 처리. 평균 대기시간 최소화. 기아 현상(Starvation) 가능. 실행 시간 예측 어려움."
           },
           {
-            "name": "Round Robin",
+            "name": "HRN (Highest Response-ratio Next)",
+            "type": "비선점",
+            "description": "우선순위 = (대기시간 + 실행시간) / 실행시간. SJF의 기아 현상 보완. 대기시간이 길수록 우선순위 증가."
+          },
+          {
+            "name": "기한부 스케줄링",
+            "type": "비선점",
+            "description": "정해진 기한(Deadline) 내에 완료해야 하는 프로세스 우선 처리."
+          },
+          {
+            "name": "우선순위 스케줄링",
+            "type": "비선점/선점",
+            "description": "우선순위가 높은 프로세스를 먼저 처리. 기아 현상 발생 가능 → 에이징(Aging)으로 해결."
+          },
+          {
+            "name": "Round Robin (RR)",
             "type": "선점",
-            "description": "시간 할당량(Quantum)만큼 순환 처리, 시분할 시스템에 적합"
-          },
-          {
-            "name": "Priority Scheduling",
-            "type": "선점/비선점",
-            "description": "우선순위가 높은 프로세스 먼저 처리"
+            "description": "각 프로세스에 균등한 시간 할당량(Time Quantum/Slice) 부여. 할당 시간 초과 시 큐 맨 뒤로 이동. 시분할 시스템에 적합."
           },
           {
             "name": "SRT (Shortest Remaining Time)",
             "type": "선점",
-            "description": "SJF의 선점 버전, 남은 시간이 짧은 것 우선"
+            "description": "실행 중 더 짧은 작업 도착 시 현재 작업 중단하고 교체. SJF의 선점 버전. 평균 대기시간 최소."
           }
-        ]
+        ],
+        "mnemonic": "비선점: FIFO/SJF/HRN/기한부/우선순위 / 선점: RR/SRT / HRN공식=(대기+실행)/실행"
       }
     },
     {
-      "id": "os_02",
-      "title": "페이지 교체 알고리즘",
+      "id": "net_11",
+      "title": "메모리 페이지 교체 알고리즘",
       "content": {
+        "definition": "가상 메모리 시스템에서 페이지 부재(Page Fault) 발생 시 메모리에서 어떤 페이지를 교체할지 결정하는 알고리즘.",
         "algorithms": [
           {
-            "name": "FIFO",
-            "description": "가장 먼저 올라온 페이지 교체",
-            "note": "Belady의 역설 발생 가능"
+            "name": "FIFO (First In First Out)",
+            "type": "페이지 교체",
+            "description": "가장 먼저 메모리에 적재된 페이지를 교체. 구현 단순. Belady의 모순 발생 가능: 프레임 수를 늘려도 페이지 부재가 증가하는 현상."
           },
           {
             "name": "LRU (Least Recently Used)",
-            "description": "가장 오랫동안 사용되지 않은 페이지 교체",
-            "note": "가장 널리 사용되는 알고리즘"
+            "type": "페이지 교체",
+            "description": "가장 오랫동안 사용되지 않은 페이지 교체. 시간 지역성(Temporal Locality) 활용. Belady의 모순 없음. 구현에 추가 하드웨어 필요."
           },
           {
             "name": "LFU (Least Frequently Used)",
-            "description": "사용 빈도가 가장 낮은 페이지 교체"
+            "type": "페이지 교체",
+            "description": "참조 빈도가 가장 낮은 페이지 교체. 자주 사용되지 않는 페이지 우선 교체. 초기에 많이 사용된 페이지가 계속 남는 문제."
           },
           {
             "name": "OPT (Optimal)",
-            "description": "앞으로 가장 오래 사용되지 않을 페이지 교체",
-            "note": "이론적으로 최적이지만 실제 구현 불가"
+            "type": "페이지 교체",
+            "description": "앞으로 가장 오랫동안 사용되지 않을 페이지 교체. 이론적으로 최적이나 미래 참조 예측 불가로 실용 불가."
+          },
+          {
+            "name": "NUR (Not Used Recently)",
+            "type": "페이지 교체",
+            "description": "최근에 사용되지 않은 페이지 교체. 참조 비트와 변형 비트를 사용하여 LRU를 근사."
           }
-        ]
+        ],
+        "characteristics": [
+          "페이지 부재(Page Fault): 필요한 페이지가 메모리에 없는 상태",
+          "Belady의 모순: FIFO에서 프레임 수 증가 시 오히려 페이지 부재가 증가하는 현상",
+          "스래싱(Thrashing): 페이지 교체가 너무 빈번하여 실제 작업보다 페이지 교체에 더 많은 시간 소모",
+          "작업 집합(Working Set): 특정 시간 동안 프로세스가 참조하는 페이지 집합"
+        ],
+        "mnemonic": "FIFO=먼저들어온것=Belady모순 / LRU=오래안쓴것=시간지역성 / LFU=적게쓴것=참조빈도"
       }
     },
     {
-      "id": "os_03",
-      "title": "교착상태 (Deadlock)",
+      "id": "net_12",
+      "title": "Unix/Linux 명령어와 chmod",
       "content": {
-        "conditions": [
-          "상호 배제 (Mutual Exclusion)",
-          "점유와 대기 (Hold and Wait)",
-          "비선점 (No Preemption)",
-          "환형 대기 (Circular Wait)"
+        "definition": "Unix/Linux 운영체제의 기본 쉘 명령어와 파일 권한 설정 명령어. chmod는 8진수 또는 기호를 사용하여 파일 권한을 설정한다.",
+        "types": [
+          {
+            "name": "파일/디렉토리 탐색",
+            "description": "pwd: 현재 디렉토리 경로 출력 / ls: 디렉토리 내용 목록 (ls -l: 상세, ls -a: 숨김파일 포함) / cd: 디렉토리 이동 / find: 파일 검색"
+          },
+          {
+            "name": "파일 관리",
+            "description": "cp: 파일/디렉토리 복사 / mv: 파일/디렉토리 이동 또는 이름 변경 / rm: 파일 삭제 (rm -r: 디렉토리 포함 재귀 삭제) / mkdir: 디렉토리 생성 / touch: 빈 파일 생성 또는 타임스탬프 갱신"
+          },
+          {
+            "name": "텍스트 처리",
+            "description": "cat: 파일 내용 출력 / grep: 패턴 검색 (grep -r: 재귀, grep -i: 대소문자 무시) / head/tail: 파일 앞/뒤 출력 / wc: 단어/줄/바이트 수 계산"
+          },
+          {
+            "name": "프로세스 관리",
+            "description": "ps: 실행 중 프로세스 목록 (ps -aux: 전체 프로세스) / kill: 프로세스 종료 (kill -9: 강제 종료) / top: 실시간 프로세스 모니터링"
+          },
+          {
+            "name": "chmod 권한 설정",
+            "description": "chmod [권한] [파일명]. 8진수: r=4, w=2, x=1. rwx=7, rw-=6, r-x=5, r--=4, -wx=3, -w-=2, --x=1, ---=0. 예: chmod 751 file (소유자=rwx=7, 그룹=r-x=5, 기타=--x=1)"
+          }
         ],
-        "handling": {
-          "prevention": "예방 - 4가지 조건 중 하나 제거",
-          "avoidance": "회피 - 은행가 알고리즘 사용",
-          "detection": "탐지 - 자원 할당 그래프 분석",
-          "recovery": "회복 - 프로세스 종료 또는 자원 선점"
-        }
+        "characteristics": [
+          "권한 구성: [소유자 3비트][그룹 3비트][기타 3비트] 순서",
+          "chmod 751: 소유자(7=rwx), 그룹(5=r-x), 기타(1=--x)",
+          "chmod 644: 소유자(6=rw-), 그룹(4=r--), 기타(4=r--)",
+          "chmod 755: 소유자(7=rwx), 그룹(5=r-x), 기타(5=r-x) - 일반 실행파일",
+          "기호 방식: chmod u+x file (소유자에 실행 권한 추가), chmod o-w file (기타 쓰기 권한 제거)"
+        ],
+        "mnemonic": "r=4, w=2, x=1 / 권한=소유자+그룹+기타 / 7=rwx, 6=rw-, 5=r-x, 4=r--, 0=---"
       }
     }
   ],
   "practice_problems": [
     {
-      "id": "nw_q_01",
-      "question": "OSI 7계층에서 라우터가 동작하는 계층과 그 계층의 PDU 이름을 쓰시오.",
-      "answer": "3계층(네트워크 계층), PDU: 패킷",
-      "explanation": "라우터는 IP 주소를 기반으로 경로를 결정하는 네트워크 계층 장비"
+      "year": "2025년 1회",
+      "difficulty": "중",
+      "question": "IP 주소를 알고 있을 때 MAC 주소를 알아내는 프로토콜은?",
+      "answer": "ARP",
+      "explanation": "ARP(Address Resolution Protocol)는 IP 주소로 MAC 주소를 알아내는 프로토콜이다. 반대로 MAC → IP는 RARP이다."
     },
     {
-      "id": "nw_q_02",
-      "question": "페이지 참조 열이 1, 2, 3, 4, 1, 2, 5일 때 프레임 수 3으로 LRU 알고리즘을 적용하면 페이지 부재(Page Fault) 횟수는?",
-      "answer": "6",
-      "explanation": "1(miss), 2(miss), 3(miss), 4(miss→1교체), 1(miss→2교체), 2(miss→3교체), 5(miss→4교체) = 6번"
+      "year": "2023년 1회",
+      "difficulty": "중",
+      "question": "오류 보고 및 진단에 사용되며, ping 명령어에 활용되는 프로토콜은?",
+      "answer": "ICMP",
+      "explanation": "ICMP(Internet Control Message Protocol)는 네트워크 오류를 보고하고 ping/traceroute 진단에 사용된다."
     },
     {
-      "id": "nw_q_03",
-      "question": "교착상태 발생의 4가지 필요 조건을 쓰시오.",
-      "answer": "상호 배제, 점유와 대기, 비선점, 환형 대기",
-      "explanation": "4가지 조건이 모두 충족될 때 교착상태 발생 가능"
+      "year": "2023년 2회",
+      "difficulty": "중",
+      "question": "수신 측에서 오류를 스스로 검출하고 정정할 수 있는 오류 제어 방식은?",
+      "answer": "FEC (전진 오류 수정)",
+      "explanation": "FEC(Forward Error Correction)는 해밍 코드 등을 사용하여 수신 측에서 오류를 직접 정정한다. 역채널이 필요 없다."
+    },
+    {
+      "year": "2023년 2회",
+      "difficulty": "중",
+      "question": "HDLC에서 링크 관리(설정/해제)에 사용되며 첫 비트가 '11'인 프레임 유형은?",
+      "answer": "U-프레임 (비번호 프레임)",
+      "explanation": "U-프레임은 첫 비트가 '11'로 시작하며 링크 설정, 해제 등 관리 기능을 수행한다."
+    },
+    {
+      "year": "2025년 1회",
+      "difficulty": "상",
+      "question": "CRC 오류 검출 방식은 FEC와 BEC 중 어느 것에 해당하는가?",
+      "answer": "BEC",
+      "explanation": "CRC는 오류를 검출만 하고, 오류 발생 시 재전송을 요청하는 BEC(ARQ) 방식에 사용된다."
+    },
+    {
+      "year": "2025년 2회",
+      "difficulty": "하",
+      "question": "암호화된 안전한 원격 접속을 제공하는 프로토콜과 포트번호는?",
+      "answer": "SSH, 22번 포트",
+      "explanation": "SSH(Secure Shell)는 22번 포트를 사용하며 암호화된 원격 접속을 제공한다. Telnet(23)은 암호화가 없어 보안에 취약하다."
+    },
+    {
+      "year": "2022년 2회",
+      "difficulty": "하",
+      "question": "HTTP 프로토콜의 포트번호는?",
+      "answer": "80번",
+      "explanation": "HTTP는 80번 포트를 사용하며 암호화되지 않은 웹 통신 프로토콜이다. 암호화된 HTTPS는 443번 포트를 사용한다."
+    },
+    {
+      "year": "2021년 2회",
+      "difficulty": "하",
+      "question": "메일을 발신할 때 사용하는 프로토콜과 포트번호는?",
+      "answer": "SMTP, 25번 포트",
+      "explanation": "SMTP(Simple Mail Transfer Protocol)는 25번 포트를 사용하며 이메일 발송에 사용된다."
+    },
+    {
+      "year": "2024년 2회",
+      "difficulty": "중",
+      "question": "RIP 프로토콜에서 A→E 최단경로를 구하시오. (각 링크의 홉 수 기반)",
+      "answer": "홉 수가 가장 적은 경로",
+      "explanation": "RIP는 거리 벡터 알고리즘으로 홉 수를 기준으로 최단 경로를 선택한다. 최대 15홉까지 지원한다."
+    },
+    {
+      "year": "2024년 1회",
+      "difficulty": "중",
+      "question": "링크 상태 알고리즘을 사용하며 대규모 네트워크에 적합한 IGP 프로토콜은?",
+      "answer": "OSPF",
+      "explanation": "OSPF(Open Shortest Path First)는 다익스트라 알고리즘 기반의 링크 상태 프로토콜로 대규모 네트워크에 적합하다."
+    },
+    {
+      "year": "2022년 2회",
+      "difficulty": "중",
+      "question": "AS(자율 시스템) 간 라우팅에 사용되는 EGP 프로토콜은?",
+      "answer": "BGP",
+      "explanation": "BGP(Border Gateway Protocol)는 EGP로 서로 다른 AS 간의 라우팅을 담당하며 경로 벡터 알고리즘을 사용한다."
+    },
+    {
+      "year": "2024년 2회",
+      "difficulty": "중",
+      "question": "패킷 교환 방식 중 통신 전 경로를 미리 설정하고 모든 패킷이 같은 경로로 전송되는 방식은?",
+      "answer": "가상회선 방식",
+      "explanation": "가상회선 방식은 연결 지향형으로 통신 전 논리적 경로를 설정하고 모든 패킷이 동일 경로를 따라 전송되어 순서가 보장된다."
+    },
+    {
+      "year": "2023년 1회",
+      "difficulty": "중",
+      "question": "패킷마다 독립적으로 경로를 결정하며 비연결형인 패킷 교환 방식은?",
+      "answer": "데이터그램 방식",
+      "explanation": "데이터그램 방식은 각 패킷이 독립적으로 최적 경로를 선택하는 비연결형 방식으로 순서 보장이 되지 않는다."
+    },
+    {
+      "year": "2021년 2회",
+      "difficulty": "하",
+      "question": "패킷 교환에서 비연결형 서비스를 제공하는 방식의 이름은?",
+      "answer": "데이터그램 방식",
+      "explanation": "데이터그램 방식은 연결 설정 없이 패킷을 독립적으로 전송하는 비연결형 서비스이다."
+    },
+    {
+      "year": "2021년 1회",
+      "difficulty": "하",
+      "question": "IPv4와 IPv6의 주소 비트 수를 각각 쓰시오.",
+      "answer": "IPv4: 32비트, IPv6: 128비트",
+      "explanation": "IPv4는 32비트로 약 43억 개의 주소를 제공하며, IPv6는 128비트로 사실상 무한한 주소를 제공한다."
+    },
+    {
+      "year": "2021년 3회",
+      "difficulty": "중",
+      "question": "OSI 7계층에서 네트워크 계층의 주요 기능은?",
+      "answer": "IP 주소 기반 라우팅, 논리적 주소 지정, 경로 선택",
+      "explanation": "네트워크 계층(3계층)은 IP 주소를 사용하여 패킷 라우팅과 논리적 주소 지정을 담당한다."
+    },
+    {
+      "year": "2025년 1회",
+      "difficulty": "상",
+      "question": "192.168.1.100, 서브넷 마스크 255.255.255.192일 때 브로드캐스트 주소는?",
+      "answer": "192.168.1.127",
+      "explanation": "255.255.255.192 = 11000000이므로 하위 6비트가 호스트 비트. 네트워크 주소: 192.168.1.64, 브로드캐스트: 192.168.1.127 (64+63)"
+    },
+    {
+      "year": "2025년 2회",
+      "difficulty": "상",
+      "question": "192.168.10.0, 서브넷 마스크 255.255.255.240일 때 네트워크 주소와 사용 가능한 호스트 수는?",
+      "answer": "네트워크 주소: 192.168.10.0, 사용 가능 호스트: 14개",
+      "explanation": "255.255.255.240 = 11110000이므로 하위 4비트가 호스트. 2^4=16개 주소, 16-2=14개 호스트 사용 가능."
+    },
+    {
+      "year": "2022년 2회",
+      "difficulty": "중",
+      "question": "서브넷 마스크 255.255.255.0에서 사용 가능한 호스트 수는?",
+      "answer": "254개",
+      "explanation": "255.255.255.0은 하위 8비트가 호스트 비트. 2^8=256개 주소에서 네트워크(0)와 브로드캐스트(255)를 제외하면 254개."
+    },
+    {
+      "year": "2022년 3회",
+      "difficulty": "상",
+      "question": "192.168.1.0/24를 5개의 서브넷으로 나눌 때 서브넷 마스크와 각 서브넷의 호스트 수는?",
+      "answer": "서브넷 마스크: /27 (255.255.255.224), 각 서브넷 호스트 수: 30개",
+      "explanation": "2^n >= 5 → n=3비트. /24+3=/27. 호스트 비트 5개: 2^5=32개 주소, 32-2=30개 호스트."
+    },
+    {
+      "year": "2021년 1회",
+      "difficulty": "중",
+      "question": "CIDR 표기 /26이 의미하는 서브넷 마스크는?",
+      "answer": "255.255.255.192",
+      "explanation": "/26은 1이 26개: 11111111.11111111.11111111.11000000 = 255.255.255.192"
+    },
+    {
+      "year": "2021년 3회",
+      "difficulty": "중",
+      "question": "OSI 7계층에서 MAC 주소를 사용하며 프레임 단위로 전송하는 계층은?",
+      "answer": "2계층 - 데이터 링크 계층",
+      "explanation": "데이터 링크 계층은 MAC 주소를 사용하고 프레임(Frame)을 PDU로 하며 스위치/브리지 장비를 사용한다."
+    },
+    {
+      "year": "2021년 3회",
+      "difficulty": "중",
+      "question": "OSI 7계층에서 데이터 암호화·복호화와 형식 변환을 담당하는 계층은?",
+      "answer": "6계층 - 표현 계층",
+      "explanation": "표현 계층은 데이터의 표현 방식(형식 변환), 암호화/복호화, 압축을 담당한다."
+    },
+    {
+      "year": "2025년 2회",
+      "difficulty": "상",
+      "question": "SJF와 SRT의 차이를 설명하시오.",
+      "answer": "SJF는 비선점, SRT는 선점 방식",
+      "explanation": "SJF(Shortest Job First)는 비선점으로 실행 중인 프로세스를 중단하지 않지만, SRT(Shortest Remaining Time)는 선점으로 더 짧은 프로세스가 도착하면 현재 프로세스를 중단한다."
+    },
+    {
+      "year": "2025년 2회",
+      "difficulty": "상",
+      "question": "Time Quantum=3인 Round Robin에서 P1(6ms), P2(4ms), P3(2ms) 프로세스의 평균 대기시간은?",
+      "answer": "평균 대기시간: (3+6+6)/3 = 5ms",
+      "explanation": "RR(TQ=3): P1(0-3)→P2(3-6)→P3(6-8)→P1(8-11)→P2(11-12). P1대기=8-3=5, P2대기=11-3-3=5, P3대기=6. 평균=(5+5+6)/3 ≈ 5.3ms"
+    },
+    {
+      "year": "2024년 2회",
+      "difficulty": "상",
+      "question": "SRT 알고리즘에서 P1(8ms, t=0), P2(4ms, t=1), P3(2ms, t=2) 도착 시 평균 대기시간은?",
+      "answer": "각 프로세스 대기시간을 계산하여 평균",
+      "explanation": "SRT(선점): t=0 P1시작, t=1 P2(4)<P1(7) 교체, t=2 P3(2)<P2(3) 교체, P3완료(t=4), P2재개(4ms→3ms), P2완료(t=7), P1재개, P1완료(t=14). 대기: P1=6, P2=2, P3=2. 평균=10/3≈3.3ms"
+    },
+    {
+      "year": "2022년 3회",
+      "difficulty": "중",
+      "question": "HRN 스케줄링의 우선순위 계산 공식은?",
+      "answer": "(대기시간 + 실행시간) / 실행시간",
+      "explanation": "HRN 우선순위 = (W + S) / S. W: 대기시간, S: 서비스(실행) 시간. 값이 클수록 우선순위가 높다."
+    },
+    {
+      "year": "2024년 1회",
+      "difficulty": "상",
+      "question": "참조 문자열 1,2,3,4,1,2,5,1,2,3,4,5에서 프레임 수 3일 때 LRU와 LFU의 페이지 부재 수를 구하시오.",
+      "answer": "LRU: 8회, LFU: 계산 필요",
+      "explanation": "LRU는 가장 오랫동안 사용되지 않은 페이지를 교체하고, LFU는 가장 적게 사용된 페이지를 교체한다. 참조 문자열을 순서대로 추적하여 페이지 부재 횟수를 계산한다."
+    },
+    {
+      "year": "2024년 1회",
+      "difficulty": "중",
+      "question": "FIFO 페이지 교체에서 발생하는 특이한 현상의 이름은?",
+      "answer": "Belady의 모순 (Belady's Anomaly)",
+      "explanation": "Belady의 모순은 FIFO에서 프레임 수를 늘렸는데 페이지 부재 횟수가 오히려 증가하는 비직관적 현상이다."
+    },
+    {
+      "year": "2023년 3회",
+      "difficulty": "중",
+      "question": "gamja.sh 파일에 chmod 751을 적용했을 때 소유자, 그룹, 기타 사용자의 권한은?",
+      "answer": "소유자: rwx (7), 그룹: r-x (5), 기타: --x (1)",
+      "explanation": "7=r(4)+w(2)+x(1)=rwx, 5=r(4)+x(1)=r-x, 1=x(1)=--x. 소유자는 읽기/쓰기/실행, 그룹은 읽기/실행, 기타는 실행만 가능."
+    },
+    {
+      "year": "2025년 3회",
+      "difficulty": "하",
+      "question": "Unix/Linux에서 현재 작업 디렉토리의 경로를 출력하는 명령어는?",
+      "answer": "pwd (Print Working Directory)",
+      "explanation": "pwd 명령어는 현재 작업 중인 디렉토리의 절대 경로를 출력한다."
+    },
+    {
+      "year": "2025년 3회",
+      "difficulty": "하",
+      "question": "Unix/Linux에서 파일이나 디렉토리를 복사하는 명령어는?",
+      "answer": "cp (copy)",
+      "explanation": "cp 명령어는 파일이나 디렉토리를 복사한다. cp -r은 디렉토리를 재귀적으로 복사한다."
+    },
+    {
+      "year": "2023년 3회",
+      "difficulty": "중",
+      "question": "chmod 644로 설정된 파일의 권한을 설명하시오.",
+      "answer": "소유자: rw- (6), 그룹: r-- (4), 기타: r-- (4)",
+      "explanation": "6=rw-(읽기+쓰기), 4=r--(읽기만). 소유자는 읽고 쓸 수 있고, 그룹과 기타 사용자는 읽기만 가능한 일반 파일 권한."
     }
   ]
 }
