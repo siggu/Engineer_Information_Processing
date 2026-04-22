@@ -2,7 +2,6 @@
 const state = {
   currentSection: 'theory',
   currentSubject: 'db',
-  chatOpen: true,
   sidebarCollapsed: false,
   lightMode: false,
   dataCache: {},
@@ -20,12 +19,6 @@ const learnPane      = $('learnPane');
 const problemsPane   = $('problemsPane');
 const learnContent   = $('learnContent');
 const problemsContent= $('problemsContent');
-const chatPanel      = $('chatPanel');
-const chatToggle     = $('chatToggle');
-const chatFab        = $('chatFab');
-const chatMessages   = $('chatMessages');
-const chatInput      = $('chatInput');
-const sendBtn        = $('sendBtn');
 const generateQuizBtn= $('generateQuizBtn');
 const quizResult     = $('quizResult');
 const tabBtns        = document.querySelectorAll('.tab-btn');
@@ -231,7 +224,35 @@ function renderTopicBody(topic) {
     </ul>`;
   }
 
-  return html || `<p style="color:var(--text-muted);margin-top:10px">상세 내용은 AI 튜터에게 질문해보세요!</p>`;
+  // 범용 catch-all: 위에서 처리되지 않은 필드를 자동 렌더링
+  const knownFields = new Set(['mnemonic','steps','layers','algorithms','levels',
+    'creational','structural','behavioral','relationships',
+    'definition','characteristics','types','acid','schema_3layer']);
+  Object.entries(c).forEach(([key, val]) => {
+    if (knownFields.has(key) || !val) return;
+    if (Array.isArray(val) && val.length > 0) {
+      if (typeof val[0] === 'string') {
+        html += `<ul class="key-points" style="margin-top:8px">${val.map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>`;
+      } else if (typeof val[0] === 'object') {
+        const headers = Object.keys(val[0]);
+        html += `<table class="info-table" style="margin-top:10px">
+          <tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>
+          ${val.map(row => `<tr>${headers.map(h => {
+            const v = row[h];
+            return `<td>${Array.isArray(v) ? v.join(', ') : escapeHtml(String(v ?? ''))}</td>`;
+          }).join('')}</tr>`).join('')}
+        </table>`;
+      }
+    } else if (typeof val === 'object' && !Array.isArray(val)) {
+      html += `<ul class="key-points" style="margin-top:8px">
+        ${Object.entries(val).map(([k, v]) => `<li><strong>${escapeHtml(k)}:</strong> ${escapeHtml(typeof v === 'string' ? v : JSON.stringify(v))}</li>`).join('')}
+      </ul>`;
+    } else if (typeof val === 'string') {
+      html += `<p style="margin-top:8px;color:var(--text-primary)">${escapeHtml(val)}</p>`;
+    }
+  });
+
+  return html || `<p style="color:var(--text-muted);margin-top:10px">내용을 불러오는 중입니다.</p>`;
 }
 
 function renderCodingLearn(data) {
@@ -265,7 +286,7 @@ function renderConceptBody(c) {
       html += `<div style="margin-top:10px"><strong>${k === 'overriding' ? '오버라이딩' : '오버로딩'}</strong>: ${c[k].description}</div>`;
     });
   }
-  return html || `<p style="color:var(--text-muted);margin-top:10px">AI 튜터에게 질문해보세요!</p>`;
+  return html || `<p style="color:var(--text-muted);margin-top:10px">내용을 불러오는 중입니다.</p>`;
 }
 
 /* ===== 기출 문제 렌더링 ===== */
@@ -287,10 +308,7 @@ function renderProblems(data, section) {
         </div>
         <div class="problem-question">${escapeHtml(p.question || p.title || '')}</div>
         ${hasCode ? `<div class="problem-code">${escapeHtml(p.code || p.problem_code || '')}</div>` : ''}
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="answer-toggle" onclick="toggleAnswer('ans_${i}')">정답 보기</button>
-          <button class="answer-toggle" onclick="askAI('${escapeAttr(p.question || p.title || '')}')">🤖 AI에게 질문</button>
-        </div>
+        <button class="answer-toggle" onclick="toggleAnswer('ans_${i}')">정답 보기</button>
         <div class="answer-box" id="ans_${i}">
           <div class="answer-label">정답</div>
           <div class="answer-text">${escapeHtml(String(p.answer || ''))}</div>
@@ -320,119 +338,6 @@ function attachToggleListeners() {
       header.closest('.topic-card').classList.toggle('open');
     });
   });
-}
-
-/* ===== AI 채팅 ===== */
-sendBtn.addEventListener('click', sendMessage);
-chatInput.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-});
-
-function askAI(question) {
-  chatInput.value = question;
-  // 채팅 열기
-  if (window.innerWidth <= 900) {
-    chatPanel.classList.add('mobile-open');
-  }
-  chatInput.focus();
-}
-window.askAI = askAI;
-
-async function sendMessage() {
-  const text = chatInput.value.trim();
-  if (!text) return;
-
-  appendMessage('user', text);
-  chatInput.value = '';
-  sendBtn.disabled = true;
-
-  const typingId = appendTyping();
-
-  try {
-    const res = await fetch('/api/chat/stream', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: text,
-        subject: state.currentSubject,
-      }),
-    });
-
-    removeTyping(typingId);
-
-    const msgEl = appendMessage('assistant', '');
-    const contentEl = msgEl.querySelector('.message-content');
-    let full = '';
-
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const lines = decoder.decode(value).split('\n');
-      for (const line of lines) {
-        if (!line.startsWith('data: ')) continue;
-        const json = JSON.parse(line.slice(6));
-        if (json.text) {
-          full += json.text;
-          contentEl.innerHTML = renderMarkdown(full);
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-      }
-    }
-  } catch (e) {
-    removeTyping(typingId);
-    appendMessage('assistant', '오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-  } finally {
-    sendBtn.disabled = false;
-  }
-}
-
-function appendMessage(role, text) {
-  const div = document.createElement('div');
-  div.className = `chat-message ${role}`;
-  div.innerHTML = `<div class="message-content md-content">${role === 'assistant' ? renderMarkdown(text) : escapeHtml(text)}</div>`;
-  chatMessages.appendChild(div);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  return div;
-}
-
-function appendTyping() {
-  const id = 'typing_' + Date.now();
-  const div = document.createElement('div');
-  div.className = 'chat-message assistant typing-indicator';
-  div.id = id;
-  div.innerHTML = `<div class="message-content"><div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></div>`;
-  chatMessages.appendChild(div);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  return id;
-}
-
-function removeTyping(id) {
-  const el = $(id);
-  if (el) el.remove();
-}
-
-/* ===== 마크다운 파서 (경량) ===== */
-function renderMarkdown(text) {
-  return text
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/```[\s\S]*?```/g, m => {
-      const code = m.replace(/```[a-z]*\n?/g, '').replace(/```$/g, '');
-      return `<pre>${code}</pre>`;
-    })
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-    .replace(/^- (.+)$/gm, '<li>$1</li>')
-    .replace(/(<li>[\s\S]+?<\/li>)/g, '<ul>$1</ul>')
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/\n/g, '<br>')
-    .replace(/^([^<].*)$/gm, (m, p1) => p1.startsWith('<') ? m : `<p>${m}</p>`);
 }
 
 /* ===== 예상 문제 생성 ===== */
@@ -490,21 +395,6 @@ sidebarToggle.addEventListener('click', () => {
   sidebar.classList.toggle('collapsed', state.sidebarCollapsed);
 });
 
-chatToggle.addEventListener('click', () => {
-  chatPanel.classList.add('hidden');
-  chatFab.style.display = 'flex';
-  if (window.innerWidth <= 900) chatPanel.classList.remove('mobile-open');
-});
-
-chatFab.addEventListener('click', () => {
-  if (window.innerWidth <= 900) {
-    chatPanel.classList.add('mobile-open');
-  } else {
-    chatPanel.classList.remove('hidden');
-    chatFab.style.display = 'none';
-  }
-});
-
 themeToggle.addEventListener('click', () => {
   state.lightMode = !state.lightMode;
   document.body.classList.toggle('light-mode', state.lightMode);
@@ -518,9 +408,6 @@ function escapeHtml(str) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
-}
-function escapeAttr(str) {
-  return String(str).replace(/'/g, "\\'").replace(/\n/g, ' ').slice(0, 120);
 }
 function loadingHTML(msg = '로딩 중...') {
   return `<div class="loading-state"><div class="spinner"></div><p>${msg}</p></div>`;
