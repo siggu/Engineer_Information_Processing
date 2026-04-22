@@ -1,0 +1,536 @@
+/* ===== 상태 ===== */
+const state = {
+  currentSection: 'theory',
+  currentSubject: 'db',
+  chatOpen: true,
+  sidebarCollapsed: false,
+  lightMode: false,
+  dataCache: {},
+};
+
+/* ===== DOM ===== */
+const $ = id => document.getElementById(id);
+const sidebar        = $('sidebar');
+const sidebarToggle  = $('sidebarToggle');
+const breadcrumb     = $('breadcrumb');
+const themeToggle    = $('themeToggle');
+const contentSection = $('contentSection');
+const quizSection    = $('quizSection');
+const learnPane      = $('learnPane');
+const problemsPane   = $('problemsPane');
+const learnContent   = $('learnContent');
+const problemsContent= $('problemsContent');
+const chatPanel      = $('chatPanel');
+const chatToggle     = $('chatToggle');
+const chatFab        = $('chatFab');
+const chatMessages   = $('chatMessages');
+const chatInput      = $('chatInput');
+const sendBtn        = $('sendBtn');
+const generateQuizBtn= $('generateQuizBtn');
+const quizResult     = $('quizResult');
+const tabBtns        = document.querySelectorAll('.tab-btn');
+const navItems       = document.querySelectorAll('.nav-item');
+
+/* ===== 라벨 맵 ===== */
+const LABELS = {
+  db: '데이터베이스',
+  network: '네트워크 / OS',
+  sw_design: 'SW 설계',
+  sw_dev: 'SW 개발',
+  security: '보안 / 신기술',
+  c: 'C언어',
+  java: 'Java',
+  python: 'Python',
+  algorithm: '알고리즘',
+};
+
+/* ===== API 호출 ===== */
+async function fetchData(url) {
+  if (state.dataCache[url]) return state.dataCache[url];
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  state.dataCache[url] = data;
+  return data;
+}
+
+/* ===== 내비게이션 ===== */
+navItems.forEach(item => {
+  item.addEventListener('click', () => {
+    navItems.forEach(n => n.classList.remove('active'));
+    item.classList.add('active');
+    const section = item.dataset.section;
+    const subject = item.dataset.subject;
+    state.currentSection = section;
+    state.currentSubject = subject;
+    breadcrumb.textContent = subject ? LABELS[subject] : '예상 문제';
+    if (section === 'quiz') {
+      contentSection.classList.add('hidden');
+      quizSection.classList.remove('hidden');
+    } else {
+      contentSection.classList.remove('hidden');
+      quizSection.classList.add('hidden');
+      loadContent(section, subject);
+    }
+  });
+});
+
+/* ===== 탭 ===== */
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.dataset.tab;
+    learnPane.classList.toggle('active', tab === 'learn');
+    problemsPane.classList.toggle('active', tab === 'problems');
+  });
+});
+
+/* ===== 콘텐츠 로드 ===== */
+async function loadContent(section, subject) {
+  learnContent.innerHTML = loadingHTML();
+  problemsContent.innerHTML = '';
+
+  try {
+    const url = section === 'theory'
+      ? `/api/theory/${subject}`
+      : `/api/coding/${subject}`;
+    const data = await fetchData(url);
+
+    learnContent.innerHTML = renderLearn(data, section);
+    problemsContent.innerHTML = renderProblems(data, section);
+    attachToggleListeners();
+  } catch (e) {
+    learnContent.innerHTML = errorHTML(e.message);
+  }
+}
+
+/* ===== 이론 렌더링 ===== */
+function renderLearn(data, section) {
+  if (section === 'theory') return renderTheory(data);
+  return renderCodingLearn(data);
+}
+
+function renderTheory(data) {
+  const topics = data.topics || [];
+  if (!topics.length) return emptyHTML('학습 내용이 없습니다.');
+
+  return topics.map(topic => `
+    <div class="topic-card">
+      <div class="topic-header" data-topic="${topic.id}">
+        <span class="topic-title">${topic.title}</span>
+        <span class="topic-toggle">▼</span>
+      </div>
+      <div class="topic-body">
+        ${renderTopicBody(topic)}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderTopicBody(topic) {
+  const c = topic.content;
+  if (!c) return '';
+  let html = '';
+
+  // 암기법
+  if (c.mnemonic) {
+    html += `<div class="mnemonic-box"><div class="label">암기법</div><div class="value">${c.mnemonic}</div></div>`;
+  }
+
+  // 단계 목록
+  if (c.steps) {
+    html += `<table class="info-table" style="margin-top:10px">
+      <tr><th>단계</th><th>키워드</th><th>설명</th></tr>
+      ${c.steps.map(s => `<tr><td><span class="badge badge-blue">${s.level || s.step}</span></td><td>${s.keyword || ''}</td><td>${s.condition || s.description || ''}</td></tr>`).join('')}
+    </table>`;
+  }
+
+  // 레이어 목록 (OSI)
+  if (c.layers) {
+    html += `<table class="info-table" style="margin-top:10px">
+      <tr><th>계층</th><th>이름</th><th>프로토콜/장비</th><th>PDU</th></tr>
+      ${c.layers.map(l => `
+        <tr>
+          <td><span class="badge badge-blue">${l.number}계층</span></td>
+          <td><strong>${l.name}</strong></td>
+          <td>${(l.protocols || []).join(', ')}${l.device ? ' / ' + l.device : ''}</td>
+          <td>${l.pdu || '-'}</td>
+        </tr>`).join('')}
+    </table>`;
+  }
+
+  // 알고리즘 목록
+  if (c.algorithms) {
+    html += `<table class="info-table" style="margin-top:10px">
+      <tr><th>이름</th><th>유형</th><th>설명</th></tr>
+      ${c.algorithms.map(a => `
+        <tr>
+          <td><strong>${a.name}</strong></td>
+          <td><span class="badge ${a.type === '선점' ? 'badge-red' : 'badge-green'}">${a.type || '-'}</span></td>
+          <td>${a.description || ''}</td>
+        </tr>`).join('')}
+    </table>`;
+  }
+
+  // 레벨 목록 (결합도/응집도)
+  if (c.levels) {
+    html += `<table class="info-table" style="margin-top:10px">
+      <tr><th>유형</th><th>강도</th><th>설명</th></tr>
+      ${c.levels.map(l => `
+        <tr>
+          <td><strong>${l.type}</strong></td>
+          <td><small>${l.strength || ''}</small></td>
+          <td>${l.description || ''}</td>
+        </tr>`).join('')}
+    </table>`;
+  }
+
+  // 패턴 목록 (디자인 패턴)
+  if (c.creational || c.structural || c.behavioral) {
+    ['creational', 'structural', 'behavioral'].forEach(cat => {
+      if (!c[cat]) return;
+      html += `<h4 style="margin-top:12px;margin-bottom:6px;color:var(--accent);font-size:12px">${c[cat].description}</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+        ${(c[cat].patterns || []).map(p => `
+          <div style="background:var(--bg-hover);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px">
+            <strong>${p.name}</strong><br><span style="color:var(--text-muted);font-size:11px">${p.description}</span>
+          </div>`).join('')}
+        </div>`;
+    });
+  }
+
+  // 관계 목록 (UML)
+  if (c.relationships) {
+    html += `<table class="info-table" style="margin-top:10px">
+      <tr><th>관계</th><th>표기</th><th>설명</th></tr>
+      ${c.relationships.map(r => `<tr><td><strong>${r.type}</strong></td><td><code>${r.notation}</code></td><td>${r.description}</td></tr>`).join('')}
+    </table>`;
+  }
+
+  // 일반 키-값 (definition, characteristics 등)
+  if (c.definition) {
+    html += `<p style="margin-top:10px;color:var(--text-primary)">${c.definition}</p>`;
+  }
+  if (c.characteristics) {
+    html += `<ul class="key-points" style="margin-top:8px">${c.characteristics.map(x => `<li>${x}</li>`).join('')}</ul>`;
+  }
+  if (c.types && typeof c.types === 'object' && !Array.isArray(c.types)) {
+    html += `<ul class="key-points" style="margin-top:8px">
+      ${Object.entries(c.types).map(([k, v]) => `<li><strong>${k}:</strong> ${v}</li>`).join('')}
+    </ul>`;
+  }
+  if (c.acid) {
+    html += `<ul class="key-points" style="margin-top:8px">
+      ${Object.entries(c.acid).map(([k, v]) => `<li><strong>${k.toUpperCase()}:</strong> ${v}</li>`).join('')}
+    </ul>`;
+  }
+  if (c.schema_3layer) {
+    html += `<ul class="key-points" style="margin-top:8px">
+      ${Object.entries(c.schema_3layer).map(([k, v]) => `<li>${v}</li>`).join('')}
+    </ul>`;
+  }
+
+  return html || `<p style="color:var(--text-muted);margin-top:10px">상세 내용은 AI 튜터에게 질문해보세요!</p>`;
+}
+
+function renderCodingLearn(data) {
+  const concepts = data.key_concepts || [];
+  if (!concepts.length) return emptyHTML('학습 내용이 없습니다.');
+
+  return concepts.map(c => `
+    <div class="topic-card">
+      <div class="topic-header" data-topic="${c.id}">
+        <span class="topic-title">${c.title}</span>
+        <span class="topic-toggle">▼</span>
+      </div>
+      <div class="topic-body">
+        ${renderConceptBody(c.content)}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderConceptBody(c) {
+  if (!c) return '';
+  let html = '';
+  if (c.explanation) html += `<p style="margin-top:10px">${c.explanation}</p>`;
+  if (c.syntax) html += `<div class="mnemonic-box"><div class="label">문법</div><div class="value" style="font-family:monospace">${c.syntax}</div></div>`;
+  if (c.rules) html += `<ul class="key-points" style="margin-top:8px">${c.rules.map(r => `<li>${r}</li>`).join('')}</ul>`;
+  if (c.examples) html += `<pre>${c.examples.join('\n')}</pre>`;
+  if (c.operators) html += `<ul class="key-points" style="margin-top:8px">${Object.entries(c.operators).map(([k, v]) => `<li><code>${k}</code> : ${v}</li>`).join('')}</ul>`;
+  if (c.overriding || c.overloading) {
+    ['overriding', 'overloading'].forEach(k => {
+      if (!c[k]) return;
+      html += `<div style="margin-top:10px"><strong>${k === 'overriding' ? '오버라이딩' : '오버로딩'}</strong>: ${c[k].description}</div>`;
+    });
+  }
+  return html || `<p style="color:var(--text-muted);margin-top:10px">AI 튜터에게 질문해보세요!</p>`;
+}
+
+/* ===== 기출 문제 렌더링 ===== */
+function renderProblems(data, section) {
+  const problems = section === 'theory'
+    ? (data.practice_problems || [])
+    : (data.problems || []);
+
+  if (!problems.length) return emptyHTML('기출 문제가 없습니다.');
+
+  return problems.map((p, i) => {
+    const hasCode = p.code || p.problem_code;
+    return `
+      <div class="problem-card">
+        <div class="problem-meta">
+          <span class="badge badge-blue">문제 ${i + 1}</span>
+          ${p.year ? `<span class="badge badge-green">${p.year}</span>` : ''}
+          ${p.difficulty ? `<span class="badge ${diffBadge(p.difficulty)}">${p.difficulty}</span>` : ''}
+        </div>
+        <div class="problem-question">${escapeHtml(p.question || p.title || '')}</div>
+        ${hasCode ? `<div class="problem-code">${escapeHtml(p.code || p.problem_code || '')}</div>` : ''}
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="answer-toggle" onclick="toggleAnswer('ans_${i}')">정답 보기</button>
+          <button class="answer-toggle" onclick="askAI('${escapeAttr(p.question || p.title || '')}')">🤖 AI에게 질문</button>
+        </div>
+        <div class="answer-box" id="ans_${i}">
+          <div class="answer-label">정답</div>
+          <div class="answer-text">${escapeHtml(String(p.answer || ''))}</div>
+          ${p.explanation ? `<div class="explanation-label">해설</div><div class="explanation-text">${escapeHtml(p.explanation)}</div>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function diffBadge(d) {
+  if (d === '상') return 'badge-red';
+  if (d === '하') return 'badge-green';
+  return 'badge-yellow';
+}
+
+function toggleAnswer(id) {
+  const el = $(id);
+  if (el) el.classList.toggle('visible');
+}
+window.toggleAnswer = toggleAnswer;
+
+/* ===== 토글 이벤트 ===== */
+function attachToggleListeners() {
+  document.querySelectorAll('.topic-header').forEach(header => {
+    header.addEventListener('click', () => {
+      header.closest('.topic-card').classList.toggle('open');
+    });
+  });
+}
+
+/* ===== AI 채팅 ===== */
+sendBtn.addEventListener('click', sendMessage);
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+function askAI(question) {
+  chatInput.value = question;
+  // 채팅 열기
+  if (window.innerWidth <= 900) {
+    chatPanel.classList.add('mobile-open');
+  }
+  chatInput.focus();
+}
+window.askAI = askAI;
+
+async function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+
+  appendMessage('user', text);
+  chatInput.value = '';
+  sendBtn.disabled = true;
+
+  const typingId = appendTyping();
+
+  try {
+    const res = await fetch('/api/chat/stream', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: text,
+        subject: state.currentSubject,
+      }),
+    });
+
+    removeTyping(typingId);
+
+    const msgEl = appendMessage('assistant', '');
+    const contentEl = msgEl.querySelector('.message-content');
+    let full = '';
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const lines = decoder.decode(value).split('\n');
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const json = JSON.parse(line.slice(6));
+        if (json.text) {
+          full += json.text;
+          contentEl.innerHTML = renderMarkdown(full);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+      }
+    }
+  } catch (e) {
+    removeTyping(typingId);
+    appendMessage('assistant', '오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+  } finally {
+    sendBtn.disabled = false;
+  }
+}
+
+function appendMessage(role, text) {
+  const div = document.createElement('div');
+  div.className = `chat-message ${role}`;
+  div.innerHTML = `<div class="message-content md-content">${role === 'assistant' ? renderMarkdown(text) : escapeHtml(text)}</div>`;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return div;
+}
+
+function appendTyping() {
+  const id = 'typing_' + Date.now();
+  const div = document.createElement('div');
+  div.className = 'chat-message assistant typing-indicator';
+  div.id = id;
+  div.innerHTML = `<div class="message-content"><div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></div>`;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return id;
+}
+
+function removeTyping(id) {
+  const el = $(id);
+  if (el) el.remove();
+}
+
+/* ===== 마크다운 파서 (경량) ===== */
+function renderMarkdown(text) {
+  return text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/```[\s\S]*?```/g, m => {
+      const code = m.replace(/```[a-z]*\n?/g, '').replace(/```$/g, '');
+      return `<pre>${code}</pre>`;
+    })
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>[\s\S]+?<\/li>)/g, '<ul>$1</ul>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>')
+    .replace(/^([^<].*)$/gm, (m, p1) => p1.startsWith('<') ? m : `<p>${m}</p>`);
+}
+
+/* ===== 예상 문제 생성 ===== */
+generateQuizBtn.addEventListener('click', async () => {
+  const subject = $('quizSubject').value;
+  const difficulty = $('quizDifficulty').value;
+  const count = parseInt($('quizCount').value);
+
+  generateQuizBtn.disabled = true;
+  generateQuizBtn.textContent = '⏳ 생성 중...';
+  quizResult.innerHTML = loadingHTML('AI가 문제를 생성하고 있습니다...');
+
+  try {
+    const res = await fetch('/api/quiz/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ subject, difficulty, count }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    quizResult.innerHTML = data.problems.map((p, i) => `
+      <div class="quiz-problem-card">
+        <div class="quiz-problem-num">문제 ${p.id || i + 1}</div>
+        <div class="quiz-problem-q">${escapeHtml(p.question || '')}</div>
+        <div class="quiz-btn-row">
+          <button class="btn-hint" onclick="toggleHint('hint_${i}')">💡 힌트</button>
+          <button class="answer-toggle" onclick="toggleAnswer('qans_${i}')">정답 보기</button>
+        </div>
+        <div class="hint-text" id="hint_${i}">${escapeHtml(p.hint || '힌트 없음')}</div>
+        <div class="answer-box" id="qans_${i}">
+          <div class="answer-label">정답</div>
+          <div class="answer-text">${escapeHtml(String(p.answer || ''))}</div>
+          ${p.explanation ? `<div class="explanation-label">해설</div><div class="explanation-text">${escapeHtml(p.explanation)}</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+  } catch (e) {
+    quizResult.innerHTML = errorHTML(e.message);
+  } finally {
+    generateQuizBtn.disabled = false;
+    generateQuizBtn.textContent = '✨ 문제 생성';
+  }
+});
+
+function toggleHint(id) {
+  const el = $(id);
+  if (el) el.classList.toggle('visible');
+}
+window.toggleHint = toggleHint;
+
+/* ===== UI 토글 ===== */
+sidebarToggle.addEventListener('click', () => {
+  state.sidebarCollapsed = !state.sidebarCollapsed;
+  sidebar.classList.toggle('collapsed', state.sidebarCollapsed);
+});
+
+chatToggle.addEventListener('click', () => {
+  chatPanel.classList.add('hidden');
+  chatFab.style.display = 'flex';
+  if (window.innerWidth <= 900) chatPanel.classList.remove('mobile-open');
+});
+
+chatFab.addEventListener('click', () => {
+  if (window.innerWidth <= 900) {
+    chatPanel.classList.add('mobile-open');
+  } else {
+    chatPanel.classList.remove('hidden');
+    chatFab.style.display = 'none';
+  }
+});
+
+themeToggle.addEventListener('click', () => {
+  state.lightMode = !state.lightMode;
+  document.body.classList.toggle('light-mode', state.lightMode);
+  themeToggle.textContent = state.lightMode ? '🌞' : '🌙';
+});
+
+/* ===== 유틸 ===== */
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+function escapeAttr(str) {
+  return String(str).replace(/'/g, "\\'").replace(/\n/g, ' ').slice(0, 120);
+}
+function loadingHTML(msg = '로딩 중...') {
+  return `<div class="loading-state"><div class="spinner"></div><p>${msg}</p></div>`;
+}
+function errorHTML(msg) {
+  return `<div class="empty-state"><div class="empty-icon">⚠️</div><p>${msg}</p></div>`;
+}
+function emptyHTML(msg) {
+  return `<div class="empty-state"><div class="empty-icon">📭</div><p>${msg}</p></div>`;
+}
+
+/* ===== 초기 로드 ===== */
+loadContent('theory', 'db');

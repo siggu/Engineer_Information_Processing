@@ -1,0 +1,162 @@
+{
+  "subject": "데이터베이스 (DB)",
+  "topics": [
+    {
+      "id": "db_01",
+      "title": "데이터베이스 개요",
+      "content": {
+        "definition": "통합·저장·운영·공유 데이터의 집합",
+        "characteristics": [
+          "통합 데이터 (Integrated Data): 중복 최소화",
+          "저장 데이터 (Stored Data): 컴퓨터 저장매체에 저장",
+          "운영 데이터 (Operational Data): 조직의 업무에 필요한 데이터",
+          "공유 데이터 (Shared Data): 여러 사용자가 공동 사용"
+        ],
+        "schema_3layer": {
+          "external": "외부 스키마 - 사용자 관점의 논리적 구조",
+          "conceptual": "개념 스키마 - 전체 데이터의 논리적 구조",
+          "internal": "내부 스키마 - 물리적 저장 구조"
+        },
+        "design_steps": [
+          "요구조건 분석",
+          "개념적 설계 (ER 다이어그램)",
+          "논리적 설계 (관계형 모델)",
+          "물리적 설계 (저장 구조)",
+          "구현"
+        ]
+      }
+    },
+    {
+      "id": "db_02",
+      "title": "키(Key)의 종류",
+      "content": {
+        "types": {
+          "super_key": "유일성을 만족하는 속성 집합",
+          "candidate_key": "유일성 + 최소성을 만족하는 속성 집합",
+          "primary_key": "후보키 중 선택된 대표 키, NULL 불가",
+          "alternate_key": "후보키 중 기본키를 제외한 나머지",
+          "foreign_key": "다른 릴레이션의 기본키를 참조하는 속성"
+        }
+      }
+    },
+    {
+      "id": "db_03",
+      "title": "정규화 (Normalization)",
+      "content": {
+        "purpose": "데이터 중복 최소화, 이상 현상 제거",
+        "mnemonic": "도부이결다조",
+        "steps": [
+          { "level": "1NF", "keyword": "도메인 분해", "condition": "모든 속성이 원자값을 가짐" },
+          { "level": "2NF", "keyword": "부분 종속 제거", "condition": "완전 함수 종속 (기본키에 완전 종속)" },
+          { "level": "3NF", "keyword": "이행 종속 제거", "condition": "이행적 함수 종속 제거" },
+          { "level": "BCNF", "keyword": "결정자 함수 종속 제거", "condition": "모든 결정자가 후보키" },
+          { "level": "4NF", "keyword": "다치 종속 제거", "condition": "다치 종속 제거" },
+          { "level": "5NF", "keyword": "조인 종속 제거", "condition": "조인 종속성 제거" }
+        ],
+        "anomalies": {
+          "insertion": "삽입 이상 - 불필요한 데이터를 함께 삽입해야 하는 문제",
+          "deletion": "삭제 이상 - 유용한 데이터가 함께 삭제되는 문제",
+          "update": "갱신 이상 - 일부만 갱신되어 불일치가 발생하는 문제"
+        }
+      }
+    },
+    {
+      "id": "db_04",
+      "title": "트랜잭션 (Transaction)",
+      "content": {
+        "definition": "데이터베이스의 상태를 변환시키는 논리적 작업 단위",
+        "acid": {
+          "atomicity": "원자성 - 전부 실행되거나 전혀 실행되지 않음",
+          "consistency": "일관성 - 트랜잭션 전후 데이터베이스 일관성 유지",
+          "isolation": "격리성 - 동시 실행 트랜잭션은 서로 영향을 주지 않음",
+          "durability": "영속성 - 완료된 트랜잭션 결과는 영구적으로 반영"
+        },
+        "commands": {
+          "commit": "트랜잭션 결과를 영구 저장",
+          "rollback": "트랜잭션 이전 상태로 복구"
+        }
+      }
+    },
+    {
+      "id": "db_05",
+      "title": "SQL 핵심 문법",
+      "content": {
+        "ddl": {
+          "description": "데이터 정의어 (Data Definition Language)",
+          "commands": ["CREATE", "ALTER", "DROP", "TRUNCATE"],
+          "example": "CREATE TABLE 학생 (학번 VARCHAR(10) PRIMARY KEY, 이름 VARCHAR(20) NOT NULL);"
+        },
+        "dml": {
+          "description": "데이터 조작어 (Data Manipulation Language)",
+          "commands": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+          "select_syntax": "SELECT [DISTINCT] 속성명 FROM 테이블명 [WHERE 조건] [GROUP BY 속성] [HAVING 조건] [ORDER BY 속성 ASC|DESC];"
+        },
+        "dcl": {
+          "description": "데이터 제어어 (Data Control Language)",
+          "commands": ["GRANT", "REVOKE"],
+          "example": "GRANT SELECT ON 학생 TO 사용자1;"
+        },
+        "join_types": [
+          { "type": "INNER JOIN", "description": "두 테이블의 교집합" },
+          { "type": "LEFT JOIN", "description": "왼쪽 테이블 전체 + 오른쪽 일치 데이터" },
+          { "type": "RIGHT JOIN", "description": "오른쪽 테이블 전체 + 왼쪽 일치 데이터" },
+          { "type": "FULL OUTER JOIN", "description": "두 테이블의 합집합" },
+          { "type": "CROSS JOIN", "description": "카티션 곱 (모든 조합)" },
+          { "type": "NATURAL JOIN", "description": "같은 이름의 속성으로 자동 조인" }
+        ],
+        "subquery": "SELECT 이름 FROM 학생 WHERE 학번 IN (SELECT 학번 FROM 수강 WHERE 과목='DB');"
+      }
+    },
+    {
+      "id": "db_06",
+      "title": "무결성 제약 조건",
+      "content": {
+        "entity_integrity": "기본키는 NULL이 될 수 없고 중복될 수 없음",
+        "referential_integrity": "외래키는 참조하는 릴레이션의 기본키 값이거나 NULL",
+        "domain_integrity": "속성값은 정의된 도메인 범위 내에 있어야 함",
+        "null_integrity": "특정 속성에 NULL을 허용하지 않음"
+      }
+    },
+    {
+      "id": "db_07",
+      "title": "병행 제어 & 회복",
+      "content": {
+        "concurrency_problems": [
+          "갱신 분실 (Lost Update): 동시 갱신 시 일부 결과 손실",
+          "현황 파악 오류 (Dirty Read): 미완료 트랜잭션 결과 참조",
+          "모순성 (Inconsistency): 여러 데이터 조회 시 일관성 위배",
+          "연쇄 복귀 (Cascading Rollback): 한 트랜잭션 실패 시 연쇄 롤백"
+        ],
+        "locking": "로킹 프로토콜 - 트랜잭션이 데이터에 잠금 설정",
+        "two_phase_locking": "2단계 로킹: 성장 단계(잠금 획득)와 축소 단계(잠금 해제)",
+        "recovery_methods": [
+          "지연 갱신 (Deferred Update): 트랜잭션 완료 후 DB에 반영",
+          "즉시 갱신 (Immediate Update): 갱신 즉시 DB에 반영",
+          "검사점 (Checkpoint): 주기적으로 검사점 저장",
+          "Redo: 완료된 트랜잭션 재실행",
+          "Undo: 미완료 트랜잭션 취소"
+        ]
+      }
+    }
+  ],
+  "practice_problems": [
+    {
+      "id": "db_q_01",
+      "question": "다음 SQL 실행 결과를 쓰시오.\nSELECT COUNT(*) FROM 학생 WHERE 학년 >= 3 AND 학과 = '컴퓨터';\n\n[학생 테이블]\n학번 | 이름  | 학년 | 학과\n001  | 홍길동 | 3   | 컴퓨터\n002  | 이영희 | 2   | 컴퓨터\n003  | 김철수 | 4   | 전기\n004  | 박민준 | 3   | 컴퓨터",
+      "answer": "2",
+      "explanation": "학년이 3 이상이고 학과가 '컴퓨터'인 레코드: 001(홍길동), 004(박민준) → 2개"
+    },
+    {
+      "id": "db_q_02",
+      "question": "릴레이션의 이상 현상 3가지를 쓰시오.",
+      "answer": "삽입 이상, 삭제 이상, 갱신 이상",
+      "explanation": "정규화가 되지 않은 릴레이션에서 발생하는 문제들"
+    },
+    {
+      "id": "db_q_03",
+      "question": "트랜잭션의 ACID 특성 중 '격리성'의 정의를 쓰시오.",
+      "answer": "동시에 실행되는 트랜잭션들이 서로 영향을 주지 않고 독립적으로 실행되어야 한다.",
+      "explanation": "Isolation - 트랜잭션 실행 중 다른 트랜잭션의 연산이 끼어들지 못함"
+    }
+  ]
+}

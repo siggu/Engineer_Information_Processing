@@ -1,0 +1,143 @@
+{
+  "subject": "SW 설계",
+  "topics": [
+    {
+      "id": "sd_01",
+      "title": "디자인 패턴 (GoF 23가지)",
+      "content": {
+        "creational": {
+          "description": "생성 패턴 - 객체 생성 방법",
+          "patterns": [
+            { "name": "Singleton", "description": "클래스의 인스턴스를 하나만 생성", "mnemonic": "싱글톤" },
+            { "name": "Factory Method", "description": "객체 생성을 서브클래스에게 위임" },
+            { "name": "Abstract Factory", "description": "관련 객체들의 집합을 생성하는 인터페이스 제공" },
+            { "name": "Builder", "description": "복잡한 객체를 단계적으로 생성" },
+            { "name": "Prototype", "description": "기존 객체를 복제하여 생성" }
+          ]
+        },
+        "structural": {
+          "description": "구조 패턴 - 클래스/객체 조합",
+          "patterns": [
+            { "name": "Adapter", "description": "호환되지 않는 인터페이스를 변환" },
+            { "name": "Bridge", "description": "구현과 추상화를 분리" },
+            { "name": "Composite", "description": "트리 구조로 객체를 구성" },
+            { "name": "Decorator", "description": "객체에 동적으로 기능 추가" },
+            { "name": "Facade", "description": "복잡한 서브시스템에 단순한 인터페이스 제공" },
+            { "name": "Flyweight", "description": "공유를 통해 메모리 사용 최소화" },
+            { "name": "Proxy", "description": "다른 객체에 대한 대리자 역할" }
+          ]
+        },
+        "behavioral": {
+          "description": "행위 패턴 - 객체 간 상호작용",
+          "patterns": [
+            { "name": "Chain of Responsibility", "description": "요청을 처리할 객체를 체인으로 연결" },
+            { "name": "Command", "description": "요청을 객체로 캡슐화" },
+            { "name": "Iterator", "description": "컬렉션 요소를 순차적으로 접근" },
+            { "name": "Mediator", "description": "객체들의 상호작용을 중재자가 담당" },
+            { "name": "Memento", "description": "객체의 이전 상태를 저장하고 복원" },
+            { "name": "Observer", "description": "상태 변화를 다른 객체에 자동 통보" },
+            { "name": "State", "description": "객체의 상태에 따라 행동 변경" },
+            { "name": "Strategy", "description": "알고리즘을 캡슐화하여 교체 가능하게 함" },
+            { "name": "Template Method", "description": "알고리즘의 뼈대를 정의하고 세부 구현을 서브클래스에 위임" },
+            { "name": "Visitor", "description": "객체 구조를 변경하지 않고 새로운 기능 추가" },
+            { "name": "Interpreter", "description": "언어의 문법을 클래스로 표현" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "sd_02",
+      "title": "결합도 (Coupling)",
+      "content": {
+        "description": "모듈 간의 의존성 정도. 낮을수록 좋음",
+        "levels": [
+          { "type": "자료 결합도 (Data)", "strength": "가장 약함 (좋음)", "description": "단순 자료만 전달" },
+          { "type": "스탬프 결합도 (Stamp)", "strength": "약함", "description": "자료구조를 전달" },
+          { "type": "제어 결합도 (Control)", "strength": "보통", "description": "제어 신호를 전달" },
+          { "type": "외부 결합도 (External)", "strength": "강함", "description": "외부 형식, 프로토콜 공유" },
+          { "type": "공통 결합도 (Common)", "strength": "더 강함", "description": "전역 변수 공유" },
+          { "type": "내용 결합도 (Content)", "strength": "가장 강함 (나쁨)", "description": "다른 모듈 내부를 직접 참조" }
+        ],
+        "mnemonic": "자스제외공내"
+      }
+    },
+    {
+      "id": "sd_03",
+      "title": "응집도 (Cohesion)",
+      "content": {
+        "description": "모듈 내부 요소들의 관련성 정도. 높을수록 좋음",
+        "levels": [
+          { "type": "기능적 응집도 (Functional)", "strength": "가장 높음 (좋음)", "description": "단일 기능 수행" },
+          { "type": "순차적 응집도 (Sequential)", "strength": "높음", "description": "이전 활동의 출력이 다음 활동의 입력" },
+          { "type": "교환적 응집도 (Communicational)", "strength": "보통 높음", "description": "동일한 데이터를 사용하는 요소들" },
+          { "type": "절차적 응집도 (Procedural)", "strength": "보통", "description": "순서대로 실행되어야 하는 요소들" },
+          { "type": "시간적 응집도 (Temporal)", "strength": "낮음", "description": "같은 시간에 실행되는 요소들" },
+          { "type": "논리적 응집도 (Logical)", "strength": "더 낮음", "description": "유사한 기능의 요소들" },
+          { "type": "우연적 응집도 (Coincidental)", "strength": "가장 낮음 (나쁨)", "description": "관계없는 요소들의 집합" }
+        ],
+        "mnemonic": "기순교절시논우"
+      }
+    },
+    {
+      "id": "sd_04",
+      "title": "UML 다이어그램",
+      "content": {
+        "static_diagrams": [
+          { "name": "클래스 다이어그램", "description": "클래스, 속성, 메서드, 관계 표현" },
+          { "name": "객체 다이어그램", "description": "특정 시점의 객체 인스턴스 표현" },
+          { "name": "컴포넌트 다이어그램", "description": "소프트웨어 컴포넌트 구조 표현" },
+          { "name": "배포 다이어그램", "description": "물리적 배포 구조 표현" },
+          { "name": "패키지 다이어그램", "description": "패키지 간 관계 표현" }
+        ],
+        "dynamic_diagrams": [
+          { "name": "유스케이스 다이어그램", "description": "시스템과 사용자의 상호작용 표현" },
+          { "name": "시퀀스 다이어그램", "description": "시간 흐름에 따른 객체 상호작용" },
+          { "name": "협업 다이어그램", "description": "객체 간 협력 관계 표현" },
+          { "name": "상태 다이어그램", "description": "객체의 상태 변화 표현" },
+          { "name": "활동 다이어그램", "description": "업무 흐름, 작업 순서 표현" }
+        ],
+        "relationships": [
+          { "type": "연관 (Association)", "notation": "실선 화살표", "description": "클래스 간 연결 관계" },
+          { "type": "집합 (Aggregation)", "notation": "빈 마름모 + 실선", "description": "전체-부분 관계 (독립 존재 가능)" },
+          { "type": "합성 (Composition)", "notation": "채워진 마름모 + 실선", "description": "강한 전체-부분 관계 (부분은 전체에 종속)" },
+          { "type": "의존 (Dependency)", "notation": "점선 화살표", "description": "일시적 사용 관계" },
+          { "type": "실현 (Realization)", "notation": "빈 삼각형 + 점선", "description": "인터페이스 구현" },
+          { "type": "일반화 (Generalization)", "notation": "빈 삼각형 + 실선", "description": "상속 관계 (is-a)" }
+        ]
+      }
+    },
+    {
+      "id": "sd_05",
+      "title": "요구사항 개발 프로세스",
+      "content": {
+        "mnemonic": "도분명확",
+        "steps": [
+          { "step": "도출 (Elicitation)", "description": "이해관계자로부터 요구사항 수집" },
+          { "step": "분석 (Analysis)", "description": "수집된 요구사항을 분류하고 우선순위 결정" },
+          { "step": "명세 (Specification)", "description": "요구사항을 명확하게 문서화" },
+          { "step": "확인 (Validation)", "description": "요구사항이 올바른지 검증" }
+        ]
+      }
+    }
+  ],
+  "practice_problems": [
+    {
+      "id": "sd_q_01",
+      "question": "다음이 설명하는 디자인 패턴의 이름을 쓰시오.\n\n클래스의 인스턴스가 단 하나만 생성되도록 보장하고, 어디서든 그 인스턴스에 접근할 수 있는 전역적인 접근점을 제공하는 패턴",
+      "answer": "싱글톤 패턴 (Singleton Pattern)",
+      "explanation": "생성 패턴 중 하나로, private 생성자와 static 인스턴스 변수를 사용"
+    },
+    {
+      "id": "sd_q_02",
+      "question": "모듈의 독립성을 높이기 위한 결합도와 응집도의 이상적인 방향을 쓰시오.",
+      "answer": "결합도는 낮게(약하게), 응집도는 높게(강하게)",
+      "explanation": "결합도가 낮으면 다른 모듈에 대한 의존성이 낮고, 응집도가 높으면 모듈 내 요소들이 연관성이 높음"
+    },
+    {
+      "id": "sd_q_03",
+      "question": "UML 관계 중 인터페이스 구현 관계를 나타내는 관계 유형의 이름을 쓰시오.",
+      "answer": "실현 관계 (Realization)",
+      "explanation": "빈 삼각형 화살표 + 점선으로 표현, 클래스가 인터페이스를 구현하는 관계"
+    }
+  ]
+}

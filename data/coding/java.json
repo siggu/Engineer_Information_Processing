@@ -1,0 +1,96 @@
+{
+  "subject": "Java 프로그래밍",
+  "key_concepts": [
+    {
+      "id": "java_01",
+      "title": "클래스와 상속",
+      "content": {
+        "syntax": "class 자식클래스 extends 부모클래스",
+        "rules": [
+          "자식 클래스는 부모 클래스의 public/protected 멤버 접근 가능",
+          "부모 클래스는 자식 클래스의 멤버에 직접 접근 불가",
+          "super 키워드로 부모 클래스 멤버 접근"
+        ]
+      }
+    },
+    {
+      "id": "java_02",
+      "title": "오버라이딩 vs 오버로딩",
+      "content": {
+        "overriding": {
+          "description": "부모 클래스의 메서드를 자식 클래스에서 재정의",
+          "conditions": "메서드 이름, 매개변수, 반환형 모두 동일해야 함"
+        },
+        "overloading": {
+          "description": "같은 이름의 메서드를 매개변수를 다르게 하여 여러 개 정의",
+          "conditions": "메서드 이름 동일, 매개변수 타입/개수 달라야 함"
+        }
+      }
+    },
+    {
+      "id": "java_03",
+      "title": "접근제어자",
+      "content": {
+        "public": "모든 클래스에서 접근 가능",
+        "protected": "같은 패키지 + 상속받은 클래스에서 접근 가능",
+        "default": "같은 패키지 내에서만 접근 가능",
+        "private": "해당 클래스 내에서만 접근 가능"
+      }
+    },
+    {
+      "id": "java_04",
+      "title": "static",
+      "content": {
+        "description": "클래스 변수/메서드 - 객체 생성 없이 클래스 이름으로 접근 가능",
+        "note": "static 메서드에서는 static이 아닌 멤버 직접 접근 불가"
+      }
+    },
+    {
+      "id": "java_05",
+      "title": "다형성 (Polymorphism)",
+      "content": {
+        "description": "부모 타입 변수로 자식 객체 참조 가능",
+        "example": "Animal a = new Dog(); // Dog가 Animal을 상속한 경우",
+        "dynamic_binding": "실제 객체의 오버라이딩된 메서드가 실행됨"
+      }
+    }
+  ],
+  "problems": [
+    {
+      "id": "java_p_01",
+      "title": "상속과 오버라이딩",
+      "year": "2024년 1회",
+      "difficulty": "중간",
+      "code": "class Animal {\n    String name;\n    Animal(String name) {\n        this.name = name;\n    }\n    void speak() {\n        System.out.println(name + \" speaks\");\n    }\n}\nclass Dog extends Animal {\n    Dog(String name) {\n        super(name);\n    }\n    @Override\n    void speak() {\n        System.out.println(name + \" barks\");\n    }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Animal a = new Dog(\"Rex\");\n        a.speak();\n    }\n}",
+      "answer": "Rex barks",
+      "explanation": "Animal 타입 변수이지만 실제 객체는 Dog. 오버라이딩된 Dog의 speak() 메서드가 호출됨 (동적 바인딩)"
+    },
+    {
+      "id": "java_p_02",
+      "title": "싱글톤 패턴",
+      "year": "2024년 1회",
+      "difficulty": "상",
+      "code": "class Singleton {\n    private static Singleton instance;\n    private int value;\n    private Singleton() {\n        value = 0;\n    }\n    public static Singleton getInstance() {\n        if (instance == null) {\n            instance = new Singleton();\n        }\n        return instance;\n    }\n    public void increment() { value++; }\n    public int getValue() { return value; }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Singleton s1 = Singleton.getInstance();\n        Singleton s2 = Singleton.getInstance();\n        s1.increment();\n        s1.increment();\n        s2.increment();\n        System.out.println(s1.getValue());\n        System.out.println(s2.getValue());\n    }\n}",
+      "answer": "3\n3",
+      "explanation": "s1과 s2는 같은 인스턴스를 참조. increment()를 총 3번 호출하므로 value=3. s1.getValue()와 s2.getValue() 모두 3 출력"
+    },
+    {
+      "id": "java_p_03",
+      "title": "static 메서드와 오버로딩",
+      "year": "2023년 2회",
+      "difficulty": "중간",
+      "code": "class Calculator {\n    static int add(int a, int b) {\n        return a + b;\n    }\n    static double add(double a, double b) {\n        return a + b;\n    }\n    static int add(int a, int b, int c) {\n        return a + b + c;\n    }\n}\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(Calculator.add(1, 2));\n        System.out.println(Calculator.add(1.5, 2.5));\n        System.out.println(Calculator.add(1, 2, 3));\n    }\n}",
+      "answer": "3\n4.0\n6",
+      "explanation": "메서드 오버로딩: 같은 이름의 메서드를 매개변수 타입/개수로 구분. static이므로 객체 없이 클래스명으로 호출"
+    },
+    {
+      "id": "java_p_04",
+      "title": "인터페이스 구현",
+      "year": "2023년 3회",
+      "difficulty": "중간",
+      "code": "interface Shape {\n    double getArea();\n    default void printInfo() {\n        System.out.println(\"Area: \" + getArea());\n    }\n}\nclass Circle implements Shape {\n    double radius;\n    Circle(double radius) {\n        this.radius = radius;\n    }\n    public double getArea() {\n        return 3.14 * radius * radius;\n    }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Shape s = new Circle(5);\n        s.printInfo();\n    }\n}",
+      "answer": "Area: 78.5",
+      "explanation": "Circle의 getArea()는 3.14 × 5 × 5 = 78.5. printInfo()는 인터페이스의 default 메서드"
+    }
+  ]
+}

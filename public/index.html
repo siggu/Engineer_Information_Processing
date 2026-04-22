@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>정처기 AI 튜터</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- 사이드바 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-icon">📚</span>
+          <span class="logo-text">정처기 AI 튜터</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-title">이론</div>
+        <button class="nav-item active" data-section="theory" data-subject="db">
+          <span class="nav-icon">🗄️</span><span>데이터베이스</span>
+        </button>
+        <button class="nav-item" data-section="theory" data-subject="network">
+          <span class="nav-icon">🌐</span><span>네트워크/OS</span>
+        </button>
+        <button class="nav-item" data-section="theory" data-subject="sw_design">
+          <span class="nav-icon">🏗️</span><span>SW 설계</span>
+        </button>
+        <button class="nav-item" data-section="theory" data-subject="sw_dev">
+          <span class="nav-icon">🔧</span><span>SW 개발</span>
+        </button>
+        <button class="nav-item" data-section="theory" data-subject="security">
+          <span class="nav-icon">🔒</span><span>보안/신기술</span>
+        </button>
+
+        <div class="nav-section-title">코딩</div>
+        <button class="nav-item" data-section="coding" data-subject="c">
+          <span class="nav-icon">⚙️</span><span>C언어</span>
+        </button>
+        <button class="nav-item" data-section="coding" data-subject="java">
+          <span class="nav-icon">☕</span><span>Java</span>
+        </button>
+        <button class="nav-item" data-section="coding" data-subject="python">
+          <span class="nav-icon">🐍</span><span>Python</span>
+        </button>
+        <button class="nav-item" data-section="coding" data-subject="algorithm">
+          <span class="nav-icon">📊</span><span>알고리즘</span>
+        </button>
+
+        <div class="nav-section-title">문제</div>
+        <button class="nav-item" data-section="quiz" data-subject="">
+          <span class="nav-icon">📝</span><span>예상 문제</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- 메인 -->
+    <main class="main-content">
+      <!-- 헤더 -->
+      <header class="top-bar">
+        <div class="breadcrumb" id="breadcrumb">데이터베이스</div>
+        <div class="header-actions">
+          <button class="btn-icon" id="themeToggle" title="테마 전환">🌙</button>
+        </div>
+      </header>
+
+      <!-- 콘텐츠 영역 -->
+      <div class="content-area">
+        <!-- 이론/코딩 탭 영역 -->
+        <section class="content-section" id="contentSection">
+          <div class="content-tabs">
+            <button class="tab-btn active" data-tab="learn">📖 학습</button>
+            <button class="tab-btn" data-tab="problems">❓ 기출 문제</button>
+          </div>
+          <div class="tab-pane active" id="learnPane">
+            <div id="learnContent" class="learn-content">
+              <div class="loading-state">
+                <div class="spinner"></div>
+                <p>데이터 로딩 중...</p>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="problemsPane">
+            <div id="problemsContent" class="problems-content"></div>
+          </div>
+        </section>
+
+        <!-- 예상 문제 생성 영역 -->
+        <section class="quiz-section hidden" id="quizSection">
+          <div class="quiz-header">
+            <h2>📝 AI 예상 문제 생성</h2>
+            <p class="quiz-desc">과목과 난이도를 선택하면 AI가 실전 스타일의 예상 문제를 생성합니다.</p>
+          </div>
+          <div class="quiz-controls">
+            <select id="quizSubject" class="select-input">
+              <option value="db">데이터베이스</option>
+              <option value="network">네트워크/OS</option>
+              <option value="sw_design">SW 설계</option>
+              <option value="sw_dev">SW 개발</option>
+              <option value="security">보안/신기술</option>
+              <option value="c">C언어</option>
+              <option value="java">Java</option>
+              <option value="python">Python</option>
+              <option value="algorithm">알고리즘</option>
+            </select>
+            <select id="quizDifficulty" class="select-input">
+              <option value="하">하 (기초)</option>
+              <option value="중간" selected>중간 (보통)</option>
+              <option value="상">상 (심화)</option>
+            </select>
+            <select id="quizCount" class="select-input">
+              <option value="3" selected>3문제</option>
+              <option value="5">5문제</option>
+            </select>
+            <button class="btn-primary" id="generateQuizBtn">
+              ✨ 문제 생성
+            </button>
+          </div>
+          <div id="quizResult" class="quiz-result"></div>
+        </section>
+      </div>
+
+      <!-- AI 채팅 패널 -->
+      <aside class="chat-panel" id="chatPanel">
+        <div class="chat-header">
+          <span>🤖 AI 튜터</span>
+          <button class="btn-icon" id="chatToggle">×</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-message assistant">
+            <div class="message-content">
+              안녕하세요! 정처기 실기 AI 튜터입니다. 🎯<br><br>
+              궁금한 개념이나 문제를 질문해주세요. 현재 학습 중인 과목에 맞춰 설명드립니다!
+            </div>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <textarea
+            id="chatInput"
+            class="chat-input"
+            placeholder="질문을 입력하세요... (Shift+Enter로 줄바꿈)"
+            rows="3"
+          ></textarea>
+          <button class="btn-send" id="sendBtn">전송</button>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- 채팅 열기 버튼 (모바일/접힌 상태) -->
+  <button class="chat-fab" id="chatFab">🤖</button>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

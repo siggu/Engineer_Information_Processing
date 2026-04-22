@@ -1,0 +1,161 @@
+{
+  "subject": "보안 / 신기술",
+  "topics": [
+    {
+      "id": "sec_01",
+      "title": "암호화 알고리즘",
+      "content": {
+        "symmetric_key": {
+          "description": "대칭키 암호화 - 암호화/복호화에 같은 키 사용",
+          "algorithms": [
+            { "name": "DES", "key_length": "56비트", "block_size": "64비트", "description": "현재 안전하지 않음" },
+            { "name": "3DES", "key_length": "168비트", "description": "DES를 3회 반복" },
+            { "name": "AES", "key_length": "128/192/256비트", "block_size": "128비트", "description": "현재 표준 대칭키 알고리즘" },
+            { "name": "ARIA", "key_length": "128/192/256비트", "description": "국내 표준 암호화 알고리즘" },
+            { "name": "SEED", "description": "국내 개발 블록 암호화 알고리즘" }
+          ],
+          "pros": "처리 속도 빠름",
+          "cons": "키 교환의 어려움, 키 관리 복잡"
+        },
+        "asymmetric_key": {
+          "description": "비대칭키 암호화 - 공개키로 암호화, 개인키로 복호화",
+          "algorithms": [
+            { "name": "RSA", "description": "소인수분해 기반, 가장 널리 사용" },
+            { "name": "ECC", "description": "타원 곡선 기반, 짧은 키로 높은 보안" },
+            { "name": "DSA", "description": "디지털 서명 알고리즘" }
+          ],
+          "pros": "키 교환 문제 해결, 디지털 서명 가능",
+          "cons": "처리 속도 느림"
+        },
+        "hash": {
+          "description": "단방향 암호화 (복호화 불가)",
+          "algorithms": [
+            { "name": "MD5", "output": "128비트", "description": "현재 보안 취약" },
+            { "name": "SHA-1", "output": "160비트", "description": "보안 취약, 사용 자제" },
+            { "name": "SHA-256", "output": "256비트", "description": "현재 표준 해시 알고리즘" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "sec_02",
+      "title": "네트워크 공격 유형",
+      "content": {
+        "dos_ddos": {
+          "name": "DoS/DDoS (서비스 거부 공격)",
+          "description": "대량 트래픽으로 서버/네트워크를 마비시키는 공격",
+          "types": [
+            "SYN Flooding: TCP 3-way 핸드셰이크를 악용",
+            "Smurf: IP 브로드캐스트를 이용한 증폭 공격",
+            "Ping of Death: 초대형 ICMP 패킷 전송"
+          ]
+        },
+        "malware": [
+          { "name": "바이러스 (Virus)", "description": "다른 파일에 기생하여 복제, 사용자 실행 필요" },
+          { "name": "웜 (Worm)", "description": "스스로 복제하며 네트워크 전파, 독립 실행" },
+          { "name": "트로이목마 (Trojan)", "description": "정상 프로그램으로 위장한 악성 코드" },
+          { "name": "랜섬웨어 (Ransomware)", "description": "파일 암호화 후 복호화 대가로 금전 요구" },
+          { "name": "스파이웨어 (Spyware)", "description": "사용자 정보를 몰래 수집·전송" },
+          { "name": "봇넷 (Botnet)", "description": "감염된 컴퓨터들을 원격 제어하는 네트워크" }
+        ],
+        "web_attacks": [
+          { "name": "SQL 인젝션", "description": "악의적인 SQL 쿼리를 입력하여 DB 조작" },
+          { "name": "XSS (Cross-Site Scripting)", "description": "악성 스크립트를 웹페이지에 삽입" },
+          { "name": "CSRF", "description": "인증된 사용자의 의도하지 않은 요청 실행" }
+        ]
+      }
+    },
+    {
+      "id": "sec_03",
+      "title": "접근 제어 모델",
+      "content": {
+        "dac": {
+          "name": "DAC (임의 접근 제어)",
+          "description": "데이터 소유자가 접근 권한 결정",
+          "example": "UNIX 파일 권한"
+        },
+        "mac": {
+          "name": "MAC (강제 접근 제어)",
+          "description": "관리자가 보안 등급에 따라 접근 권한 결정",
+          "example": "군사, 정부 기관"
+        },
+        "rbac": {
+          "name": "RBAC (역할 기반 접근 제어)",
+          "description": "사용자의 역할(Role)에 따라 접근 권한 부여",
+          "example": "일반 기업, 조직"
+        }
+      }
+    },
+    {
+      "id": "tech_01",
+      "title": "신기술 트렌드",
+      "content": {
+        "technologies": [
+          {
+            "name": "블록체인 (Blockchain)",
+            "description": "분산 원장 기술, 투명성과 불변성, 스마트 계약",
+            "keywords": ["분산 원장", "해시 체인", "합의 알고리즘", "스마트 컨트랙트"]
+          },
+          {
+            "name": "인공지능 (AI) / 머신러닝",
+            "description": "딥러닝, 자연어처리(NLP), 컴퓨터 비전",
+            "keywords": ["딥러닝", "지도학습", "비지도학습", "강화학습"]
+          },
+          {
+            "name": "클라우드 컴퓨팅",
+            "description": "인터넷을 통한 컴퓨팅 자원 제공",
+            "types": ["IaaS (인프라)", "PaaS (플랫폼)", "SaaS (소프트웨어)"]
+          },
+          {
+            "name": "IoT (사물인터넷)",
+            "description": "인터넷에 연결된 사물들의 데이터 수집·교환"
+          },
+          {
+            "name": "양자 컴퓨팅 / 양자암호",
+            "description": "양자역학 원리를 이용한 컴퓨팅과 암호화"
+          },
+          {
+            "name": "제로 트러스트 (Zero Trust)",
+            "description": "신뢰하지 않고 항상 검증하는 보안 모델"
+          },
+          {
+            "name": "DevSecOps",
+            "description": "개발(Dev) + 보안(Sec) + 운영(Ops) 통합"
+          },
+          {
+            "name": "마이크로서비스 아키텍처 (MSA)",
+            "description": "서비스를 소규모 독립 서비스로 분리"
+          },
+          {
+            "name": "컨테이너 (Docker/Kubernetes)",
+            "description": "애플리케이션을 컨테이너로 패키징하여 배포"
+          },
+          {
+            "name": "엣지 컴퓨팅",
+            "description": "데이터 처리를 엣지(단말)에서 수행"
+          }
+        ]
+      }
+    }
+  ],
+  "practice_problems": [
+    {
+      "id": "sec_q_01",
+      "question": "다음이 설명하는 보안 공격의 이름을 쓰시오.\n\n공격자가 웹 게시판의 댓글에 악성 스크립트 코드를 삽입하고, 사용자가 해당 게시글을 열람할 때 스크립트가 실행되어 사용자의 쿠키나 세션 정보를 탈취하는 공격",
+      "answer": "XSS (Cross-Site Scripting, 크로스 사이트 스크립팅)",
+      "explanation": "입력값 검증과 출력값 인코딩으로 방어 가능"
+    },
+    {
+      "id": "sec_q_02",
+      "question": "대칭키 암호화 알고리즘과 비대칭키 암호화 알고리즘의 차이를 쓰시오.",
+      "answer": "대칭키: 암호화와 복호화에 같은 키 사용, 속도 빠름. 비대칭키: 공개키로 암호화하고 개인키로 복호화, 키 교환 문제 해결하지만 속도 느림",
+      "explanation": "AES(대칭키), RSA(비대칭키)가 대표적"
+    },
+    {
+      "id": "sec_q_03",
+      "question": "다음이 설명하는 신기술의 이름을 쓰시오.\n\n데이터를 중앙 서버가 아닌 네트워크 참여자들이 공동으로 기록·관리하는 분산 원장 기술로, 데이터 위변조가 어렵고 투명성이 높다.",
+      "answer": "블록체인 (Blockchain)",
+      "explanation": "각 블록은 이전 블록의 해시값을 포함하므로 변경 탐지 가능"
+    }
+  ]
+}

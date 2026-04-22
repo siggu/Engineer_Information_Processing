@@ -1,0 +1,107 @@
+{
+  "subject": "SW 개발",
+  "topics": [
+    {
+      "id": "swdev_01",
+      "title": "소프트웨어 테스트",
+      "content": {
+        "test_levels": [
+          { "level": "단위 테스트 (Unit Test)", "description": "개별 모듈/함수 테스트", "executor": "개발자" },
+          { "level": "통합 테스트 (Integration Test)", "description": "모듈 간 인터페이스 테스트", "methods": ["하향식", "상향식", "빅뱅"] },
+          { "level": "시스템 테스트 (System Test)", "description": "전체 시스템의 기능/성능 테스트" },
+          { "level": "인수 테스트 (Acceptance Test)", "description": "사용자 요구사항 충족 여부 확인", "types": ["알파 테스트 (개발사)", "베타 테스트 (사용자)"] }
+        ],
+        "test_types": {
+          "blackbox": {
+            "name": "블랙박스 테스트",
+            "description": "내부 구조를 모르고 입출력만으로 테스트",
+            "techniques": [
+              "동치 분할 (Equivalence Partitioning)",
+              "경계값 분석 (Boundary Value Analysis)",
+              "결정 테이블",
+              "상태 전이 테스트",
+              "원인-효과 그래프"
+            ]
+          },
+          "whitebox": {
+            "name": "화이트박스 테스트",
+            "description": "내부 코드 구조를 보고 테스트",
+            "techniques": [
+              "구문 커버리지 (Statement Coverage)",
+              "결정 커버리지 (Decision Coverage)",
+              "조건 커버리지 (Condition Coverage)",
+              "MC/DC 커버리지"
+            ]
+          }
+        },
+        "coverage": [
+          { "name": "구문 커버리지", "description": "모든 구문이 최소 한 번 실행" },
+          { "name": "결정 커버리지", "description": "모든 결정 포인트의 참/거짓이 최소 한 번" },
+          { "name": "조건 커버리지", "description": "각 조건의 참/거짓이 최소 한 번" },
+          { "name": "MC/DC", "description": "각 조건이 독립적으로 결과에 영향을 미치는 경우" }
+        ]
+      }
+    },
+    {
+      "id": "swdev_02",
+      "title": "형상 관리 (Configuration Management)",
+      "content": {
+        "mnemonic": "식통감기",
+        "activities": [
+          { "name": "형상 식별 (Identification)", "description": "형상 항목 정의 및 식별자 부여" },
+          { "name": "형상 통제 (Control)", "description": "변경 요청 검토 및 승인 절차" },
+          { "name": "형상 감사 (Audit)", "description": "완전성과 일관성 검증" },
+          { "name": "형상 기록 (Status Accounting)", "description": "형상 변경 내역 기록 및 보고" }
+        ],
+        "tools": ["Git", "SVN", "CVS"]
+      }
+    },
+    {
+      "id": "swdev_03",
+      "title": "소프트웨어 품질 (ISO/IEC 9126)",
+      "content": {
+        "quality_characteristics": [
+          { "name": "기능성 (Functionality)", "description": "요구 기능을 올바르게 수행하는 정도" },
+          { "name": "신뢰성 (Reliability)", "description": "정해진 조건에서 기능을 유지하는 능력" },
+          { "name": "사용성 (Usability)", "description": "사용자가 이해하고 쓰기 쉬운 정도" },
+          { "name": "효율성 (Efficiency)", "description": "자원 사용 대비 성능" },
+          { "name": "유지보수성 (Maintainability)", "description": "수정·변경이 쉬운 정도" },
+          { "name": "이식성 (Portability)", "description": "다른 환경으로 이전이 쉬운 정도" }
+        ]
+      }
+    },
+    {
+      "id": "swdev_04",
+      "title": "인터페이스 보안",
+      "content": {
+        "interface_types": ["JSON 인터페이스", "XML 인터페이스", "REST API", "SOAP"],
+        "security_measures": [
+          "데이터 암호화 전송 (HTTPS/TLS)",
+          "입력값 검증",
+          "인증 및 인가 (OAuth, JWT)",
+          "로깅 및 모니터링"
+        ]
+      }
+    }
+  ],
+  "practice_problems": [
+    {
+      "id": "swdev_q_01",
+      "question": "소프트웨어 테스트 레벨을 개발 단계 순서대로 나열하시오.",
+      "answer": "단위 테스트 → 통합 테스트 → 시스템 테스트 → 인수 테스트",
+      "explanation": "하위 모듈부터 전체 시스템 순서로 진행"
+    },
+    {
+      "id": "swdev_q_02",
+      "question": "블랙박스 테스트 기법 중 입력 조건의 경계에 해당하는 값들로 테스트 케이스를 설계하는 기법의 이름을 쓰시오.",
+      "answer": "경계값 분석 (Boundary Value Analysis)",
+      "explanation": "유효범위의 최솟값, 최솟값+1, 최댓값-1, 최댓값, 초과/미만값으로 테스트"
+    },
+    {
+      "id": "swdev_q_03",
+      "question": "형상 관리 활동 4가지를 쓰시오.",
+      "answer": "형상 식별, 형상 통제, 형상 감사, 형상 기록 (상태 보고)",
+      "explanation": "암기법: 식통감기"
+    }
+  ]
+}

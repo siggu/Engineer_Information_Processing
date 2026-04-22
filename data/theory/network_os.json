@@ -1,0 +1,199 @@
+{
+  "subject": "네트워크 / 운영체제 (NW/OS)",
+  "topics": [
+    {
+      "id": "nw_01",
+      "title": "OSI 7계층",
+      "content": {
+        "mnemonic": "응표세전네데물 (응용-표현-세션-전송-네트워크-데이터링크-물리)",
+        "layers": [
+          {
+            "number": 7,
+            "name": "응용 계층 (Application)",
+            "protocols": ["HTTP", "FTP", "SMTP", "DNS", "TELNET"],
+            "description": "사용자와 직접 상호작용하는 계층"
+          },
+          {
+            "number": 6,
+            "name": "표현 계층 (Presentation)",
+            "protocols": ["JPEG", "MPEG", "ASCII"],
+            "description": "데이터 압축, 암호화, 형식 변환"
+          },
+          {
+            "number": 5,
+            "name": "세션 계층 (Session)",
+            "protocols": ["NetBIOS", "SSH"],
+            "description": "통신 세션 설정, 유지, 종료"
+          },
+          {
+            "number": 4,
+            "name": "전송 계층 (Transport)",
+            "protocols": ["TCP", "UDP"],
+            "description": "종단 간 신뢰성 있는 데이터 전송, 흐름 제어",
+            "pdu": "세그먼트"
+          },
+          {
+            "number": 3,
+            "name": "네트워크 계층 (Network)",
+            "protocols": ["IP", "ICMP", "ARP", "OSPF", "BGP"],
+            "description": "논리적 주소(IP) 지정, 라우팅",
+            "device": "라우터",
+            "pdu": "패킷"
+          },
+          {
+            "number": 2,
+            "name": "데이터링크 계층 (Data Link)",
+            "protocols": ["Ethernet", "PPP", "HDLC"],
+            "description": "물리적 주소(MAC) 지정, 오류 검출",
+            "device": "스위치, 브리지",
+            "pdu": "프레임"
+          },
+          {
+            "number": 1,
+            "name": "물리 계층 (Physical)",
+            "protocols": ["RS-232", "USB"],
+            "description": "비트 단위 전송, 전기/광 신호",
+            "device": "허브, 리피터",
+            "pdu": "비트"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nw_02",
+      "title": "라우팅 프로토콜",
+      "content": {
+        "rip": {
+          "name": "RIP (Routing Information Protocol)",
+          "type": "Distance Vector",
+          "metric": "홉 수 (최대 15)",
+          "update_interval": "30초",
+          "description": "소규모 네트워크에 적합"
+        },
+        "ospf": {
+          "name": "OSPF (Open Shortest Path First)",
+          "type": "Link State",
+          "metric": "Cost (대역폭 기반)",
+          "description": "대규모 네트워크에 적합, 링크 상태 정보 교환"
+        },
+        "bgp": {
+          "name": "BGP (Border Gateway Protocol)",
+          "type": "Path Vector",
+          "description": "ISP 간 인터넷 라우팅 (외부 게이트웨이 프로토콜)"
+        }
+      }
+    },
+    {
+      "id": "nw_03",
+      "title": "IP 주소 및 서브넷팅",
+      "content": {
+        "ipv4": "32비트 주소체계, 약 43억 개",
+        "ipv6": "128비트 주소체계, 거의 무한대",
+        "classes": [
+          { "class": "A", "range": "1.0.0.0 ~ 126.255.255.255", "default_mask": "255.0.0.0 (/8)" },
+          { "class": "B", "range": "128.0.0.0 ~ 191.255.255.255", "default_mask": "255.255.0.0 (/16)" },
+          { "class": "C", "range": "192.0.0.0 ~ 223.255.255.255", "default_mask": "255.255.255.0 (/24)" }
+        ],
+        "cidr_example": "192.168.1.0/26 → 서브넷 마스크 255.255.255.192, 호스트 62개"
+      }
+    },
+    {
+      "id": "os_01",
+      "title": "프로세스 스케줄링",
+      "content": {
+        "algorithms": [
+          {
+            "name": "FCFS (First Come First Served)",
+            "type": "비선점",
+            "description": "도착 순서대로 처리, 단순하지만 긴 대기시간 발생 가능"
+          },
+          {
+            "name": "SJF (Shortest Job First)",
+            "type": "비선점",
+            "description": "실행 시간이 짧은 것부터 처리, 기아 현상 발생 가능"
+          },
+          {
+            "name": "Round Robin",
+            "type": "선점",
+            "description": "시간 할당량(Quantum)만큼 순환 처리, 시분할 시스템에 적합"
+          },
+          {
+            "name": "Priority Scheduling",
+            "type": "선점/비선점",
+            "description": "우선순위가 높은 프로세스 먼저 처리"
+          },
+          {
+            "name": "SRT (Shortest Remaining Time)",
+            "type": "선점",
+            "description": "SJF의 선점 버전, 남은 시간이 짧은 것 우선"
+          }
+        ]
+      }
+    },
+    {
+      "id": "os_02",
+      "title": "페이지 교체 알고리즘",
+      "content": {
+        "algorithms": [
+          {
+            "name": "FIFO",
+            "description": "가장 먼저 올라온 페이지 교체",
+            "note": "Belady의 역설 발생 가능"
+          },
+          {
+            "name": "LRU (Least Recently Used)",
+            "description": "가장 오랫동안 사용되지 않은 페이지 교체",
+            "note": "가장 널리 사용되는 알고리즘"
+          },
+          {
+            "name": "LFU (Least Frequently Used)",
+            "description": "사용 빈도가 가장 낮은 페이지 교체"
+          },
+          {
+            "name": "OPT (Optimal)",
+            "description": "앞으로 가장 오래 사용되지 않을 페이지 교체",
+            "note": "이론적으로 최적이지만 실제 구현 불가"
+          }
+        ]
+      }
+    },
+    {
+      "id": "os_03",
+      "title": "교착상태 (Deadlock)",
+      "content": {
+        "conditions": [
+          "상호 배제 (Mutual Exclusion)",
+          "점유와 대기 (Hold and Wait)",
+          "비선점 (No Preemption)",
+          "환형 대기 (Circular Wait)"
+        ],
+        "handling": {
+          "prevention": "예방 - 4가지 조건 중 하나 제거",
+          "avoidance": "회피 - 은행가 알고리즘 사용",
+          "detection": "탐지 - 자원 할당 그래프 분석",
+          "recovery": "회복 - 프로세스 종료 또는 자원 선점"
+        }
+      }
+    }
+  ],
+  "practice_problems": [
+    {
+      "id": "nw_q_01",
+      "question": "OSI 7계층에서 라우터가 동작하는 계층과 그 계층의 PDU 이름을 쓰시오.",
+      "answer": "3계층(네트워크 계층), PDU: 패킷",
+      "explanation": "라우터는 IP 주소를 기반으로 경로를 결정하는 네트워크 계층 장비"
+    },
+    {
+      "id": "nw_q_02",
+      "question": "페이지 참조 열이 1, 2, 3, 4, 1, 2, 5일 때 프레임 수 3으로 LRU 알고리즘을 적용하면 페이지 부재(Page Fault) 횟수는?",
+      "answer": "6",
+      "explanation": "1(miss), 2(miss), 3(miss), 4(miss→1교체), 1(miss→2교체), 2(miss→3교체), 5(miss→4교체) = 6번"
+    },
+    {
+      "id": "nw_q_03",
+      "question": "교착상태 발생의 4가지 필요 조건을 쓰시오.",
+      "answer": "상호 배제, 점유와 대기, 비선점, 환형 대기",
+      "explanation": "4가지 조건이 모두 충족될 때 교착상태 발생 가능"
+    }
+  ]
+}

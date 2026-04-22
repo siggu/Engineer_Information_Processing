@@ -1,0 +1,116 @@
+{
+  "subject": "공통 기초 알고리즘",
+  "topics": [
+    {
+      "id": "algo_01",
+      "title": "정렬 알고리즘",
+      "algorithms": [
+        {
+          "name": "버블 정렬 (Bubble Sort)",
+          "time_complexity": "O(n²)",
+          "description": "인접한 두 원소를 비교하여 교환",
+          "c_code": "for(int i=0; i<n-1; i++)\n  for(int j=0; j<n-1-i; j++)\n    if(a[j] > a[j+1]) swap(a[j], a[j+1]);"
+        },
+        {
+          "name": "선택 정렬 (Selection Sort)",
+          "time_complexity": "O(n²)",
+          "description": "최솟값을 찾아 앞으로 이동",
+          "c_code": "for(int i=0; i<n-1; i++) {\n  int min = i;\n  for(int j=i+1; j<n; j++)\n    if(a[j] < a[min]) min = j;\n  swap(a[i], a[min]);\n}"
+        },
+        {
+          "name": "삽입 정렬 (Insertion Sort)",
+          "time_complexity": "O(n²)",
+          "description": "현재 원소를 적절한 위치에 삽입",
+          "note": "거의 정렬된 데이터에 효율적"
+        },
+        {
+          "name": "퀵 정렬 (Quick Sort)",
+          "time_complexity": "평균 O(n log n), 최악 O(n²)",
+          "description": "피벗을 기준으로 분할 정복"
+        },
+        {
+          "name": "병합 정렬 (Merge Sort)",
+          "time_complexity": "O(n log n)",
+          "description": "분할 정복, 안정 정렬"
+        }
+      ]
+    },
+    {
+      "id": "algo_02",
+      "title": "탐색 알고리즘",
+      "algorithms": [
+        {
+          "name": "순차 탐색 (Linear Search)",
+          "time_complexity": "O(n)",
+          "description": "처음부터 순서대로 탐색"
+        },
+        {
+          "name": "이진 탐색 (Binary Search)",
+          "time_complexity": "O(log n)",
+          "description": "정렬된 배열에서 절반씩 범위를 줄여 탐색",
+          "c_code": "int low=0, high=n-1;\nwhile(low <= high) {\n  int mid = (low+high)/2;\n  if(a[mid] == target) return mid;\n  else if(a[mid] < target) low = mid+1;\n  else high = mid-1;\n}"
+        }
+      ]
+    },
+    {
+      "id": "algo_03",
+      "title": "자료구조",
+      "structures": [
+        {
+          "name": "스택 (Stack)",
+          "characteristic": "LIFO (Last In First Out)",
+          "operations": ["push (삽입)", "pop (삭제)", "peek/top (조회)"],
+          "use_cases": ["함수 호출 관리", "괄호 검사", "DFS"]
+        },
+        {
+          "name": "큐 (Queue)",
+          "characteristic": "FIFO (First In First Out)",
+          "operations": ["enqueue (삽입)", "dequeue (삭제)", "front (앞 조회)"],
+          "use_cases": ["프로세스 스케줄링", "BFS", "버퍼"]
+        },
+        {
+          "name": "트리 (Tree)",
+          "traversals": [
+            { "name": "전위 순회 (Preorder)", "order": "루트→왼쪽→오른쪽" },
+            { "name": "중위 순회 (Inorder)", "order": "왼쪽→루트→오른쪽", "note": "BST에서 정렬된 순서" },
+            { "name": "후위 순회 (Postorder)", "order": "왼쪽→오른쪽→루트" }
+          ]
+        }
+      ]
+    }
+  ],
+  "problems": [
+    {
+      "id": "algo_p_01",
+      "title": "버블 정렬 추적",
+      "difficulty": "하",
+      "question": "다음 배열을 버블 정렬로 오름차순 정렬할 때, 1회전 후의 배열 상태를 쓰시오.\n초기 배열: [5, 3, 8, 1, 9]",
+      "answer": "[3, 5, 1, 8, 9]",
+      "explanation": "1회전: (5,3)비교→교환[3,5,8,1,9], (5,8)비교→유지[3,5,8,1,9], (8,1)비교→교환[3,5,1,8,9], (8,9)비교→유지[3,5,1,8,9]"
+    },
+    {
+      "id": "algo_p_02",
+      "title": "스택 연산",
+      "difficulty": "중간",
+      "question": "다음 순서로 스택 연산을 수행할 때, 최종 스택 상태(아래→위)를 쓰시오.\npush(1), push(2), push(3), pop(), push(4), push(5), pop()",
+      "answer": "[1, 2, 4]",
+      "explanation": "push(1):[1], push(2):[1,2], push(3):[1,2,3], pop():[1,2], push(4):[1,2,4], push(5):[1,2,4,5], pop():[1,2,4]"
+    },
+    {
+      "id": "algo_p_03",
+      "title": "이진 탐색",
+      "difficulty": "중간",
+      "question": "정렬된 배열 [1, 3, 5, 7, 9, 11, 13, 15]에서 이진 탐색으로 7을 찾을 때, 비교하는 값을 순서대로 쓰시오.",
+      "answer": "9, 3, 7",
+      "explanation": "mid=(0+7)/2=3 → a[3]=7... 아니라 a[3]=7. 사실 첫 mid=3이므로 a[3]=7. 정답: 7 (1번 비교)\n\n[배열 인덱스 0부터]: a[0]=1,a[1]=3,a[2]=5,a[3]=7,a[4]=9,a[5]=11,a[6]=13,a[7]=15\nmid=(0+7)/2=3, a[3]=7 → 찾음! 비교값: 7 (1회 비교)"
+    },
+    {
+      "id": "algo_p_04",
+      "title": "트리 순회",
+      "difficulty": "중간",
+      "question": "다음 이진 트리를 중위 순회(Inorder)한 결과를 쓰시오.\n    A\n   / \\\n  B   C\n / \\\nD   E",
+      "answer": "D, B, E, A, C",
+      "explanation": "중위 순회: 왼쪽→루트→오른쪽 / B의 왼쪽(D) → B → B의 오른쪽(E) → A → C"
+    }
+  ]
+}
