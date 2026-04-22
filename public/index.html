@@ -52,7 +52,7 @@
 
         <div class="nav-section-title">문제</div>
         <button class="nav-item" data-section="quiz" data-subject="">
-          <span class="nav-icon">📝</span><span>예상 문제</span>
+          <span class="nav-icon">🎲</span><span>기출 문제</span>
         </button>
       </nav>
     </aside>
@@ -88,36 +88,23 @@
           </div>
         </section>
 
-        <!-- 예상 문제 생성 영역 -->
+        <!-- 기출 문제 풀기 영역 -->
         <section class="quiz-section hidden" id="quizSection">
           <div class="quiz-header">
-            <h2>📝 AI 예상 문제 생성</h2>
-            <p class="quiz-desc">과목과 난이도를 선택하면 AI가 실전 스타일의 예상 문제를 생성합니다.</p>
+            <h2>🎲 기출 문제 랜덤 풀기</h2>
+            <p class="quiz-desc">과목을 선택하고 문제를 무작위로 섞어 풀어보세요.</p>
           </div>
           <div class="quiz-controls">
             <select id="quizSubject" class="select-input">
+              <option value="all">전체 과목</option>
               <option value="db">데이터베이스</option>
               <option value="network">네트워크/OS</option>
               <option value="sw_design">SW 설계</option>
               <option value="sw_dev">SW 개발</option>
               <option value="security">보안/신기술</option>
-              <option value="c">C언어</option>
-              <option value="java">Java</option>
-              <option value="python">Python</option>
-              <option value="algorithm">알고리즘</option>
             </select>
-            <select id="quizDifficulty" class="select-input">
-              <option value="하">하 (기초)</option>
-              <option value="중간" selected>중간 (보통)</option>
-              <option value="상">상 (심화)</option>
-            </select>
-            <select id="quizCount" class="select-input">
-              <option value="3" selected>3문제</option>
-              <option value="5">5문제</option>
-            </select>
-            <button class="btn-primary" id="generateQuizBtn">
-              ✨ 문제 생성
-            </button>
+            <button class="btn-primary" id="startQuizBtn">🎲 문제 섞기</button>
+            <span class="quiz-count-badge" id="quizCountBadge"></span>
           </div>
           <div id="quizResult" class="quiz-result"></div>
         </section>

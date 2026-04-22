@@ -19,7 +19,8 @@ const learnPane      = $('learnPane');
 const problemsPane   = $('problemsPane');
 const learnContent   = $('learnContent');
 const problemsContent= $('problemsContent');
-const generateQuizBtn= $('generateQuizBtn');
+const startQuizBtn   = $('startQuizBtn');
+const quizCountBadge = $('quizCountBadge');
 const quizResult     = $('quizResult');
 const tabBtns        = document.querySelectorAll('.tab-btn');
 const navItems       = document.querySelectorAll('.nav-item');
@@ -372,34 +373,56 @@ function attachToggleListeners() {
   });
 }
 
-/* ===== 예상 문제 생성 ===== */
-generateQuizBtn.addEventListener('click', async () => {
-  const subject = $('quizSubject').value;
-  const difficulty = $('quizDifficulty').value;
-  const count = parseInt($('quizCount').value);
+/* ===== 기출 문제 랜덤 풀기 ===== */
+const THEORY_SUBJECTS = ['db', 'network', 'sw_design', 'sw_dev', 'security'];
 
-  generateQuizBtn.disabled = true;
-  generateQuizBtn.textContent = '⏳ 생성 중...';
-  quizResult.innerHTML = loadingHTML('AI가 문제를 생성하고 있습니다...');
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+startQuizBtn.addEventListener('click', async () => {
+  const subject = $('quizSubject').value;
+  startQuizBtn.disabled = true;
+  startQuizBtn.textContent = '⏳ 로딩 중...';
+  quizResult.innerHTML = loadingHTML('문제를 불러오는 중...');
+  quizCountBadge.textContent = '';
 
   try {
-    const res = await fetch('/api/quiz/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ subject, difficulty, count }),
-    });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
+    const subjects = subject === 'all' ? THEORY_SUBJECTS : [subject];
+    const allProblems = [];
 
-    quizResult.innerHTML = data.problems.map((p, i) => `
+    await Promise.all(subjects.map(async s => {
+      const data = await fetchData(`/api/theory/${s}`);
+      (data.practice_problems || []).forEach(p => {
+        allProblems.push({ ...p, _subject: LABELS[s] });
+      });
+    }));
+
+    if (!allProblems.length) {
+      quizResult.innerHTML = emptyHTML('기출 문제가 없습니다.');
+      quizCountBadge.textContent = '';
+      return;
+    }
+
+    const problems = shuffle(allProblems);
+    quizCountBadge.textContent = `총 ${problems.length}문제`;
+
+    quizResult.innerHTML = problems.map((p, i) => `
       <div class="quiz-problem-card">
-        <div class="quiz-problem-num">문제 ${p.id || i + 1}</div>
-        <div class="quiz-problem-q">${escapeHtml(p.question || '')}</div>
-        <div class="quiz-btn-row">
-          <button class="btn-hint" onclick="toggleHint('hint_${i}')">💡 힌트</button>
-          <button class="answer-toggle" onclick="toggleAnswer('qans_${i}')">정답 보기</button>
+        <div class="problem-meta">
+          <span class="badge badge-blue">문제 ${i + 1}</span>
+          ${p._subject ? `<span class="badge badge-purple">${p._subject}</span>` : ''}
+          ${p.year ? `<span class="badge badge-green">${p.year}</span>` : ''}
+          ${p.difficulty ? `<span class="badge ${diffBadge(p.difficulty)}">${p.difficulty}</span>` : ''}
         </div>
-        <div class="hint-text" id="hint_${i}">${escapeHtml(p.hint || '힌트 없음')}</div>
+        <div class="quiz-problem-q">${escapeHtml(p.question || '')}</div>
+        ${p.code || p.problem_code ? `<div class="problem-code">${escapeHtml(p.code || p.problem_code || '')}</div>` : ''}
+        <button class="answer-toggle" onclick="toggleAnswer('qans_${i}')">정답 보기</button>
         <div class="answer-box" id="qans_${i}">
           <div class="answer-label">정답</div>
           <div class="answer-text">${escapeHtml(String(p.answer || ''))}</div>
@@ -410,16 +433,10 @@ generateQuizBtn.addEventListener('click', async () => {
   } catch (e) {
     quizResult.innerHTML = errorHTML(e.message);
   } finally {
-    generateQuizBtn.disabled = false;
-    generateQuizBtn.textContent = '✨ 문제 생성';
+    startQuizBtn.disabled = false;
+    startQuizBtn.textContent = '🎲 문제 섞기';
   }
 });
-
-function toggleHint(id) {
-  const el = $(id);
-  if (el) el.classList.toggle('visible');
-}
-window.toggleHint = toggleHint;
 
 /* ===== UI 토글 ===== */
 sidebarToggle.addEventListener('click', () => {
