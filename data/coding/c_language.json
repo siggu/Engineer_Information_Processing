@@ -14,24 +14,129 @@
           "p+n": "포인터를 n만큼 이동 (자료형 크기 × n 바이트)",
           "*p": "p가 가리키는 값",
           "*(p+n)": "p에서 n번째 위치의 값"
-        }
+        },
+        "examples": [
+          "int a = 10; int *p = &a; // p는 a의 주소",
+          "*p = 20; // a의 값을 20으로 변경",
+          "char *s = \"KOREA\"; s+3은 'E' 위치를 가리킴"
+        ]
       }
     },
     {
       "id": "c_02",
-      "title": "구조체 포인터",
+      "title": "구조체 (struct)",
       "content": {
+        "syntax": "struct 구조체명 { 자료형 멤버명; ... };",
         "dot_operator": "구조체 변수.멤버명 (직접 접근)",
         "arrow_operator": "구조체 포인터->멤버명 (포인터를 통한 접근)",
-        "note": "-> 는 (*p).멤버명 과 동일"
+        "note": "-> 는 (*p).멤버명 과 동일",
+        "examples": [
+          "struct student { int id; char name[10]; double grade; };",
+          "struct student s = {1001, \"김철수\", 85.5};",
+          "struct student *p = &s; p->id = 2001;"
+        ],
+        "typedef": "typedef struct { ... } 별칭명; 으로 struct 키워드 생략 가능"
       }
     },
     {
       "id": "c_03",
+      "title": "동적 메모리 할당 (malloc, free)",
+      "content": {
+        "malloc": "malloc(크기) - 힙에 메모리 할당, 성공 시 주소 반환, 실패 시 NULL",
+        "free": "free(포인터) - 할당된 메모리 해제",
+        "stack_vs_heap": {
+          "스택": "지역 변수/매개변수, 함수 종료 시 자동 해제",
+          "힙": "malloc/new로 할당, 프로그래머가 직접 free/delete로 해제"
+        },
+        "examples": [
+          "int *p = (int*)malloc(sizeof(int));",
+          "*p = 100; printf(\"%d\", *p); free(p);",
+          "구조체 노드: Data *node = (Data*)malloc(sizeof(Data));"
+        ]
+      }
+    },
+    {
+      "id": "c_04",
+      "title": "배열 기초",
+      "content": {
+        "syntax": "자료형 배열명[크기];",
+        "rules": [
+          "인덱스는 0부터 시작 (arr[0] ~ arr[n-1])",
+          "배열 이름은 첫 번째 요소의 주소 (arr == &arr[0])",
+          "*arr은 arr[0]과 동일 (역참조)",
+          "2차원 배열: int arr[행][열];"
+        ],
+        "examples": [
+          "int arr[5] = {10, 20, 30, 40, 50};",
+          "arr[2] == *(arr+2) == 30",
+          "sizeof(arr) / sizeof(arr[0]) → 배열 요소 개수"
+        ]
+      }
+    },
+    {
+      "id": "c_05",
+      "title": "함수의 기초",
+      "content": {
+        "syntax": "반환형 함수명(매개변수) { ... return 반환값; }",
+        "rules": [
+          "void 함수는 반환값이 없음",
+          "return을 만나면 함수가 즉시 종료되고 호출한 곳으로 돌아감",
+          "매개변수는 복사본 전달 (call by value)",
+          "포인터 전달 시 원본 수정 가능 (call by reference 효과)"
+        ],
+        "examples": [
+          "int add(int a, int b) { return a + b; }",
+          "void print(char *s) { printf(\"%s\", s); }",
+          "int result = add(3, 4); // result = 7"
+        ]
+      }
+    },
+    {
+      "id": "c_06",
+      "title": "문자열과 널 문자",
+      "content": {
+        "explanation": "C언어에서 문자열은 char 배열. 끝에 널 문자 '\\0' 자동 추가",
+        "null_char": "'\\0' - ASCII 값 0, 문자열 끝을 표시. 문자 '0'(ASCII 48)과 다름",
+        "array_size": "\"HELLO\" → 배열 크기 6 (문자 5 + 널 1), 문자열 길이는 5",
+        "strlen_loop": "while (str[i] != '\\0') { i++; } → i가 문자열 길이",
+        "indexing": [
+          "str[0]부터 접근, str[len-1]이 마지막 문자",
+          "str[len-2]는 뒤에서 두 번째 문자"
+        ],
+        "examples": [
+          "char str[] = \"HELLO\"; // str[5] == '\\0'",
+          "printf(\"%s\", str); // HELLO ('\\0'에서 멈춤)",
+          "printf(\"%c\", str[0]); // H"
+        ]
+      }
+    },
+    {
+      "id": "c_07",
+      "title": "재귀함수",
+      "content": {
+        "explanation": "함수가 자기 자신을 호출하는 방식",
+        "rules": [
+          "반드시 기저 조건(base case)이 있어야 무한 루프 방지",
+          "각 호출마다 스택 프레임이 생성됨",
+          "return을 통해 이전 호출로 값 전달"
+        ],
+        "examples": [
+          "int fact(int n) { if (n<=1) return 1; return n*fact(n-1); }",
+          "fact(4) = 4*fact(3) = 4*3*fact(2) = 4*3*2*1 = 24",
+          "int fib(int n) { if (n<=1) return n; return fib(n-1)+fib(n-2); }"
+        ]
+      }
+    },
+    {
+      "id": "c_08",
       "title": "switch-case 주의사항",
       "content": {
-        "break_fallthrough": "break 없으면 다음 case로 계속 실행됨",
-        "example": "switch(3) { case 2: printf('B'); case 3: printf('C'); case 4: printf('D'); } → CD 출력"
+        "break_fallthrough": "break 없으면 다음 case로 계속 실행됨 (fall-through)",
+        "default": "어떤 case에도 해당하지 않을 때 실행 (생략 가능)",
+        "examples": [
+          "switch(3) { case 2: printf('B'); case 3: printf('C'); case 4: printf('D'); } → CD 출력",
+          "break가 없으면 해당 case 이후 모든 case 실행"
+        ]
       }
     }
   ],
@@ -80,12 +185,12 @@
     },
     {
       "id": "c_p_05",
-      "title": "switch 문 (break 없음)",
+      "title": "switch 문 fall-through",
       "year": "2023년 2회",
       "difficulty": "하",
       "code": "#include <stdio.h>\nint main() {\n    int sum = 0;\n    for (int i = 1; i <= 10; i++) {\n        sum += i;\n    }\n    switch (sum % 5) {\n        case 0: printf(\"A\");\n        case 1: printf(\"B\");\n        case 2: printf(\"C\");\n        case 3: printf(\"D\");\n        case 4: printf(\"E\");\n    }\n    return 0;\n}",
-      "answer": "BCD",
-      "explanation": "sum = 55, 55%5 = 0... 잠깐, sum%5 = 0이면 A부터 출력\n실제로 sum = 55, 55%5 = 0, case 0: A 출력 후 break 없어서 B, C, D, E 모두 출력 → ABCDE\n\n[주의: 문제 원본에 따라 sum 값과 switch 조건이 다를 수 있음]"
+      "answer": "ABCDE",
+      "explanation": "sum = 1+2+...+10 = 55, 55%5 = 0. case 0에서 시작해 break 없으므로 case 1, 2, 3, 4도 모두 실행 → ABCDE 출력"
     },
     {
       "id": "c_p_06",
@@ -98,7 +203,7 @@
     },
     {
       "id": "c_p_07",
-      "title": "이진수 변환",
+      "title": "이진수 변환 빈칸",
       "year": "2023년 1회",
       "difficulty": "중간",
       "code": "#include <stdio.h>\nvoid toBin(int n) {\n    if (n == 0) return;\n    toBin(n / __①__);\n    printf(\"%d\", n __②__ 2);\n}\nint main() {\n    toBin(10);\n    return 0;\n}",
@@ -108,6 +213,33 @@
       ],
       "answer": "1010",
       "explanation": "10을 2진수로 변환하면 1010"
+    },
+    {
+      "id": "c_p_08",
+      "title": "문자열 길이 함수",
+      "year": "2022년 2회",
+      "difficulty": "중간",
+      "code": "#include <stdio.h>\nint len(char* p) {\n    int r = 0;\n    while (*p != '\\0') {\n        p++;\n        r++;\n    }\n    return r;\n}\nint main() {\n    char *p1 = \"2022\";\n    char *p2 = \"202207\";\n    printf(\"%d\", len(p1) + len(p2));\n    return 0;\n}",
+      "answer": "10",
+      "explanation": "len(\"2022\") = 4, len(\"202207\") = 6. 4 + 6 = 10. 널 문자를 만날 때까지 r을 증가시켜 문자열 길이 반환"
+    },
+    {
+      "id": "c_p_09",
+      "title": "char 배열과 포인터",
+      "year": "2023년 1회",
+      "difficulty": "하",
+      "code": "#include <stdio.h>\nint main() {\n    char a[] = \"Art\";\n    char* p = NULL;\n    int i = 0;\n    p = a;\n    printf(\"%s\\n\", a);\n    printf(\"%c\\n\", *p);\n    printf(\"%c\\n\", *a);\n    printf(\"%s\\n\", p);\n    for (i = 0; a[i] != '\\0'; i++)\n        printf(\"%c\", a[i]);\n    return 0;\n}",
+      "answer": "Art\nA\nA\nArt\nArt",
+      "explanation": "p = a이므로 p도 배열 a의 첫 주소를 가리킴. *p와 *a 모두 첫 문자 'A'. %s는 '\\0'을 만날 때까지 출력. for 루프도 '\\0' 전까지 한 글자씩 출력"
+    },
+    {
+      "id": "c_p_10",
+      "title": "문자열 길이 후 특정 문자 출력",
+      "year": "2025년 3회",
+      "difficulty": "중간",
+      "code": "#include <stdio.h>\nint main() {\n    char str[] = \"REPUBLICOFKOREA\";\n    int a = 0;\n    while (str[a] != '\\0') ++a;\n    putchar(str[a - 2]);\n    return 0;\n}",
+      "answer": "E",
+      "explanation": "\"REPUBLICOFKOREA\"의 길이는 15. 루프 종료 후 a=15. str[a-2] = str[13]. 인덱스 13은 'E' (R=0,E=1,...,R=12,E=13,A=14)"
     }
   ]
 }

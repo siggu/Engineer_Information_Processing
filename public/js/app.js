@@ -36,6 +36,7 @@ const LABELS = {
   java: 'Java',
   python: 'Python',
   algorithm: '알고리즘',
+  common: '공통 기초',
 };
 
 /* ===== API 호출 ===== */

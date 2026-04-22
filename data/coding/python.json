@@ -5,37 +5,49 @@
       "id": "py_01",
       "title": "슬라이싱 (Slicing)",
       "content": {
-        "syntax": "리스트[시작:끝:스텝]",
+        "syntax": "시퀀스[시작:끝:스텝]",
         "rules": [
           "시작 인덱스 포함, 끝 인덱스 미포함",
-          "음수 인덱스: 끝에서부터 역방향",
-          "스텝이 음수이면 역순"
+          "음수 인덱스: 끝에서부터 역방향 (-1이 마지막)",
+          "스텝이 음수이면 역순으로 이동",
+          "문자열, 리스트, 튜플 모두 동일하게 적용"
         ],
         "examples": [
           "a = [1,2,3,4,5]; a[1:3] → [2,3]",
           "a[-1] → 5 (마지막 요소)",
-          "a[::-1] → [5,4,3,2,1] (역순)"
+          "a[::-1] → [5,4,3,2,1] (역순)",
+          "a[::2] → [1,3,5] (2칸씩)",
+          "s = 'HELLO'; s[1:4] → 'ELL'"
         ]
       }
     },
     {
       "id": "py_02",
-      "title": "자료형",
+      "title": "자료형 비교",
       "content": {
-        "list": { "syntax": "[]", "description": "순서 있음, 변경 가능", "example": "[1, 2, 3]" },
-        "tuple": { "syntax": "()", "description": "순서 있음, 변경 불가", "example": "(1, 2, 3)" },
-        "dict": { "syntax": "{key: value}", "description": "키-값 쌍, 순서 있음(3.7+), 변경 가능" },
-        "set": { "syntax": "{}", "description": "순서 없음, 중복 불가", "example": "{1, 2, 3}" }
+        "list": { "syntax": "[]", "description": "순서 있음, 변경 가능 (mutable)", "example": "[1, 2, 3]" },
+        "tuple": { "syntax": "()", "description": "순서 있음, 변경 불가 (immutable). 요소 1개: (100,)", "example": "(1, 2, 3)" },
+        "dict": { "syntax": "{key: value}", "description": "키-값 쌍, 순서 있음(3.7+), 변경 가능", "example": "{\"a\": 1}" },
+        "set": { "syntax": "{}", "description": "순서 없음, 중복 불가. 빈 집합은 set()", "example": "{1, 2, 3}" },
+        "주의": "(100)은 int, (100,)이 tuple. {}는 빈 dict이므로 빈 set은 set() 사용"
       }
     },
     {
       "id": "py_03",
-      "title": "클래스",
+      "title": "클래스와 __init__",
       "content": {
         "syntax": "class 클래스명:",
-        "self": "인스턴스 메서드의 첫 번째 인자는 반드시 self",
-        "init": "__init__은 생성자 (객체 생성 시 자동 호출)",
-        "inheritance": "class 자식(부모): 형태로 상속"
+        "self": "인스턴스 메서드의 첫 번째 인자. Python이 자동으로 현재 인스턴스를 전달",
+        "init": "__init__은 생성자 (객체 생성 시 자동 호출). self.변수 = 인스턴스 속성",
+        "instance_vs_class": {
+          "인스턴스 속성": "self.변수 = 값 → 각 객체가 독립적으로 가짐",
+          "클래스 속성": "클래스 내부, 메서드 밖에 선언 → 모든 인스턴스가 공유"
+        },
+        "inheritance": "class 자식(부모): 형태로 상속",
+        "examples": [
+          "class Node: def __init__(self, v): self.v = v; self.c = []",
+          "class Gamja: li = [1,2,3]  # 클래스 속성, 모든 인스턴스 공유"
+        ]
       }
     },
     {
@@ -47,7 +59,117 @@
           "시작 포함, 끝 미포함",
           "range(5) → 0,1,2,3,4",
           "range(1,6) → 1,2,3,4,5",
-          "range(0,10,2) → 0,2,4,6,8"
+          "range(0,10,2) → 0,2,4,6,8",
+          "range(10,0,-1) → 10,9,...,1"
+        ]
+      }
+    },
+    {
+      "id": "py_05",
+      "title": "딕셔너리 (Dictionary)",
+      "content": {
+        "create": "d = {\"key\": value} 또는 d = dict(key=value)",
+        "access": "d[\"key\"] 또는 d.get(\"key\", 기본값)",
+        "methods": {
+          "keys()": "모든 키 반환",
+          "values()": "모든 값 반환",
+          "items()": "(키, 값) 튜플 쌍 반환",
+          "get(key, default)": "키 없으면 오류 대신 기본값 반환",
+          "update({})": "다른 딕셔너리로 업데이트"
+        },
+        "comprehension": "{k: v for k, v in items}",
+        "examples": [
+          "d = {\"a\": 1, \"b\": 2}; d[\"c\"] = 3",
+          "for k, v in d.items(): print(k, v)",
+          "{i: i*2 for i in range(3)} → {0:0, 1:2, 2:4}"
+        ]
+      }
+    },
+    {
+      "id": "py_06",
+      "title": "튜플 (Tuple)",
+      "content": {
+        "description": "변경 불가(immutable) 순서 있는 자료형",
+        "create": "t = (1,2,3) 또는 t = 1,2,3 (괄호 없이도 생성)",
+        "single_element": "t = (100,) — 쉼표 필수. (100)은 그냥 정수",
+        "methods": {
+          "count(값)": "해당 값의 개수 반환",
+          "index(값)": "해당 값이 처음 나타나는 인덱스 반환"
+        },
+        "slicing": "t[1:4], t[::-1] 등 리스트 슬라이싱과 동일한 문법",
+        "conversion": "list(t) → 리스트 변환, tuple([1,2,3]) → 튜플 변환"
+      }
+    },
+    {
+      "id": "py_07",
+      "title": "집합 (Set)",
+      "content": {
+        "description": "중복 없음, 순서 없음. 인덱스로 접근 불가",
+        "create": "s = {1,2,3} 또는 s = set([1,2,3]). 빈 집합은 반드시 set()",
+        "methods": {
+          "add(값)": "요소 하나 추가",
+          "remove(값)": "요소 제거. 없으면 KeyError 발생",
+          "discard(값)": "요소 제거. 없어도 오류 없음",
+          "update(반복가능객체)": "여러 요소 한 번에 추가"
+        },
+        "operations": {
+          "&": "교집합 (intersection)",
+          "|": "합집합 (union)",
+          "-": "차집합 (difference)",
+          "^": "대칭 차집합 (symmetric difference)"
+        },
+        "examples": [
+          "a={1,2,3}; b={2,3,4}; a & b → {2,3}",
+          "a | b → {1,2,3,4}; a - b → {1}"
+        ]
+      }
+    },
+    {
+      "id": "py_08",
+      "title": "람다 표현식 (Lambda)",
+      "content": {
+        "syntax": "lambda 매개변수: 표현식",
+        "description": "이름 없는 익명 함수. 단일 표현식만 가능",
+        "vs_java": "Python: lambda x: x*2 / Java: (x) -> x*2",
+        "common_uses": [
+          "sorted(list, key=lambda x: x[1]) — 정렬 기준",
+          "map(lambda x: x*2, lst) — 각 요소 변환",
+          "filter(lambda x: x>0, lst) — 조건 필터링"
+        ],
+        "examples": [
+          "double = lambda x: x * 2; double(5) → 10",
+          "students.sort(key=lambda s: s[1], reverse=True)"
+        ]
+      }
+    },
+    {
+      "id": "py_09",
+      "title": "리스트 메서드",
+      "content": {
+        "methods": {
+          "append(값)": "끝에 요소 추가",
+          "pop()": "마지막 요소 제거 및 반환. pop(i)는 인덱스 i 제거",
+          "insert(i, 값)": "인덱스 i 위치에 삽입",
+          "remove(값)": "첫 번째 해당 값 제거",
+          "sort()": "오름차순 정렬 (원본 변경)",
+          "sorted(list)": "정렬된 새 리스트 반환 (원본 유지)",
+          "reverse()": "순서 뒤집기"
+        },
+        "comprehension": "[표현식 for 변수 in 반복가능객체 if 조건]",
+        "examples": [
+          "[x**2 for x in range(5)] → [0,1,4,9,16]",
+          "[x for x in lst if x % 2 == 0] — 짝수만"
+        ]
+      }
+    },
+    {
+      "id": "py_10",
+      "title": "재귀함수",
+      "content": {
+        "description": "함수가 자기 자신을 호출. 반드시 기저 조건(base case) 필요",
+        "examples": [
+          "def fact(n): return 1 if n<=1 else n*fact(n-1)",
+          "def fib(n): return n if n<=1 else fib(n-1)+fib(n-2)"
         ]
       }
     }
@@ -73,10 +195,10 @@
     },
     {
       "id": "py_p_03",
-      "title": "클래스 상속",
+      "title": "클래스 상속과 다형성",
       "year": "2024년 2회",
       "difficulty": "중간",
-      "code": "class Animal:\n    def __init__(self, name):\n        self.name = name\n    \n    def speak(self):\n        return f\"{self.name} makes a sound\"\n\nclass Dog(Animal):\n    def speak(self):\n        return f\"{self.name} barks\"\n\nclass Cat(Animal):\n    def speak(self):\n        return f\"{self.name} meows\"\n\nanimals = [Dog(\"Rex\"), Cat(\"Kitty\"), Dog(\"Buddy\")]\nfor animal in animals:\n    print(animal.speak())",
+      "code": "class Animal:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        return f\"{self.name} makes a sound\"\n\nclass Dog(Animal):\n    def speak(self):\n        return f\"{self.name} barks\"\n\nclass Cat(Animal):\n    def speak(self):\n        return f\"{self.name} meows\"\n\nanimals = [Dog(\"Rex\"), Cat(\"Kitty\"), Dog(\"Buddy\")]\nfor animal in animals:\n    print(animal.speak())",
       "answer": "Rex barks\nKitty meows\nBuddy barks",
       "explanation": "파이썬의 다형성: 부모 클래스 Animal을 상속한 Dog와 Cat이 각각 speak()를 오버라이딩"
     },
@@ -100,12 +222,48 @@
     },
     {
       "id": "py_p_06",
-      "title": "재귀 함수",
+      "title": "재귀 함수 - 피보나치",
       "year": "2023년 3회",
       "difficulty": "중간",
       "code": "def fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)\n\nfor i in range(8):\n    print(fibonacci(i), end=' ')",
       "answer": "0 1 1 2 3 5 8 13 ",
       "explanation": "피보나치 수열: 0, 1, 1, 2, 3, 5, 8, 13, ..."
+    },
+    {
+      "id": "py_p_07",
+      "title": "클래스 속성 공유",
+      "year": "2021년 1회",
+      "difficulty": "중간",
+      "code": "class Gamja:\n    li = [1, 2, 3]\n\ng1 = Gamja()\ng2 = Gamja()\ng1.li.append(4)\nprint(g2.li)",
+      "answer": "[1, 2, 3, 4]",
+      "explanation": "li는 클래스 속성이므로 모든 인스턴스가 같은 리스트를 공유. g1.li.append(4)를 하면 g2.li에도 반영됨"
+    },
+    {
+      "id": "py_p_08",
+      "title": "집합 연산",
+      "year": "2020년 2회",
+      "difficulty": "중간",
+      "code": "a = {'한국', '중국', '일본'}\na.add('베트남')\na.add('중국')\na.remove('일본')\na.update({'홍콩', '한국', '태국'})\nprint(len(a))",
+      "answer": "5",
+      "explanation": "시작: {한국,중국,일본}. add('베트남')→{한국,중국,일본,베트남}. add('중국')→중복 무시. remove('일본')→{한국,중국,베트남}. update({홍콩,한국,태국})→{한국,중국,베트남,홍콩,태국} (한국 중복 무시). 최종 원소 5개"
+    },
+    {
+      "id": "py_p_09",
+      "title": "type() 함수와 분기",
+      "year": "2024년 3회",
+      "difficulty": "중간",
+      "code": "def func(value):\n    if type(value) == type(100):\n        return 100\n    elif type(value) == type(\"\"):\n        return len(value)\n    else:\n        return 20\n\na = \"100.0\"\nb = 100.0\nc = (100, 200)\nprint(func(a) + func(b) + func(c))",
+      "answer": "45",
+      "explanation": "func(a): type(\"100.0\")==str → len(\"100.0\")=5\nfunc(b): type(100.0)==float → else → 20\nfunc(c): type((100,200))==tuple → else → 20\n5 + 20 + 20 = 45"
+    },
+    {
+      "id": "py_p_10",
+      "title": "집합과 딕셔너리 컴프리헨션",
+      "year": "2025년 2회",
+      "difficulty": "상",
+      "code": "lst = [1, 2, 3]\ndst = {i: i * 2 for i in lst}\ns = set(dst.values())\nlst[0] = 99\ndst[2] = 7\ns.add(99)\nprint(len(s & set(dst.values())))",
+      "answer": "2",
+      "explanation": "dst = {1:2, 2:4, 3:6}. s = {2,4,6}. lst[0]=99는 dst에 무관. dst[2]=7 → {1:2, 2:7, 3:6}. s.add(99) → {2,4,6,99}. dst.values() = {2,7,6}. s & {2,7,6} = {2,6} → len = 2"
     }
   ]
 }

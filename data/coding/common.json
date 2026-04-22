@@ -1,0 +1,284 @@
+{
+  "subject": "프로그래밍 공통 기초",
+  "key_concepts": [
+    {
+      "id": "common_01",
+      "title": "변수 선언 방법",
+      "content": {
+        "comparison": {
+          "C언어": "int a = 5; // 자료형 명시 필수",
+          "Java": "int a = 5; // 자료형 명시 필수",
+          "Python": "a = 5 # 자료형 키워드 없음, 값으로 자동 결정"
+        },
+        "rules": [
+          "C/Java: 자료형 먼저 선언 후 변수명",
+          "Python: 변수명 = 값 형태만으로 선언",
+          "C/Java: 선언 후 사용, Python: 대입 즉시 사용 가능"
+        ],
+        "data_types": {
+          "C": "int, double, float, char, long",
+          "Java": "int, double, float, char, long, boolean, String",
+          "Python": "자동 결정 (int, float, str, bool, list, dict 등)"
+        }
+      }
+    },
+    {
+      "id": "common_02",
+      "title": "메모리 구조 (스택, 힙, 데이터 영역)",
+      "content": {
+        "stack": {
+          "description": "지역 변수, 매개변수 저장",
+          "lifecycle": "함수 호출 시 생성, 함수 종료 시 자동 해제",
+          "note": "재귀 호출 시 스택 프레임이 쌓임"
+        },
+        "heap": {
+          "description": "동적으로 할당된 메모리",
+          "lifecycle": "C: malloc으로 할당, free로 해제 / Java, Python: GC(가비지 컬렉터)가 자동 해제",
+          "note": "free 없이 반복 할당하면 메모리 누수(memory leak)"
+        },
+        "data_area": {
+          "description": "전역 변수, static 변수 저장",
+          "lifecycle": "프로그램 시작 시 생성, 종료 시 해제"
+        },
+        "code_area": "프로그램 코드(명령어) 저장"
+      }
+    },
+    {
+      "id": "common_03",
+      "title": "변수 스코프 (지역 변수 vs 전역 변수)",
+      "content": {
+        "local": "함수 내부에서 선언. 해당 함수 내에서만 유효. 함수 종료 시 소멸",
+        "global": "함수 외부에서 선언. 프로그램 전체에서 접근 가능",
+        "search_order": "지역 → 상위 함수(Python) → 전역 → 내장 함수 순으로 탐색",
+        "python_global": "Python에서 함수 내에서 전역 변수를 수정하려면 global 키워드 필요",
+        "examples": [
+          "int x = 10; // 전역 변수",
+          "void f() { int x = 5; } // 지역 변수, 전역 x와 별개",
+          "Python: global x; x = 20 // 전역 변수 수정"
+        ]
+      }
+    },
+    {
+      "id": "common_04",
+      "title": "산술·증감 연산자",
+      "content": {
+        "arithmetic": {
+          "+": "덧셈",
+          "-": "뺄셈",
+          "*": "곱셈",
+          "/": "나눗셈 (C/Java: 정수÷정수=정수, Python: 항상 실수)",
+          "%": "나머지",
+          "//": "Python 정수 나눗셈",
+          "**": "Python 거듭제곱"
+        },
+        "increment": {
+          "++i (전위)": "먼저 증가, 그 후 사용. b = ++a → a 먼저 1 증가 후 b에 대입",
+          "i++ (후위)": "먼저 사용, 그 후 증가. b = a++ → 현재 a 값 b에 대입 후 a 증가",
+          "Python": "Python은 ++ 연산자 없음. a += 1 사용"
+        },
+        "compound_assignment": "+=, -=, *=, /=, %= (예: a += 3 은 a = a + 3)",
+        "examples": [
+          "int a=5; int b=++a; → a=6, b=6",
+          "int a=5; int b=a++; → b=5, a=6"
+        ]
+      }
+    },
+    {
+      "id": "common_05",
+      "title": "비교·논리 연산자",
+      "content": {
+        "comparison": {
+          "==": "같다",
+          "!=": "같지 않다",
+          ">": "크다",
+          "<": "작다",
+          ">=": "크거나 같다",
+          "<=": "작거나 같다"
+        },
+        "logical": {
+          "C/Java &&": "논리 AND (단락 평가: 앞이 false면 뒤 평가 안 함)",
+          "C/Java ||": "논리 OR (단락 평가: 앞이 true면 뒤 평가 안 함)",
+          "C/Java !": "논리 NOT",
+          "Python and": "논리 AND",
+          "Python or": "논리 OR",
+          "Python not": "논리 NOT"
+        }
+      }
+    },
+    {
+      "id": "common_06",
+      "title": "비트 연산자",
+      "content": {
+        "operators": {
+          "&": "비트 AND (둘 다 1이면 1)",
+          "|": "비트 OR (하나라도 1이면 1)",
+          "^": "비트 XOR (다르면 1)",
+          "~": "비트 NOT (비트 반전, ~n = -(n+1))",
+          "<<": "왼쪽 시프트 (n << 1 = n * 2)",
+          ">>": "오른쪽 시프트 (n >> 1 = n / 2)"
+        },
+        "examples": [
+          "5 & 3 = (101 & 011) = 001 = 1",
+          "5 | 3 = (101 | 011) = 111 = 7",
+          "5 ^ 3 = (101 ^ 011) = 110 = 6",
+          "~5 = -(5+1) = -6",
+          "4 << 1 = 8 (왼쪽으로 1비트 → ×2)"
+        ]
+      }
+    },
+    {
+      "id": "common_07",
+      "title": "이진수·16진수 변환",
+      "content": {
+        "decimal_to_binary": "2로 계속 나누어 나머지를 역순으로 나열",
+        "binary_to_decimal": "각 자리에 2의 제곱수(2^n) 곱하여 합산",
+        "hex": {
+          "description": "16진수. 0~9, A~F (A=10, B=11, ..., F=15)",
+          "prefix": "C/Java: 0x prefix (예: 0xFF = 255)"
+        },
+        "two_complement": "음수 표현: 양수의 비트를 반전(NOT) 후 1을 더함",
+        "examples": [
+          "10(10) → 1010(2): 10÷2=5나머지0, 5÷2=2나머지1, 2÷2=1나머지0, 1÷2=0나머지1 → 역순: 1010",
+          "1010(2) → 1×2³+0×2²+1×2¹+0×2⁰ = 8+0+2+0 = 10",
+          "0xFF = 15*16 + 15 = 255"
+        ]
+      }
+    },
+    {
+      "id": "common_08",
+      "title": "조건문",
+      "content": {
+        "if_else": {
+          "C/Java": "if (조건) { } else if (조건) { } else { }",
+          "Python": "if 조건: / elif 조건: / else: (콜론 필수, 들여쓰기로 블록 구분)"
+        },
+        "switch_case": {
+          "languages": "C언어, Java에서 사용",
+          "fall_through": "break 없으면 다음 case로 계속 실행됨",
+          "default": "어떤 case에도 해당하지 않을 때 실행",
+          "Python_equivalent": "Python은 switch-case 없음. if-elif-else 사용 (Python 3.10+ match-case)"
+        }
+      }
+    },
+    {
+      "id": "common_09",
+      "title": "반복문",
+      "content": {
+        "for": {
+          "C/Java": "for (초기화; 조건; 증감) { }",
+          "Python": "for 변수 in 반복가능객체:"
+        },
+        "while": {
+          "C/Java/Python": "while (조건) { } — 조건이 참인 동안 반복",
+          "do_while": "do { } while (조건); — C/Java만 존재. 최소 1번 실행"
+        },
+        "control": {
+          "break": "반복문 즉시 탈출",
+          "continue": "현재 반복 건너뛰고 다음 반복으로"
+        },
+        "examples": [
+          "C: for(int i=0; i<5; i++) sum+=i;",
+          "Python: for i in range(5): sum += i",
+          "Python: for i in range(1, 10, 2): # 1,3,5,7,9"
+        ]
+      }
+    },
+    {
+      "id": "common_10",
+      "title": "함수의 기초",
+      "content": {
+        "definition": {
+          "C": "반환형 함수명(매개변수) { return 값; }",
+          "Java": "반환형 메서드명(매개변수) { return 값; } (클래스 내부)",
+          "Python": "def 함수명(매개변수): return 값"
+        },
+        "call_by_value": "매개변수로 값의 복사본이 전달됨. 함수 내 변경이 원본에 영향 없음",
+        "void": "C/Java: void로 반환값 없음 선언. Python: return 없으면 None 반환",
+        "lambda": {
+          "description": "이름 없는 익명 함수",
+          "Java": "(매개변수) -> 표현식",
+          "Python": "lambda 매개변수: 표현식"
+        }
+      }
+    },
+    {
+      "id": "common_11",
+      "title": "코드 실행 순서",
+      "content": {
+        "C": "main() 함수에서 시작, 위에서 아래로 순차 실행",
+        "Java": "public static void main(String[] args)에서 시작",
+        "Python": "최상위 코드에서 바로 시작 (main 함수 없어도 됨). if __name__ == '__main__': 패턴으로 진입점 명시",
+        "function_call": "함수 호출 → 함수 실행 → return으로 호출 지점으로 복귀",
+        "compile_vs_runtime": {
+          "컴파일": "소스 코드를 기계어로 변환 (C, Java의 javac)",
+          "런타임": "프로그램이 실제 실행되는 시점. Python은 인터프리터 방식(줄마다 즉시 실행)"
+        }
+      }
+    }
+  ],
+  "problems": [
+    {
+      "id": "common_p_01",
+      "title": "전위·후위 증감 연산자",
+      "year": "공통 기초",
+      "difficulty": "하",
+      "code": "// Java 기준\nint a = 5;\nint b = ++a;\nint c = b++;\nSystem.out.println(a);\nSystem.out.println(b);\nSystem.out.println(c);",
+      "answer": "6\n7\n6",
+      "explanation": "b = ++a: a가 먼저 6이 되고, b=6. c = b++: c에 현재 b값(6) 대입 후 b가 7이 됨. 출력: a=6, b=7, c=6"
+    },
+    {
+      "id": "common_p_02",
+      "title": "비트 연산자",
+      "year": "공통 기초",
+      "difficulty": "중간",
+      "code": "// C/Java/Python 동일\nint a = 12;  // 1100\nint b = 10;  // 1010\nSystem.out.println(a & b);\nSystem.out.println(a | b);\nSystem.out.println(a ^ b);",
+      "answer": "8\n14\n6",
+      "explanation": "12=1100, 10=1010\nAND: 1100 & 1010 = 1000 = 8\nOR:  1100 | 1010 = 1110 = 14\nXOR: 1100 ^ 1010 = 0110 = 6"
+    },
+    {
+      "id": "common_p_03",
+      "title": "이진수 변환",
+      "year": "공통 기초",
+      "difficulty": "하",
+      "code": "// 다음 10진수를 2진수로 변환하시오.\n// (1) 13\n// (2) 25",
+      "answer": "(1) 1101\n(2) 11001",
+      "explanation": "(1) 13: 13÷2=6나머지1, 6÷2=3나머지0, 3÷2=1나머지1, 1÷2=0나머지1 → 역순: 1101\n(2) 25: 25÷2=12나머지1, 12÷2=6나머지0, 6÷2=3나머지0, 3÷2=1나머지1, 1÷2=0나머지1 → 역순: 11001"
+    },
+    {
+      "id": "common_p_04",
+      "title": "반복문 합계",
+      "year": "공통 기초",
+      "difficulty": "하",
+      "code": "// C/Java 기준\nint sum = 0;\nfor (int i = 1; i <= 10; i++) {\n    if (i % 2 == 0) sum += i;\n}\nSystem.out.println(sum);",
+      "answer": "30",
+      "explanation": "1~10 중 짝수(2,4,6,8,10)의 합 = 2+4+6+8+10 = 30"
+    },
+    {
+      "id": "common_p_05",
+      "title": "변수 스코프",
+      "year": "공통 기초",
+      "difficulty": "중간",
+      "code": "// Java 기준\nint x = 10;\n\nstatic int test() {\n    int x = 20;\n    return x;\n}\n\npublic static void main(String[] args) {\n    System.out.println(x);\n    System.out.println(test());\n    System.out.println(x);\n}",
+      "answer": "10\n20\n10",
+      "explanation": "test() 함수 내의 x는 지역 변수로 전역 x와 별개. test() 호출 시 지역 x=20 반환. 전역 x는 여전히 10"
+    },
+    {
+      "id": "common_p_06",
+      "title": "switch-case fall-through",
+      "year": "공통 기초",
+      "difficulty": "중간",
+      "code": "// Java 기준\nint n = 2;\nswitch (n) {\n    case 1:\n        System.out.println(\"one\");\n    case 2:\n        System.out.println(\"two\");\n    case 3:\n        System.out.println(\"three\");\n        break;\n    case 4:\n        System.out.println(\"four\");\n}",
+      "answer": "two\nthree",
+      "explanation": "n=2이므로 case 2에서 시작. break가 없으므로 case 3도 실행. case 3에 break 있으므로 case 4는 실행 안 됨"
+    },
+    {
+      "id": "common_p_07",
+      "title": "시프트 연산자",
+      "year": "공통 기초",
+      "difficulty": "중간",
+      "code": "// C/Java 기준\nint a = 8;\nSystem.out.println(a << 2);\nSystem.out.println(a >> 1);",
+      "answer": "32\n4",
+      "explanation": "8 = 1000(2)\n8 << 2: 100000(2) = 32 (왼쪽 2칸 이동 = ×4)\n8 >> 1: 100(2) = 4 (오른쪽 1칸 이동 = ÷2)"
+    }
+  ]
+}

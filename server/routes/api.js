@@ -47,6 +47,7 @@ router.get('/coding/:lang', (req, res) => {
     java: 'java.json',
     python: 'python.json',
     algorithm: 'algorithms.json',
+    common: 'common.json',
   };
   const fileName = langMap[req.params.lang];
   if (!fileName) return res.status(404).json({ error: '언어를 찾을 수 없습니다.' });
@@ -76,6 +77,7 @@ router.post('/chat/stream', async (req, res) => {
     java: 'Java',
     python: 'Python',
     algorithm: '알고리즘',
+    common: '프로그래밍 공통 기초',
   }[subject] || '정보처리기사 실기';
 
   const systemPrompt = `당신은 정보처리기사 실기 시험 전문 AI 튜터입니다.
@@ -127,6 +129,7 @@ router.post('/quiz/generate', async (req, res) => {
     java: 'Java 프로그래밍 - 상속, 오버라이딩, 인터페이스',
     python: 'Python 프로그래밍 - 슬라이싱, 클래스, 람다',
     algorithm: '알고리즘 - 정렬, 탐색, 자료구조',
+    common: '프로그래밍 공통 기초 - 변수, 연산자, 반복문, 메모리 구조',
   }[subject] || '정보처리기사 실기';
 
   try {
