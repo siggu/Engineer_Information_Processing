@@ -57,7 +57,7 @@ navItems.forEach(item => {
     const subject = item.dataset.subject;
     state.currentSection = section;
     state.currentSubject = subject;
-    breadcrumb.textContent = subject ? LABELS[subject] : '예상 문제';
+    breadcrumb.textContent = subject ? LABELS[subject] : '기출 문제';
     if (section === 'quiz') {
       contentSection.classList.add('hidden');
       quizSection.classList.remove('hidden');
@@ -134,24 +134,34 @@ function renderTopicBody(topic) {
 
   // 단계 목록
   if (c.steps) {
-    html += `<table class="info-table" style="margin-top:10px">
-      <tr><th>단계</th><th>키워드</th><th>설명</th></tr>
-      ${c.steps.map(s => `<tr><td><span class="badge badge-blue">${s.level || s.step}</span></td><td>${s.keyword || ''}</td><td>${s.condition || s.description || ''}</td></tr>`).join('')}
-    </table>`;
+    const hasStepObjects = c.steps.length && typeof c.steps[0] === 'object';
+    if (hasStepObjects) {
+      html += `<table class="info-table" style="margin-top:10px">
+        <tr><th>단계</th><th>키워드</th><th>설명</th></tr>
+        ${c.steps.map(s => `<tr><td><span class="badge badge-blue">${escapeHtml(String(s.level || s.step || ''))}</span></td><td>${escapeHtml(s.keyword || '')}</td><td>${escapeHtml(s.condition || s.description || '')}</td></tr>`).join('')}
+      </table>`;
+    } else {
+      html += renderValue(c.steps);
+    }
   }
 
   // 레이어 목록 (OSI)
   if (c.layers) {
-    html += `<table class="info-table" style="margin-top:10px">
-      <tr><th>계층</th><th>이름</th><th>프로토콜/장비</th><th>PDU</th></tr>
-      ${c.layers.map(l => `
-        <tr>
-          <td><span class="badge badge-blue">${l.number}계층</span></td>
-          <td><strong>${l.name}</strong></td>
-          <td>${(l.protocols || []).join(', ')}${l.device ? ' / ' + l.device : ''}</td>
-          <td>${l.pdu || '-'}</td>
-        </tr>`).join('')}
-    </table>`;
+    const hasNumber = c.layers.length && c.layers[0].number != null;
+    if (hasNumber) {
+      html += `<table class="info-table" style="margin-top:10px">
+        <tr><th>계층</th><th>이름</th><th>프로토콜/장비</th><th>PDU</th></tr>
+        ${c.layers.map(l => `
+          <tr>
+            <td><span class="badge badge-blue">${l.number}계층</span></td>
+            <td><strong>${escapeHtml(l.name || '')}</strong></td>
+            <td>${(l.protocols || []).map(escapeHtml).join(', ')}${l.device ? ' / ' + escapeHtml(l.device) : ''}</td>
+            <td>${escapeHtml(l.pdu || '-')}</td>
+          </tr>`).join('')}
+      </table>`;
+    } else {
+      html += renderValue(c.layers);
+    }
   }
 
   // 알고리즘 목록
@@ -209,10 +219,14 @@ function renderTopicBody(topic) {
   if (c.characteristics) {
     html += `<ul class="key-points" style="margin-top:8px">${c.characteristics.map(x => `<li>${x}</li>`).join('')}</ul>`;
   }
-  if (c.types && typeof c.types === 'object' && !Array.isArray(c.types)) {
-    html += `<ul class="key-points" style="margin-top:8px">
-      ${Object.entries(c.types).map(([k, v]) => `<li><strong>${k}:</strong> ${v}</li>`).join('')}
-    </ul>`;
+  if (c.types) {
+    if (Array.isArray(c.types)) {
+      html += renderValue(c.types);
+    } else if (typeof c.types === 'object') {
+      html += `<ul class="key-points" style="margin-top:8px">
+        ${Object.entries(c.types).map(([k, v]) => `<li><strong>${escapeHtml(k)}:</strong> ${escapeHtml(String(v))}</li>`).join('')}
+      </ul>`;
+    }
   }
   if (c.acid) {
     html += `<ul class="key-points" style="margin-top:8px">
@@ -251,14 +265,26 @@ function renderValue(val) {
       return `<ul class="key-points" style="margin-top:8px">${val.map(x => `<li>${escapeHtml(String(x))}</li>`).join('')}</ul>`;
     }
     if (typeof val[0] === 'object') {
-      const headers = Object.keys(val[0]);
+      const KEY_LABELS = {
+        name:'이름', description:'설명', type:'유형', level:'레벨', term:'용어',
+        element:'요소', step:'단계', keyword:'키워드', condition:'조건',
+        strength:'강도', notation:'표기', alias:'별칭', count:'개수',
+        feature:'특징', category:'분류', protocol:'프로토콜', port:'포트',
+        method:'방법', purpose:'목적', example:'예시', note:'비고',
+        algorithm:'알고리즘', complexity:'복잡도', attack:'공격', defense:'방어',
+        tool:'도구', advantage:'장점', disadvantage:'단점', phase:'단계',
+        standard:'표준', version:'버전', target:'대상', value:'값',
+      };
+      const allKeys = Array.from(new Set(val.flatMap(r => Object.keys(r))));
+      const headers = allKeys;
       return `<table class="info-table" style="margin-top:10px">
-        <tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>
+        <tr>${headers.map(h => `<th>${KEY_LABELS[h] || h}</th>`).join('')}</tr>
         ${val.map(row => `<tr>${headers.map(h => {
           const v = row[h];
+          if (v == null) return '<td>-</td>';
           if (Array.isArray(v)) return `<td>${v.map(x => escapeHtml(String(x))).join(', ')}</td>`;
-          if (v && typeof v === 'object') return `<td>${Object.entries(v).map(([k2,v2]) => `<strong>${escapeHtml(k2)}:</strong> ${escapeHtml(String(v2))}`).join('<br>')}</td>`;
-          return `<td>${escapeHtml(String(v ?? ''))}</td>`;
+          if (typeof v === 'object') return `<td>${Object.entries(v).map(([k2,v2]) => `<strong>${escapeHtml(k2)}:</strong> ${escapeHtml(String(v2))}`).join('<br>')}</td>`;
+          return `<td>${escapeHtml(String(v))}</td>`;
         }).join('')}</tr>`).join('')}
       </table>`;
     }
