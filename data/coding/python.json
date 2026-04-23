@@ -172,6 +172,74 @@
           "def fib(n): return n if n<=1 else fib(n-1)+fib(n-2)"
         ]
       }
+    },
+    {
+      "id": "py_11",
+      "title": "언패킹과 다중 할당",
+      "content": {
+        "multiple_assign": "a, b = 1, 2 → a=1, b=2 동시 할당",
+        "swap": "a, b = b, a → 임시 변수 없이 두 변수 교환",
+        "tuple_unpack": "x, y = (10, 20) → 튜플 언패킹",
+        "extended": "head, *rest = [1,2,3,4] → head=1, rest=[2,3,4]",
+        "for_unpack": "for k, v in d.items(): → 딕셔너리 순회",
+        "enumerate": "for i, x in enumerate(lst): → 인덱스와 값 동시 획득",
+        "divmod": "q, r = divmod(10, 3) → 몫과 나머지 동시 반환",
+        "examples": [
+          "a, b, c = 1, 2, 3",
+          "a, b = b, a  # swap without temp",
+          "for idx, val in enumerate(['a','b','c']): # (0,'a'), (1,'b'), (2,'c')"
+        ]
+      }
+    },
+    {
+      "id": "py_12",
+      "title": "문자열 메서드",
+      "content": {
+        "indexing": "s[0] 첫 문자, s[-1] 마지막 문자, s[1:4] 슬라이싱",
+        "methods": {
+          "len(s)": "문자열 길이",
+          "s.upper()": "대문자 변환",
+          "s.lower()": "소문자 변환",
+          "s.strip()": "앞뒤 공백/특수문자 제거",
+          "s.split(구분자)": "구분자로 분리하여 리스트 반환",
+          "s.join(리스트)": "리스트 원소를 s로 이어 문자열 생성",
+          "s.replace(old, new)": "old를 new로 교체",
+          "s.find(부분문자열)": "위치 반환 (없으면 -1)"
+        },
+        "examples": [
+          "\"hello\".upper() → \"HELLO\"",
+          "\"-\".join([\"a\",\"b\",\"c\"]) → \"a-b-c\"",
+          "\"hello world\".split() → [\"hello\", \"world\"]",
+          "\"Seoul\"[0] → 'S'"
+        ]
+      }
+    },
+    {
+      "id": "py_13",
+      "title": "내장 함수 (map, filter, sorted, enumerate)",
+      "content": {
+        "map": {
+          "syntax": "map(함수, 반복가능객체)",
+          "description": "각 원소에 함수 적용. list()로 변환해야 출력 가능",
+          "example": "list(map(lambda x: x+100, [1,2,3])) → [101, 102, 103]"
+        },
+        "filter": {
+          "syntax": "filter(함수, 반복가능객체)",
+          "description": "함수가 True인 원소만 필터링",
+          "example": "list(filter(lambda x: x>0, [-1, 2, -3, 4])) → [2, 4]"
+        },
+        "sorted": {
+          "syntax": "sorted(반복가능객체, key=함수, reverse=True/False)",
+          "description": "정렬된 새 리스트 반환 (원본 유지). key로 정렬 기준 지정"
+        },
+        "enumerate": {
+          "syntax": "enumerate(반복가능객체, start=0)",
+          "description": "(인덱스, 값) 쌍 반환. for i, v in enumerate(lst):",
+          "example": "list(enumerate(['a','b','c'])) → [(0,'a'),(1,'b'),(2,'c')]"
+        },
+        "sum_min_max": "sum(lst), min(lst), max(lst) → 합계, 최소, 최대",
+        "zip": "zip(lst1, lst2) → 두 리스트를 쌍으로 묶음"
+      }
     }
   ],
   "problems": [
@@ -264,6 +332,33 @@
       "code": "lst = [1, 2, 3]\ndst = {i: i * 2 for i in lst}\ns = set(dst.values())\nlst[0] = 99\ndst[2] = 7\ns.add(99)\nprint(len(s & set(dst.values())))",
       "answer": "2",
       "explanation": "dst = {1:2, 2:4, 3:6}. s = {2,4,6}. lst[0]=99는 dst에 무관. dst[2]=7 → {1:2, 2:7, 3:6}. s.add(99) → {2,4,6,99}. dst.values() = {2,7,6}. s & {2,7,6} = {2,6} → len = 2"
+    },
+    {
+      "id": "py_p_11",
+      "title": "enumerate와 딕셔너리 - 리스트 합계/길이",
+      "year": "2025년 3회",
+      "difficulty": "중간",
+      "code": "data = [\n    [3, 5, 2, 4, 1],\n    [4, 5, 1],\n    [4, 4, 1, 5, 4],\n    [4, 5]\n]\nresult = {}\nfor index, lis in enumerate(data):\n    list_sum = sum(lis)\n    list_len = len(lis)\n    result[index] = (list_sum, list_len)\nprint(result)",
+      "answer": "{0: (15, 5), 1: (10, 3), 2: (18, 5), 3: (9, 2)}",
+      "explanation": "enumerate(data)로 인덱스와 리스트를 동시 획득\nindex=0: sum([3,5,2,4,1])=15, len=5 → (15,5)\nindex=1: sum([4,5,1])=10, len=3 → (10,3)\nindex=2: sum([4,4,1,5,4])=18, len=5 → (18,5)\nindex=3: sum([4,5])=9, len=2 → (9,2)"
+    },
+    {
+      "id": "py_p_12",
+      "title": "map()과 lambda",
+      "year": "2022년 3회",
+      "difficulty": "하",
+      "code": "l = [1, 2, 3, 4, 5]\nl = list(map(lambda num: num + 100, l))\nprint(l)",
+      "answer": "[101, 102, 103, 104, 105]",
+      "explanation": "map(함수, 리스트): 각 원소에 함수 적용\nlambda num: num + 100 → 각 원소에 100 더함\nlist()로 map 객체를 리스트로 변환"
+    },
+    {
+      "id": "py_p_13",
+      "title": "클래스 속성 - 도시 이니셜",
+      "year": "2021년 1회",
+      "difficulty": "중간",
+      "code": "class Gamja:\n    li = [\"Seoul\", \"Kyeonggi\", \"Inchon\", \"Daejeon\", \"Daegu\", \"Pusan\"]\n\ns = Gamja()\nstr01 = \"\"\nfor i in s.li:\n    str01 = str01 + i[0]\nprint(str01)",
+      "answer": "SKIDKP",
+      "explanation": "li는 클래스 속성 (모든 인스턴스 공유)\nfor 루프: 각 도시명의 첫 글자(인덱스 0)를 연결\nSeoul[0]='S', Kyeonggi[0]='K', Inchon[0]='I', Daejeon[0]='D', Daegu[0]='K', Pusan[0]='P'\n→ \"SKIDKP\""
     }
   ]
 }

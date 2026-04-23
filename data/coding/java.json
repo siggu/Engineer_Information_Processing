@@ -26,11 +26,19 @@
         "overriding": {
           "description": "부모 클래스의 메서드를 자식 클래스에서 재정의",
           "conditions": "메서드 이름, 매개변수, 반환형 모두 동일해야 함",
-          "annotation": "@Override 어노테이션 권장"
+          "annotation": "@Override 어노테이션 권장",
+          "binding": "동적 바인딩: 실제 객체 타입의 메서드가 호출됨"
         },
         "overloading": {
           "description": "같은 이름의 메서드를 매개변수를 다르게 하여 여러 개 정의",
-          "conditions": "메서드 이름 동일, 매개변수 타입/개수 달라야 함"
+          "conditions": "메서드 이름 동일, 매개변수 타입/개수 달라야 함",
+          "binding": "정적 바인딩: 컴파일 타임에 선언 타입 기준으로 결정"
+        },
+        "parent_ref_child_obj": {
+          "pattern": "Parent ref = new Child();",
+          "instance_method": "실제 객체(Child) 기준으로 호출 (동적 바인딩)",
+          "static_method": "선언 타입(Parent) 기준으로 호출",
+          "field": "선언 타입(Parent) 기준"
         }
       }
     },
@@ -127,6 +135,109 @@
           "여러 문장: (x) -> { int r = x*2; return r; }"
         ]
       }
+    },
+    {
+      "id": "java_10",
+      "title": "enum (열거형)",
+      "content": {
+        "explanation": "정해진 상수 값만 사용하도록 제한하는 특별한 클래스",
+        "syntax": "enum 이름 { 상수1, 상수2, ... }",
+        "key_methods": {
+          "values()": "모든 enum 상수를 선언 순서대로 배열로 반환",
+          "name()": "enum 상수의 이름을 String으로 반환",
+          "ordinal()": "enum 상수의 선언 순서(인덱스)를 int로 반환 (0부터)",
+          "valueOf(String)": "문자열로 enum 상수 찾기"
+        },
+        "with_field": {
+          "note": "속성/메서드가 있으면 상수 목록 끝에 세미콜론 필수",
+          "constructor": "enum 생성자는 항상 private",
+          "example": "enum Color { RED(\"빨강\"), BLUE(\"파랑\"); private String k; Color(String k){this.k=k;} public String k(){return k;} }"
+        },
+        "examples": [
+          "enum Season { SPRING, SUMMER, FALL, WINTER }",
+          "Season.SUMMER.ordinal() == 1",
+          "Season.FALL.name() == \"FALL\"",
+          "Season.values()[0] == Season.SPRING"
+        ]
+      }
+    },
+    {
+      "id": "java_11",
+      "title": "추상 클래스 (abstract class)",
+      "content": {
+        "explanation": "직접 객체 생성 불가. 자식 클래스가 반드시 구현해야 하는 메서드를 선언",
+        "abstract_method": "본문 없이 선언만 있는 메서드. abstract 키워드 필수",
+        "normal_method": "추상 클래스 안에 일반 메서드도 가질 수 있음 (구현 포함)",
+        "vs_interface": {
+          "추상 클래스": "일반 메서드/필드 가능, 단일 상속(extends), abstract 키워드",
+          "인터페이스": "추상 메서드만(Java 8+ default 제외), 다중 구현(implements)"
+        },
+        "examples": [
+          "abstract class Vehicle { abstract String getName(String v); }",
+          "class Car extends Vehicle { public String getName(String v) { return v; } }",
+          "Vehicle obj = new Car(\"Spark\"); // 다형성 가능"
+        ]
+      }
+    },
+    {
+      "id": "java_12",
+      "title": "제네릭과 타입 소거",
+      "content": {
+        "explanation": "타입을 파라미터로 받는 클래스/메서드. 컴파일 후 T가 지워짐(type erasure)",
+        "type_erasure": {
+          "<T>": "Object로 소거",
+          "<T extends Number>": "Number로 소거",
+          "<T extends Comparable>": "Comparable로 소거"
+        },
+        "overloading_impact": "오버로딩은 컴파일 타임에 결정. 타입 소거 후의 타입으로 메서드가 선택됨",
+        "examples": [
+          "class Box<T> { T value; }",
+          "new Collection<Integer>(0).print() → T가 Object로 소거 → print(Object x) 호출",
+          "class Box<T> 컴파일 후 → class Box { Object value; }"
+        ]
+      }
+    },
+    {
+      "id": "java_13",
+      "title": "스레드(Thread)와 Runnable",
+      "content": {
+        "two_ways": {
+          "extends_Thread": "class MyThread extends Thread { public void run() { ... } }",
+          "implements_Runnable": "class MyTask implements Runnable { public void run() { ... } }"
+        },
+        "preferred": "Runnable 구현이 권장 (다른 클래스 상속도 가능)",
+        "start_vs_run": {
+          "start()": "새 스레드 생성 후 run() 실행 (병렬)",
+          "run()": "현재 스레드에서 직접 실행 (일반 메서드 호출)"
+        },
+        "usage": "Thread t = new Thread(new MyTask()); t.start();",
+        "examples": [
+          "class Car implements Runnable { public void run() { System.out.println(\"run\"); } }",
+          "new Thread(new Car()).start(); // Car가 Runnable이므로"
+        ]
+      }
+    },
+    {
+      "id": "java_14",
+      "title": "for-each문 (향상된 for문)",
+      "content": {
+        "syntax": "for (타입 변수 : 배열 또는 컬렉션) { ... }",
+        "features": [
+          "배열의 원소를 처음부터 끝까지 순서대로 순회",
+          "인덱스가 필요 없을 때 간결하게 사용",
+          "for-each 내에서 배열 원본 수정 불가 (복사본 사용)"
+        ],
+        "string_equals": {
+          "equals()": "String 내용 비교 (항상 내용 동일하면 true)",
+          "==": "참조(주소) 비교 (new String()이면 다른 객체)"
+        },
+        "examples": [
+          "for (int x : arr) { sum += x; }",
+          "for (String s : strArr) { System.out.println(s); }",
+          "\"A\".equals(\"A\") == true (내용 비교)",
+          "new String(\"A\") == new String(\"A\") == false (참조 비교)"
+        ]
+      }
     }
   ],
   "problems": [
@@ -192,6 +303,154 @@
       "code": "class Student {\n    String name;\n    int score;\n    Student(String name) {\n        this(name, 0);\n    }\n    Student(String name, int score) {\n        this.name = name;\n        this.score = score;\n        System.out.println(name + \": \" + score);\n    }\n}\npublic class Main {\n    public static void main(String[] args) {\n        new Student(\"김철수\");\n        new Student(\"이영희\", 95);\n    }\n}",
       "answer": "김철수: 0\n이영희: 95",
       "explanation": "this(name, 0) 호출로 두 번째 생성자가 실행됨. 두 번째 생성자에서 this.name, this.score 설정 후 출력"
+    },
+    {
+      "id": "java_p_08",
+      "title": "enum values/name/ordinal",
+      "year": "2025년 3회",
+      "difficulty": "상",
+      "code": "enum Tri {\n    AB(\"A\"), A(\"AB\"), C(\"ABC\");\n    private String code;\n    Tri(String code) {\n        this.code = code;\n    }\n    public String code() {\n        return code;\n    }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Tri t = Tri.values()[Tri.A.name().length()];\n        System.out.print(t.code());\n    }\n}",
+      "answer": "AB",
+      "explanation": "Tri.A.name() → \"A\" (상수 이름 문자열)\n\"A\".length() → 1\nTri.values()[1] → Tri.A (0:AB, 1:A, 2:C)\nTri.A.code() → \"AB\" (A의 생성자 인수)"
+    },
+    {
+      "id": "java_p_09",
+      "title": "오버라이딩과 static 메서드",
+      "year": "2025년 2회",
+      "difficulty": "상",
+      "code": "public class Main {\n    public static class Parent {\n        public int x(int i) { return i + 2; }\n        public static String id() { return \"P\"; }\n    }\n    public static class Child extends Parent {\n        public int x(int i) { return i + 3; }\n        public String x(String s) { return s + \"R\"; }\n        public static String id() { return \"C\"; }\n    }\n    public static void main(String[] args) {\n        Parent ref = new Child();\n        System.out.println(ref.x(2) + ref.id());\n    }\n}",
+      "answer": "5P",
+      "explanation": "ref.x(2): 인스턴스 메서드 → 실제 객체 Child 기준 → i+3=2+3=5\nref.id(): static 메서드 → 선언 타입 Parent 기준 → \"P\"\n5 + \"P\" → 문자열 연결 → \"5P\""
+    },
+    {
+      "id": "java_p_10",
+      "title": "인터페이스 implements 빈칸",
+      "year": "2025년 3회",
+      "difficulty": "하",
+      "code": "interface Person {\n    void sayHello();\n}\nclass OliveYoungWorker ________ Person {\n    public void sayHello() {\n        System.out.println(\"어서오세요 올리브영입니다~\");\n    }\n}\nclass StarBucksWorker ________ Person {\n    public void sayHello() {\n        System.out.println(\"주문하신 아메리카노 나왔습니다~\");\n    }\n}",
+      "answer": "implements",
+      "explanation": "인터페이스를 구현할 때는 implements 키워드 사용. extends는 클래스 상속에만 사용"
+    },
+    {
+      "id": "java_p_11",
+      "title": "인터페이스 구현 - 홀짝 합계",
+      "year": "2024년 2회",
+      "difficulty": "중간",
+      "code": "interface A {\n    int sum(int[] a, boolean odd);\n}\nclass B implements A {\n    public int sum(int[] a, boolean odd) {\n        int result = 0;\n        for (int i = 0; i < a.length; i++) {\n            if ((odd && a[i] % 2 != 0) || (!odd && a[i] % 2 == 0))\n                result += a[i];\n        }\n        return result;\n    }\n}\nclass Gamja {\n    public static void main(String[] args) {\n        int a[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};\n        B x = new B();\n        System.out.print(x.sum(a, true) + \", \" + x.sum(a, false));\n    }\n}",
+      "answer": "25, 20",
+      "explanation": "sum(a, true): odd=true → 홀수만 합산 → 1+3+5+7+9 = 25\nsum(a, false): odd=false → 짝수만 합산 → 2+4+6+8 = 20\n출력: \"25, 20\""
+    },
+    {
+      "id": "java_p_12",
+      "title": "제네릭 타입소거와 오버로딩",
+      "year": "2024년 3회",
+      "difficulty": "상",
+      "code": "class Printer {\n    void print(Integer x) { System.out.print(\"A\" + x); }\n    void print(Object x) { System.out.print(\"B\" + x); }\n    void print(Number x) { System.out.print(\"C\" + x); }\n}\nclass Collection<T> {\n    T value;\n    public Collection(T t) { value = t; }\n    public void print() {\n        new Printer().print(value);\n    }\n}\nclass Gamja {\n    public static void main(String[] args) {\n        new Collection<Integer>(0).print();\n    }\n}",
+      "answer": "B0",
+      "explanation": "Collection<Integer>에서 T=Integer\n타입 소거 후: value의 타입은 Object\nprint(value) 호출 시 컴파일 타임에 Object 타입으로 결정 → print(Object x) 선택\n\"B\" + 0 = \"B0\""
+    },
+    {
+      "id": "java_p_13",
+      "title": "추상 클래스와 메서드 오버로딩",
+      "year": "2020년 3회",
+      "difficulty": "중간",
+      "code": "abstract class Vehicle {\n    String name;\n    abstract public String getName(String val);\n    public String getName() {\n        return \"Vehicle name:\" + name;\n    }\n    public void setName(String val) {\n        name = val;\n    }\n}\nclass Car extends Vehicle {\n    public Car(String val) {\n        setName(val);\n    }\n    public String getName(String val) {\n        return \"Car name:\" + val;\n    }\n    public String getName(byte val[]) {\n        return \"Car name:\" + val;\n    }\n}\npublic class Gamja {\n    public static void main(String[] args) {\n        Vehicle obj = new Car(\"Spark\");\n        System.out.println(obj.getName());\n    }\n}",
+      "answer": "Vehicle name:Spark",
+      "explanation": "new Car(\"Spark\"): setName(\"Spark\") → name=\"Spark\"\nobj.getName(): 매개변수 없는 버전 호출. Car에 매개변수 없는 getName()이 없으므로 부모(Vehicle)의 메서드 실행\n\"Vehicle name:\" + \"Spark\" = \"Vehicle name:Spark\""
+    },
+    {
+      "id": "java_p_14",
+      "title": "static 키워드 빈칸",
+      "year": "2021년 2회",
+      "difficulty": "하",
+      "code": "public class Gamja {\n    public static void main(String[] args) {\n        System.out.print(Gamja.check(1));\n    }\n    _______ String check(int num) {\n        return (num >= 0) ? \"positive\" : \"negative\";\n    }\n}",
+      "answer": "static",
+      "explanation": "main은 static 메서드. static에서 같은 클래스의 메서드를 클래스명.메서드() 형식으로 호출하려면 해당 메서드도 static이어야 함\ncheck(1): 1>=0이므로 \"positive\" 반환"
+    },
+    {
+      "id": "java_p_15",
+      "title": "람다와 예외 처리",
+      "year": "2025년 2회",
+      "difficulty": "상",
+      "code": "public class Main {\n    static interface F {\n        int apply(int x) throws Exception;\n    }\n    public static int run(F f) {\n        try {\n            return f.apply(3);\n        } catch (Exception e) {\n            return 7;\n        }\n    }\n    public static void main(String[] args) {\n        F f = (x) -> {\n            if (x > 2) throw new Exception();\n            return x * 2;\n        };\n        System.out.print(run(f) + run((int n) -> n + 9));\n    }\n}",
+      "answer": "19",
+      "explanation": "run(f): x=3, 3>2 → Exception 발생 → catch에서 7 반환\nrun((int n) -> n+9): n=3, 3+9=12 → 정상 반환\n7 + 12 = 19"
+    },
+    {
+      "id": "java_p_16",
+      "title": "메서드 오버로딩과 재귀",
+      "year": "2025년 1회",
+      "difficulty": "상",
+      "code": "public class Gamja {\n    public static void main(String[] args) {\n        System.out.println(calc(\"5\"));\n    }\n    static int calc(int value) {\n        if (value <= 1) return value;\n        return calc(value - 1) + calc(value - 2);\n    }\n    static int calc(String str) {\n        int value = Integer.valueOf(str);\n        if (value <= 1) return value;\n        return calc(value - 1) + calc(value - 3);\n    }\n}",
+      "answer": "4",
+      "explanation": "calc(\"5\"): String 버전. value=5\nreturn calc(4) + calc(2) [int 버전으로 전환]\ncalc(1)=1, calc(0)=0\ncalc(2)=calc(1)+calc(0)=1\ncalc(3)=calc(2)+calc(1)=2\ncalc(4)=calc(3)+calc(2)=3\ncalc(\"5\")=3+1=4"
+    },
+    {
+      "id": "java_p_17",
+      "title": "컴파일타임 오버로드 결합",
+      "year": "2026년 1회",
+      "difficulty": "상",
+      "code": "class A {\n    String f(Object x) { return \"1\"; }\n    String g() { return f(\"a\"); }\n}\nclass B extends A {\n    String f(Object x) { return \"2\"; }\n    String f(String x) { return \"3\"; }\n}\npublic class Main {\n    public static void main(String[] args) {\n        A a = new B();\n        System.out.println(a.g());\n    }\n}",
+      "answer": "2",
+      "explanation": "a.g(): g()는 B에서 오버라이딩 안 함 → A의 g() 실행\nA.g()에서 f(\"a\"): 컴파일 시점에 A 기준으로 f(Object) 선택 (A에는 f(Object)만 있음)\n런타임에 실제 객체 B의 f(Object) 실행 → \"2\" 반환\n(B의 f(String)은 오버로딩이라 컴파일 타임에 선택 안 됨)"
+    },
+    {
+      "id": "java_p_18",
+      "title": "Thread와 Runnable 빈칸",
+      "year": "2022년 1회",
+      "difficulty": "하",
+      "code": "class Car implements Runnable {\n    int a;\n    public void run() {\n        System.out.println(\"run\");\n    }\n}\npublic class Gamja {\n    public static void main(String args[]) {\n        Thread t1 = new Thread(new _______());\n        t1.start();\n    }\n}",
+      "answer": "Car",
+      "explanation": "Thread 생성자에 Runnable 구현체를 전달해야 함. Car는 Runnable을 implements하므로 new Car()를 전달"
+    },
+    {
+      "id": "java_p_19",
+      "title": "객체 배열과 참조 교환",
+      "year": "2025년 2회",
+      "difficulty": "상",
+      "code": "public class Main {\n    public static class BO {\n        public int v;\n        public BO(int v) { this.v = v; }\n    }\n    public static void main(String[] args) {\n        BO a = new BO(1);\n        BO b = new BO(2);\n        BO c = new BO(3);\n        BO[] arr = {a, b, c};\n        BO t = arr[0];\n        arr[0] = arr[2];\n        arr[2] = t;\n        arr[1].v = arr[0].v;\n        System.out.println(a.v + \"a\" + b.v + \"b\" + c.v);\n    }\n}",
+      "answer": "1a3b3",
+      "explanation": "arr[0]↔arr[2] 교환: arr={c,b,a}. 원본 변수 a,b,c 불변\narr[1].v = arr[0].v: arr[1]=b, arr[0]=c → b.v = c.v = 3\na.v=1, b.v=3, c.v=3\n출력: \"1a3b3\""
+    },
+    {
+      "id": "java_p_20",
+      "title": "for-each와 equals 비교",
+      "year": "2024년 3회",
+      "difficulty": "중간",
+      "code": "class Gamja {\n    static void func(String[] sM, int size) {\n        for (int i = 1; i < size; i++) {\n            if (sM[i - 1].equals(sM[i])) {\n                System.out.print(\"O\");\n            } else {\n                System.out.print(\"N\");\n            }\n        }\n        for (String m : sM) {\n            System.out.print(m);\n        }\n    }\n    public static void main(String[] args) {\n        String[] sM = new String[3];\n        sM[0] = \"A\";\n        sM[1] = \"A\";\n        sM[2] = new String(\"A\");\n        func(sM, 3);\n    }\n}",
+      "answer": "OOAAA",
+      "explanation": "equals()는 String 내용 비교\ni=1: sM[0].equals(sM[1]) = \"A\".equals(\"A\") = true → O\ni=2: sM[1].equals(sM[2]) = \"A\".equals(\"A\") = true → O\nfor-each: sM[0]+sM[1]+sM[2] = \"A\"+\"A\"+\"A\" → AAA\n총 출력: OOAAA"
+    },
+    {
+      "id": "java_p_21",
+      "title": "정렬과 순위 알고리즘",
+      "year": "2022년 3회",
+      "difficulty": "중간",
+      "code": "public class Main {\n    public static void main(String[] args) {\n        int[] result = new int[5];\n        int[] arr = {79, 34, 10, 99, 50};\n        for (int i = 0; i < 5; i++) {\n            result[i] = 1;\n            for (int j = 0; j < 5; j++) {\n                if (arr[i] < arr[j]) result[i]++;\n            }\n        }\n        for (int k = 0; k < 5; k++)\n            System.out.print(result[k]);\n    }\n}",
+      "answer": "24513",
+      "explanation": "arr[i]보다 큰 값 개수 + 1 = 순위\narr[0]=79: 99 > 79 (1개) → rank=2\narr[1]=34: 79,99,50 > 34 (3개) → rank=4\narr[2]=10: 79,34,99,50 > 10 (4개) → rank=5\narr[3]=99: 없음 (0개) → rank=1\narr[4]=50: 79,99 > 50 (2개) → rank=3\n출력: 24513"
+    },
+    {
+      "id": "java_p_22",
+      "title": "super() 키워드 빈칸",
+      "year": "2025년 3회",
+      "difficulty": "하",
+      "code": "class Rectangle {\n    int width, height;\n    Rectangle(int width, int height) {\n        this.width = width;\n        this.height = height;\n    }\n    int getArea() { return width * height; }\n}\nclass Square extends Rectangle {\n    Square(int s) {\n        _______(s, s);\n    }\n    int getSquareArea() { return width * height; }\n}",
+      "answer": "super",
+      "explanation": "자식 클래스 생성자에서 부모 클래스의 매개변수 생성자를 호출할 때 super() 사용. 반드시 첫 줄에 위치. super(s, s)는 Rectangle(s, s) 호출"
+    },
+    {
+      "id": "java_p_23",
+      "title": "버블 정렬 빈칸",
+      "year": "2023년 1회",
+      "difficulty": "중간",
+      "code": "class Gamja {\n    static void swap(int[] a, int idx1, int idx2) {\n        int t = a[idx1];\n        a[idx1] = a[idx2];\n        a[ ① ] = t;\n    }\n    static void Usort(int[] a, int len) {\n        for (int i = 0; i < len; i++) {\n            for (int j = 0; j < len - i - 1; j++) {\n                if (a[j] > a[j + 1]) {\n                    swap(a, j, j + 1);\n                }\n            }\n        }\n    }\n    public static void main(String[] args) {\n        int[] item = {5, 4, 9, 1, 3, 7};\n        int nx = 6;\n        Usort(item, ② );\n        for (int data : item)\n            System.out.print(data + \"\");\n    }\n}",
+      "blanks": [
+        { "blank": "①", "answer": "idx2", "explanation": "a[idx2]에 t를 저장해야 교환 완성" },
+        { "blank": "②", "answer": "nx", "explanation": "배열 길이 변수 nx=6을 전달" }
+      ],
+      "answer": "134579",
+      "explanation": "버블 정렬로 오름차순 정렬: {5,4,9,1,3,7} → {1,3,4,5,7,9}\n① idx2: swap의 세 번째 줄 a[idx2]=t로 교환 완성\n② nx: 배열 길이 6"
     }
   ]
 }
