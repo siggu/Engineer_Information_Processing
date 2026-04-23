@@ -769,6 +769,36 @@
       "code": "#include <stdio.h>\nint increase() {\n    static int x = 0;\n    x += 2;\n    return x;\n}\nint main() {\n    int x = 0;\n    int sum = 0;\n    int i = 0;\n    for (i = 0; i < 4; i++) {\n        x++;\n        sum += increase();\n    }\n    printf(\"%d\", sum);\n    return 0;\n}",
       "answer": "20",
       "explanation": "static x는 함수 종료 후에도 값 유지. 초기값 0, 호출마다 +2\ni=0: increase() static x=2 반환. sum=2\ni=1: static x=4 반환. sum=6\ni=2: static x=6 반환. sum=12\ni=3: static x=8 반환. sum=20\nmain의 지역 x는 관계없음"
+    },
+    {
+      "id": "c_p_29",
+      "title": "배열 출력 빈칸 채우기",
+      "year": "2023년 2회",
+      "difficulty": "중간",
+      "code": "#include <stdio.h>\nint main() {\n    int n[5] = {5, 4, 3, 2, 1};\n    int i;\n    for (i = 0; i < 5; i++) {\n        printf(\"%d\", __________);\n    }\n    return 0;\n}",
+      "blanks": [
+        { "blank": "빈칸", "answer": "n[(i+1)%5]", "explanation": "출력 43215: 인덱스 1,2,3,4,0 순서 → (i+1)%5" }
+      ],
+      "answer": "43215",
+      "explanation": "n = {5,4,3,2,1} (index: [0]=5,[1]=4,[2]=3,[3]=2,[4]=1)\n출력 43215를 위한 인덱스 순서: 1,2,3,4,0\nn[(i+1)%5]:\ni=0: n[1%5]=n[1]=4\ni=1: n[2%5]=n[2]=3\ni=2: n[3%5]=n[3]=2\ni=3: n[4%5]=n[4]=1\ni=4: n[5%5]=n[0]=5\n→ 43215"
+    },
+    {
+      "id": "c_p_30",
+      "title": "포인터 배열 차이 합산",
+      "year": "2022년 2회",
+      "difficulty": "중간",
+      "code": "#include <stdio.h>\nint main() {\n    int a[4] = {0, 2, 4, 8};\n    int b[3];\n    int* pl;\n    int i;\n    int sum = 0;\n    for (i = 1; i < 4; i++) {\n        pl = a + i;\n        b[i - 1] = *pl - a[i - 1];\n        sum = sum + a[i] + b[i - 1];\n    }\n    printf(\"%d\", sum);\n    return 0;\n}",
+      "answer": "22",
+      "explanation": "pl = a+i → *pl = a[i]\nb[i-1] = a[i] - a[i-1] (인접 요소의 차)\ni=1: b[0]=2-0=2, sum=0+2+2=4\ni=2: b[1]=4-2=2, sum=4+4+2=10\ni=3: b[2]=8-4=4, sum=10+8+4=22"
+    },
+    {
+      "id": "c_p_31",
+      "title": "연결 리스트 역순 출력 (malloc)",
+      "year": "2025년 2회",
+      "difficulty": "상",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\nstruct node {\n    char c;\n    struct node* p;\n};\nstruct node* func(char* s) {\n    struct node* h = NULL, *n;\n    while (*s) {\n        n = malloc(sizeof(struct node));\n        n->c = *s++;\n        n->p = h;\n        h = n;\n    }\n    return h;\n}\nint main() {\n    struct node* n = func(\"BEST\");\n    while (n) {\n        putchar(n->c);\n        struct node* t = n;\n        n = n->p;\n        free(t);\n    }\n    return 0;\n}",
+      "answer": "TSEB",
+      "explanation": "func는 각 문자를 head에 삽입하여 역순 연결 리스트 생성\n'B' 삽입: h→[B|NULL]\n'E' 삽입: h→[E|→B]\n'S' 삽입: h→[S|→E→B]\n'T' 삽입: h→[T|→S→E→B]\nmain에서 순서대로 출력: T→S→E→B = TSEB"
     }
   ]
 }
