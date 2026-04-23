@@ -440,6 +440,24 @@
       "explanation": "자식 클래스 생성자에서 부모 클래스의 매개변수 생성자를 호출할 때 super() 사용. 반드시 첫 줄에 위치. super(s, s)는 Rectangle(s, s) 호출"
     },
     {
+      "id": "java_p_24",
+      "title": "싱글톤 패턴 - 공유 인스턴스",
+      "year": "2021년 3회",
+      "difficulty": "중간",
+      "code": "class Gamja {\n    static private Gamja instance = null;\n    private int count = 0;\n    static public Gamja get() {\n        if (instance == null) {\n            instance = new Gamja();\n        }\n        return instance;\n    }\n    public void count() { count++; }\n    public int getCount() { return count; }\n}\npublic class Gamja2 {\n    public static void main(String[] args) {\n        Gamja s1 = Gamja.get();\n        s1.count();\n        Gamja s2 = Gamja.get();\n        s2.count();\n        Gamja s3 = Gamja.get();\n        s3.count();\n        System.out.print(s1.getCount());\n    }\n}",
+      "answer": "3",
+      "explanation": "Gamja.get(): instance가 null이므로 객체 생성. s1이 가리킴\ns1.count(): count=1\nGamja.get(): 이미 instance 있음 → 같은 객체 반환. s2=s1\ns2.count(): count=2 (같은 객체)\nGamja.get(): s3도 같은 객체\ns3.count(): count=3\ns1.getCount(): 3 (s1,s2,s3 모두 동일 인스턴스)"
+    },
+    {
+      "id": "java_p_25",
+      "title": "싱글톤 - count 4번 호출",
+      "year": "2024년 1회",
+      "difficulty": "중간",
+      "code": "class Gamja {\n    static private Gamja instance = null;\n    private int count = 0;\n    static public Gamja get() {\n        if (instance == null) {\n            instance = new Gamja();\n        }\n        return instance;\n    }\n    public void count() { count++; }\n    public int getCount() { return count; }\n}\npublic class Gamja2 {\n    public static void main(String[] args) {\n        Gamja s1 = Gamja.get();\n        s1.count();\n        Gamja s2 = Gamja.get();\n        s2.count();\n        Gamja s3 = Gamja.get();\n        s3.count();\n        s1.count();\n        System.out.print(s1.getCount());\n    }\n}",
+      "answer": "4",
+      "explanation": "s1.count() → count=1\ns2는 같은 인스턴스, s2.count() → count=2\ns3도 같은 인스턴스, s3.count() → count=3\n마지막 s1.count() → count=4\ns1.getCount() = 4"
+    },
+    {
       "id": "java_p_23",
       "title": "버블 정렬 빈칸",
       "year": "2023년 1회",

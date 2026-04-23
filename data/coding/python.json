@@ -359,6 +359,42 @@
       "code": "class Gamja:\n    li = [\"Seoul\", \"Kyeonggi\", \"Inchon\", \"Daejeon\", \"Daegu\", \"Pusan\"]\n\ns = Gamja()\nstr01 = \"\"\nfor i in s.li:\n    str01 = str01 + i[0]\nprint(str01)",
       "answer": "SKIDKP",
       "explanation": "li는 클래스 속성 (모든 인스턴스 공유)\nfor 루프: 각 도시명의 첫 글자(인덱스 0)를 연결\nSeoul[0]='S', Kyeonggi[0]='K', Inchon[0]='I', Daejeon[0]='D', Daegu[0]='K', Pusan[0]='P'\n→ \"SKIDKP\""
+    },
+    {
+      "id": "py_p_14",
+      "title": "print() 기본 매개변수",
+      "year": "2022년 1회",
+      "difficulty": "하",
+      "code": "def func(num1, num2=2):\n    print('a=', num1, 'b=', num2)\nfunc(20)",
+      "answer": "a= 20 b= 2",
+      "explanation": "num2=2는 기본값(default parameter). func(20) 호출 시 num1=20, num2=2\nprint()는 여러 인수를 공백(sep=' ')으로 구분하여 출력\n'a=' + ' ' + '20' + ' ' + 'b=' + ' ' + '2' → 'a= 20 b= 2'"
+    },
+    {
+      "id": "py_p_15",
+      "title": "중첩 리스트와 print(end='')",
+      "year": "2020년 4회",
+      "difficulty": "중간",
+      "code": "lol = [[1, 2, 3], [4, 5], [6, 7, 8, 9]]\nprint(lol[0])\nprint(lol[2][1])\nfor sub in lol:\n    for item in sub:\n        print(item, end=\"\")\n    print()",
+      "answer": "[1, 2, 3]\n7\n123\n45\n6789",
+      "explanation": "lol[0] = [1,2,3] → 리스트 전체 출력\nlol[2][1] = [6,7,8,9][1] = 7\n중첩 for: end=\"\"로 줄바꿈 없이 출력, 내부 루프 끝나면 print()로 줄바꿈\nsub=[1,2,3]: 123 + 줄바꿈\nsub=[4,5]: 45 + 줄바꿈\nsub=[6,7,8,9]: 6789 + 줄바꿈"
+    },
+    {
+      "id": "py_p_16",
+      "title": "f-string과 부분문자열 카운트",
+      "year": "2024년 2회",
+      "difficulty": "중간",
+      "code": "def fn(x, y):\n    result = 0\n    for i in range(len(x)):\n        s = x[i:i+len(y)]\n        if s == y:\n            result += 1\n    return result\n\nstr = \"abdcabcabca\"\np1 = \"ab\"\np2 = \"ca\"\nprint(f'ab{fn(str, p1)}' f'ca{fn(str, p2)}')",
+      "answer": "ab3ca3",
+      "explanation": "fn(str, 'ab'): 'abdcabcabca'에서 'ab' 등장 횟수\n인덱스 0('ab'), 4('ab'), 7('ab') → 3번\nfn(str, 'ca'): 인덱스 3('ca'), 6('ca'), 9('ca') → 3번\n인접한 f-string은 자동 결합: f'ab{3}' + f'ca{3}' = 'ab3ca3'"
+    },
+    {
+      "id": "py_p_17",
+      "title": "문자열 슬라이싱과 % 포맷",
+      "year": "2022년 2회",
+      "difficulty": "중간",
+      "code": "a = \"REMEMBER NOVEMBER\"\nb = a[:3] + a[12:16]\nc = \"R AND %s\" % \"STR\"\nprint(b + c)",
+      "answer": "REMEMBER AND STR",
+      "explanation": "a = 'REMEMBER NOVEMBER' (인덱스: R=0,E=1,M=2,E=3,M=4,B=5,E=6,R=7,' '=8,N=9,O=10,V=11,E=12,M=13,B=14,E=15)\na[:3] = 'REM'\na[12:16] = 'EMBE'\nb = 'REM' + 'EMBE' = 'REMEMBE'\nc = 'R AND STR' (%s 포맷)\nb + c = 'REMEMBE' + 'R AND STR' = 'REMEMBER AND STR'"
     }
   ]
 }
