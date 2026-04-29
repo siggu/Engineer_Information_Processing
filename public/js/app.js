@@ -3,7 +3,7 @@ const state = {
   currentSection: 'theory',
   currentSubject: 'db',
   sidebarCollapsed: false,
-  lightMode: false,
+  lightMode: true,
   dataCache: {},
 };
 
